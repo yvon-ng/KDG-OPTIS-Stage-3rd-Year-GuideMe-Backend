@@ -1,5 +1,7 @@
 package optis.guideme.domain;
 
+import optis.guideme.domain.user.UserId;
+
 import java.time.LocalDateTime;
 
 public class Notification {
@@ -7,4 +9,5 @@ public class Notification {
     private String description;
     private boolean isRead;
     private LocalDateTime sentAt;
+    private UserId receiver;
 }

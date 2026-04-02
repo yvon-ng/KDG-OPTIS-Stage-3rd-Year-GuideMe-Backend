@@ -1,4 +1,4 @@
-package optis.guideme.domain;
+package optis.guideme.domain.user;
 
 public class Manager extends User {
     public void updateMeeting(){} // for adjusting a meeting

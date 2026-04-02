@@ -1,10 +1,10 @@
 package optis.guideme.domain.factories;
 
 import optis.guideme.api.dto.ActiveDirectoryUserDto;
-import optis.guideme.domain.Consultant;
-import optis.guideme.domain.Manager;
-import optis.guideme.domain.Role;
-import optis.guideme.domain.User;
+import optis.guideme.domain.user.Consultant;
+import optis.guideme.domain.user.Manager;
+import optis.guideme.domain.user.Role;
+import optis.guideme.domain.user.User;
 
 import java.util.List;
 

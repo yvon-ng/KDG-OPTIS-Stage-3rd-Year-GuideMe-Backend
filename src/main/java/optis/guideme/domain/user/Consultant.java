@@ -1,4 +1,4 @@
-package optis.guideme.domain;
+package optis.guideme.domain.user;
 
 
 import java.time.LocalDate;

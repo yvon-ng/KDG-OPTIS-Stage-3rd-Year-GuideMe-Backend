@@ -1,8 +1,6 @@
-package optis.guideme.domain.factories;
+package optis.guideme.domain.meeting;
 
-import optis.guideme.domain.Meeting;
-import optis.guideme.domain.Status;
-import optis.guideme.domain.User;
+import optis.guideme.domain.user.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -63,4 +61,5 @@ public class MeetingRequest {
 
         return this.referenceCode;
     }
+
 }

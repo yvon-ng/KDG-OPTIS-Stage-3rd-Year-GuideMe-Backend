@@ -1,4 +1,4 @@
-package optis.guideme.domain;
+package optis.guideme.domain.user;
 
 public enum Rating {
     ONE(1),

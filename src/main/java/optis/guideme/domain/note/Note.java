@@ -1,13 +1,20 @@
-package optis.guideme.domain;
+package optis.guideme.domain.note;
+
+import optis.guideme.domain.meeting.Meeting;
+import optis.guideme.domain.user.User;
+import optis.guideme.domain.user.UserId;
 
 import java.util.List;
 
 public class Note {
+
     private String title;
     private String description;
     private Visibility visibility;
+
     private Meeting meeting;
     private List<User> sharedUsers;
+    private UserId owner;
 
     public void publish(Visibility visibility) { // to share or make private
         this.visibility = visibility;
