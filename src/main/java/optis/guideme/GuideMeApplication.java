@@ -1,13 +1,13 @@
-package optis.stgguidemebe;
+package optis.guideme;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class StgGuidemeBeApplication {
+public class GuideMeApplication {
 
     static void main(String[] args) {
-		SpringApplication.run(StgGuidemeBeApplication.class, args);
+		SpringApplication.run(GuideMeApplication.class, args);
 	}
 
 }
