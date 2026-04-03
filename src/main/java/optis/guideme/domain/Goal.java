@@ -8,8 +8,9 @@ public class Goal {
     private String title;
     private String description;
     private boolean approved;
-    private LocalDateTime DueDate;
-    private LocalDateTime AchievedDate;
+    private LocalDateTime startDate;
+    private LocalDateTime dueDate; //TODO vraag na ofdat nodig is
+    private LocalDateTime achievedDate;
 
     private UserId userId;
 }

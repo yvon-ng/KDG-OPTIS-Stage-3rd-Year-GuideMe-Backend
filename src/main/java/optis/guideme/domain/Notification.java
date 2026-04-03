@@ -8,6 +8,6 @@ public class Notification {
     private String title;
     private String description;
     private boolean isRead;
-    private LocalDateTime sentAt;
+    private LocalDateTime receivedAt;
     private UserId receiver;
 }
