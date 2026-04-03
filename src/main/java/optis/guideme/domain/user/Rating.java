@@ -1,5 +1,8 @@
 package optis.guideme.domain.user;
 
+import lombok.Getter;
+
+@Getter
 public enum Rating {
     ONE(1),
     TWO(2),
@@ -16,9 +19,5 @@ public enum Rating {
 
     Rating(int value) {
         this.value = value;
-    }
-
-    public int getValue() {
-        return value;
     }
 }
