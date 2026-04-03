@@ -7,10 +7,10 @@ import java.time.LocalDateTime;
 public class Goal {
     private String title;
     private String description;
-    private boolean approved;
-    private LocalDateTime startDate;
+    private boolean achieved;
+    private LocalDateTime dateOfCreation;
     private LocalDateTime dueDate; //TODO vraag na ofdat nodig is
-    private LocalDateTime achievedDate;
+    private LocalDateTime dateOfAchievement;
 
     private UserId userId;
 }

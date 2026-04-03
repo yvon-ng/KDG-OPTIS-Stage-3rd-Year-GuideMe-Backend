@@ -26,17 +26,4 @@ public class ActiveDirectoryUserDto {
         this.surname = surname;
         this.memberOf = memberOf;
     }
-
-//    public String getObjectId() { return objectId; }
-//    public String getMail() { return mail; }
-//    public String getGivenName() { return givenName; }
-//    public String getSurname() { return surname; }
-//    public List<String> getMemberOf() { return memberOf; }
-
-//    // Setters for deserialization
-//    public void setObjectId(String objectId) { this.objectId = objectId; }
-//    public void setMail(String mail) { this.mail = mail; }
-//    public void setGivenName(String givenName) { this.givenName = givenName; }
-//    public void setSurname(String surname) { this.surname = surname; }
-//    public void setMemberOf(List<String> memberOf) { this.memberOf = memberOf; }
 }
