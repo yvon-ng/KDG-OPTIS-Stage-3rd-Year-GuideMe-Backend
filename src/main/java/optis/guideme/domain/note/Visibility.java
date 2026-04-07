@@ -1,5 +1,5 @@
 package optis.guideme.domain.note;
 
 public enum Visibility {
-    PRIVATE, MEETING_PARTICIPANTS, PUBLIC
+    PRIVATE, MEETING_PARTICIPANTS, SHARED
 }
