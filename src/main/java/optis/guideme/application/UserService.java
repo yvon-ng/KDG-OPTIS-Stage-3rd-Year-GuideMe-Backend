@@ -12,6 +12,6 @@ import java.util.Optional;
 public class UserService {
 
     public Optional<User> getUser(UserId userId) {
-        return null;
+        return Optional.empty();
     }
 }

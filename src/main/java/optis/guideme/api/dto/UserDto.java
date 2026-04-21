@@ -15,8 +15,8 @@ public record UserDto(String firstName, String lastName, String email, String cu
 
         if (user instanceof Consultant consultant) {
             if (consultant.getClient() != null) {
-                currentClient = consultant.getClient().getClientName();
-                startDateAtClient = consultant.getClient().getStartDateAtClient();
+                currentClient = consultant.getClient().clientName();
+                startDateAtClient = consultant.getClient().startDateAtClient();
             }
 
             clientRatings = consultant.getClientRatings()
