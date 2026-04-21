@@ -1,4 +1,4 @@
-package optis.guideme.domain.user;
+package optis.guideme.domain.user.client;
 
 import lombok.Getter;
 

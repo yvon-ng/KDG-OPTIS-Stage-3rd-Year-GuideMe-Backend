@@ -1,16 +1,17 @@
 package optis.guideme.api.dto;
 
-import optis.guideme.domain.user.ClientRating;
-import optis.guideme.domain.user.Rating;
+import optis.guideme.domain.user.client.Client;
+import optis.guideme.domain.user.client.ClientRating;
+import optis.guideme.domain.user.client.Rating;
 
 import java.time.LocalDate;
 
-public record ClientRatingDto(String currentClient, Rating rating, LocalDate date) {
+public record ClientRatingDto(Client client, Rating rating, LocalDate date) {
     public static ClientRatingDto fromDomain(ClientRating clientRating) {
         return new ClientRatingDto(
-                clientRating.getCurrentClient(),
-                clientRating.getRating(),
-                clientRating.getDate()
+                clientRating.client(),
+                clientRating.rating(),
+                clientRating.date()
         );
     }
 }

@@ -2,22 +2,17 @@ package optis.guideme.api.dto;
 
 import optis.guideme.domain.user.Consultant;
 import optis.guideme.domain.user.User;
+import optis.guideme.domain.user.client.ClientAssignment;
 
-import java.time.LocalDate;
 import java.util.List;
 
-public record UserDto(String firstName, String lastName, String email, String currentClient,
-                      LocalDate startDateAtClient, List<ClientRatingDto> clientRatings) {
+public record UserDto(String firstName, String lastName, String email, ClientAssignment clientAssignment, List<ClientRatingDto> clientRatings) {
     public static UserDto fromDomain(User user) {
-        String currentClient = null;
-        LocalDate startDateAtClient = null;
+        ClientAssignment clientAssignment  = null; // null when not a consultant
         List<ClientRatingDto> clientRatings = List.of();
 
         if (user instanceof Consultant consultant) {
-            if (consultant.getClient() != null) {
-                currentClient = consultant.getClient().clientName();
-                startDateAtClient = consultant.getClient().startDateAtClient();
-            }
+            clientAssignment  = consultant.getClientAssignment();
 
             clientRatings = consultant.getClientRatings()
                     .stream()
@@ -29,8 +24,7 @@ public record UserDto(String firstName, String lastName, String email, String cu
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
-                currentClient,
-                startDateAtClient,
+                clientAssignment,
                 clientRatings
         );
     }
