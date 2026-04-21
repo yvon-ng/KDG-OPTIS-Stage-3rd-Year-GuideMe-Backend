@@ -1,0 +1,34 @@
+package optis.guideme.api;
+
+import lombok.NonNull;
+import optis.guideme.api.dto.UserDto;
+import optis.guideme.application.UserService;
+import optis.guideme.domain.exception.NotFoundException;
+import optis.guideme.domain.user.User;
+import optis.guideme.domain.user.UserId;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/api/user")
+public class UserController {
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<@NonNull UserDto> me(@AuthenticationPrincipal Jwt jwt){
+        UserId userId = new UserId(UUID.fromString(jwt.getSubject()));
+        User user = userService.getUser(userId)
+                .orElseThrow(() -> new NotFoundException("User not found with id: " + userId));
+        return ResponseEntity.ok(UserDto.fromDomain(user));
+    }
+}
