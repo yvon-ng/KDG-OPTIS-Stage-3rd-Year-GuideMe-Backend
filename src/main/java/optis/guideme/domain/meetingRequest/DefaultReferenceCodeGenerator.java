@@ -1,6 +1,5 @@
 package optis.guideme.domain.meetingRequest;
 
-import optis.guideme.domain.user.User;
 import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;

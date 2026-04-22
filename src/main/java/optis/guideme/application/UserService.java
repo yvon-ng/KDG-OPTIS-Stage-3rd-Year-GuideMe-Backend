@@ -6,8 +6,6 @@ import optis.guideme.domain.user.*;
 import optis.guideme.persistence.user.JpaUserEntity;
 import optis.guideme.persistence.user.JpaUserRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 @Service
 public class UserService {
     private final JpaUserRepository jpaUserRepository;

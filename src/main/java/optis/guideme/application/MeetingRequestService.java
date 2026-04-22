@@ -4,7 +4,6 @@ import optis.guideme.api.dto.MeetingRequestDto;
 import optis.guideme.domain.exception.WrongInputException;
 import optis.guideme.domain.meetingRequest.*;
 import optis.guideme.domain.user.Manager;
-import optis.guideme.domain.user.Role;
 import optis.guideme.domain.user.User;
 import optis.guideme.domain.user.UserId;
 import optis.guideme.persistence.DbMeetingRequestRepository;
