@@ -86,3 +86,4 @@ out/
 ### VS Code ###
 .vscode/
 /.env
+/infra/postgresql/
