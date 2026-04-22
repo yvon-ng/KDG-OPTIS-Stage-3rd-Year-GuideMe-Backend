@@ -16,7 +16,7 @@ public class UserService {
     }
 
     public Optional<User> getUser(UserId userId) {
-        return Optional.empty();
+        return this.userRepository.getUser(userId);
     }
 
     public Optional<User> addUser(UserId userId, String email, Role role) {

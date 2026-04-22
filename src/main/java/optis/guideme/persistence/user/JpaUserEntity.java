@@ -2,13 +2,11 @@ package optis.guideme.persistence.user;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
-import optis.guideme.domain.user.Role;
+import optis.guideme.domain.user.*;
 
 import java.util.UUID;
 
 @Entity
-@Setter
 @Getter
 @Table(name = "users")
 public class JpaUserEntity {
@@ -19,5 +17,23 @@ public class JpaUserEntity {
     private String email;
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    public User toDomain() {
+        return switch(role) {
+            case MANAGER -> new Manager(
+                    new UserId(userId),
+                    firstName,
+                    lastName,
+                    email
+            );
+            case CONSULTANT ->  new Consultant(
+                    new UserId(userId),
+                    firstName,
+                    lastName,
+                    email
+                    //TODO consultants attributes
+            );
+        };
+    }
 }
 

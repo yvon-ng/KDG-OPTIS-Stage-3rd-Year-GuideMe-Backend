@@ -16,8 +16,8 @@ public class Consultant extends User {
     private ClientAssignment clientAssignment; // nullable
     private List<ClientRating> clientRatings = new ArrayList<>();
 
-    public Consultant(String firstName, String lastName, String email) {
-        super(firstName, lastName, email);
+    public Consultant(UserId id, String firstName, String lastName, String email) {
+        super(id, firstName, lastName, email);
     }
 
     public void assignToClient(Client client, LocalDate startDate) {
