@@ -1,0 +1,22 @@
+name: GuideMeBackend
+services:
+  app_postgres:
+    image: postgres:17.6-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: 'user'
+      POSTGRES_PASSWORD: 'password'
+      POSTGRES_DB: 'postgres'
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - '5446:5432'
+    networks:
+      - backend
+    volumes:
+      - ./postgresql/data:/var/lib/postgresql
+      - ./init-scripts/sql:/docker-entrypoint-initdb.d
+
+networks:
+  backend:
+    name: back-network
+    external: true
