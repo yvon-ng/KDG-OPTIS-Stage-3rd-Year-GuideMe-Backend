@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import optis.guideme.domain.exception.WrongInputException;
 import optis.guideme.domain.meeting.Meeting;
-import optis.guideme.domain.user.User;
 import optis.guideme.domain.user.UserId;
 
 import java.time.LocalDateTime;

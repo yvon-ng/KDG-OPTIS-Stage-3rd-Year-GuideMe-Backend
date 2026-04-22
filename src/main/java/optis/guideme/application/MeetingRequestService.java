@@ -1,6 +1,7 @@
 package optis.guideme.application;
 
 import optis.guideme.api.dto.MeetingRequestDto;
+import optis.guideme.domain.exception.WrongInputException;
 import optis.guideme.domain.meetingRequest.*;
 import optis.guideme.domain.user.Manager;
 import optis.guideme.domain.user.Role;
@@ -40,13 +41,16 @@ public class MeetingRequestService {
                 .map(userService::findById)
                 .toList();
 
-        //TODO: maybe this with a db search instead of loading full user objects in service ...
         boolean isAllowed =
                 requester instanceof Manager || requestedUsers.stream().anyMatch(user -> user instanceof Manager);
 
+        if (!isAllowed) {
+            throw new WrongInputException("Meeting Requests must include at least one manager!");
+        }
+
         MeetingRequest meetingRequest = new MeetingRequest(
                 meetingRequestDto.endDateTime(),
-                isAllowed,
+                true,
                 new MeetingRequestId(UUID.randomUUID()),
                 meetingRequestDto.name(),
                 meetingRequestDto.previousRequestId(),
