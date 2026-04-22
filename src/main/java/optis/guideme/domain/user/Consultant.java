@@ -9,8 +9,8 @@ public class Consultant extends User {
     private LocalDate startDateAtClient;
     private List<ClientRating> clientRatings;
 
-    public Consultant(String firstName, String lastName, String email) {
-        super(firstName, lastName, email);
+    public Consultant(UserId id,String firstName, String lastName, String email) {
+        super(id, firstName, lastName, email);
     }
 
     public void rateCurrentClient(ClientRating clientRating) {

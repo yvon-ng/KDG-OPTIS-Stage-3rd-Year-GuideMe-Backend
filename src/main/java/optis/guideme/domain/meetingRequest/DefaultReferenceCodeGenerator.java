@@ -1,9 +1,11 @@
 package optis.guideme.domain.meetingRequest;
 
 import optis.guideme.domain.user.User;
+import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;
 
+@Component
 public class DefaultReferenceCodeGenerator { // !!!!!!!!  use in service and check in db if code already exist
     public static final String REFERENCE_CODE_TEMPLATE = "%s-Q%d-%02d-%s";
     private static final SecureRandom RANDOM = new SecureRandom();
