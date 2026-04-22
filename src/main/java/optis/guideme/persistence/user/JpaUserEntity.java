@@ -1,9 +1,8 @@
 package optis.guideme.persistence.user;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Setter;
+import optis.guideme.domain.user.Role;
 
 import java.util.UUID;
 
@@ -16,4 +15,6 @@ public class JpaUserEntity {
     private String firstName;
     private String lastName;
     private String email;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 }

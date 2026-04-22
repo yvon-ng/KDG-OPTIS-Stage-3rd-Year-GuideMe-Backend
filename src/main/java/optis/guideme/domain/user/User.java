@@ -17,22 +17,8 @@ public abstract class User {
     private String firstName;
     private String lastName;
     private String email;
+    private Role role;
 
 //    private List<Goal> goals;
 //    private List<Reminder> reminders;
-public MeetingRequest createMeetingRequest(LocalDateTime endDateTime, boolean isAllowed, MeetingRequestId meetingRequestId, String name, MeetingRequestId previousRequestId, int recurrenceIntervalInMonths, String referenceCode, User requestedBy, List<User> requestFor, LocalDateTime startDateTime, Status status ) {
-    return new MeetingRequest(
-            endDateTime,
-            true,
-            new MeetingRequestId(UUID.randomUUID()),
-            name,
-            previousRequestId,
-            recurrenceIntervalInMonths,
-            referenceCode,
-            requestedBy,
-            requestFor,
-            startDateTime,
-            status
-    );
-}
 }

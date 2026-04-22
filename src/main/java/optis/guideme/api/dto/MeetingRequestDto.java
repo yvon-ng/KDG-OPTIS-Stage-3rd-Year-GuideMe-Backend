@@ -9,7 +9,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-public record MeetingRequestDto(@NonNull String name, LocalDateTime startDateTime, @Nullable LocalDateTime endDateTime,int recurrence, List<UUID> requestFor, @Nullable MeetingRequestId previousRequestId) {
+//TODO: for now UUID for requestedBy directly, later via security: get currentUser.id() or something
+public record MeetingRequestDto(@NonNull String name, LocalDateTime startDateTime, @Nullable LocalDateTime endDateTime,int recurrence, List<UUID> requestFor, @Nullable MeetingRequestId previousRequestId, UUID requestedBy) {
     public static MeetingRequestDto fromDomain(MeetingRequest meetingRequest) {
         return new MeetingRequestDto(
                 meetingRequest.getName(),
@@ -18,9 +19,10 @@ public record MeetingRequestDto(@NonNull String name, LocalDateTime startDateTim
                 meetingRequest.getRecurrenceIntervalInMonths(),
                 meetingRequest.getRequestFor()
                         .stream()
-                        .map(user -> user.getId().userId())
+                        .map(userId -> userId.userId())
                         .toList(),
-                meetingRequest.getPreviousRequestId()
+                meetingRequest.getPreviousRequestId(),
+                meetingRequest.getRequestedBy().userId()
         );
     }
 }

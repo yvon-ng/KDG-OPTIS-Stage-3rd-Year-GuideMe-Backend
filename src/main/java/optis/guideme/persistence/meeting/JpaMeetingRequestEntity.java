@@ -52,7 +52,7 @@ public class JpaMeetingRequestEntity {
 
             if (meetingRequest.getRequestedBy() != null) {
                 JpaUserEntity requestedByEntity = new JpaUserEntity();
-                requestedByEntity.setUserId(meetingRequest.getRequestedBy().getId().userId());
+                requestedByEntity.setUserId(meetingRequest.getRequestedBy().userId());
                 entity.requestedBy = requestedByEntity;
             }
 
@@ -61,7 +61,7 @@ public class JpaMeetingRequestEntity {
                 entity.requestFor = meetingRequest.getRequestFor().stream()
                         .map(user -> {
                             JpaUserEntity userEntity = new JpaUserEntity();
-                            userEntity.setUserId(user.getId().userId());
+                            userEntity.setUserId(user.userId());
                             return userEntity;
                         })
                         .toList();
