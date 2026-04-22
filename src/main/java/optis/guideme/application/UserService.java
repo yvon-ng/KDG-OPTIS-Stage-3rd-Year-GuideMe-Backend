@@ -1,5 +1,7 @@
 package optis.guideme.application;
 
+import optis.guideme.domain.user.Invitation;
+import optis.guideme.domain.user.Role;
 import optis.guideme.domain.user.User;
 import optis.guideme.domain.user.UserId;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,12 @@ import java.util.Optional;
 public class UserService {
 
     public Optional<User> getUser(UserId userId) {
+        return Optional.empty();
+    }
+
+    public Optional<User> addUser(UserId userId, String email, Role role) {
+        Invitation invitation = new Invitation(email, role);
+
         return Optional.empty();
     }
 }

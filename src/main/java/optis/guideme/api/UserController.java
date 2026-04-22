@@ -1,6 +1,8 @@
 package optis.guideme.api;
 
 import lombok.NonNull;
+import optis.guideme.api.dto.InvitationDto;
+import optis.guideme.api.dto.NewInvitationDto;
 import optis.guideme.api.dto.UserDto;
 import optis.guideme.application.UserService;
 import optis.guideme.domain.exception.NotFoundException;
@@ -31,4 +33,12 @@ public class UserController {
                 .orElseThrow(() -> new NotFoundException("User not found with id: " + userId));
         return ResponseEntity.ok(UserDto.fromDomain(user));
     }
+
+//    @GetMapping("/invite")
+//    public ResponseEntity<@NonNull InvitationDto> inviteUser(@AuthenticationPrincipal Jwt jwt, NewInvitationDto newInvitationDto){
+//        UserId managerId = new UserId(UUID.fromString(jwt.getSubject()));
+//        User user = userService.addUser(managerId, newInvitationDto.email(), newInvitationDto.role())
+//                .orElseThrow(() -> new NotFoundException("User not found with id: " + managerId)); //todo
+//        return ResponseEntity.ok();
+//    }
 }
