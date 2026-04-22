@@ -1,6 +1,7 @@
 package optis.guideme.persistence.user;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.Setter;
 import optis.guideme.domain.user.Role;
 
@@ -8,6 +9,7 @@ import java.util.UUID;
 
 @Entity
 @Setter
+@Getter
 @Table(name = "users")
 public class JpaUserEntity {
     @Id

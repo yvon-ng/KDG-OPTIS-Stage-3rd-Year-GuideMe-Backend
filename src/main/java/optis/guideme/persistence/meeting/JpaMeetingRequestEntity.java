@@ -2,9 +2,11 @@ package optis.guideme.persistence.meeting;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NonNull;
 import optis.guideme.domain.meetingRequest.MeetingRequest;
 import optis.guideme.domain.meetingRequest.MeetingRequestId;
 import optis.guideme.domain.meetingRequest.Status;
+import optis.guideme.domain.user.UserId;
 import optis.guideme.persistence.user.JpaUserEntity;
 
 import java.time.LocalDateTime;
@@ -24,16 +26,14 @@ public class JpaMeetingRequestEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
     @ManyToOne //one meetingrequest is made by one user
-    @JoinTable(
-            name = "meeting_requests_users",
-            joinColumns = @JoinColumn(name = "meeting_request_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
+    @JoinColumn(name="requestedBy", nullable = false
     )
+    @NonNull
     private JpaUserEntity requestedBy;
     @ManyToMany
     @JoinTable(
-            name="meeting_requests_users",
-            joinColumns = @JoinColumn(name="requested_by"),
+            name="meeting_requests_participants",
+            joinColumns = @JoinColumn(name = "meeting_request_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private List<JpaUserEntity> requestFor;
@@ -71,17 +71,19 @@ public class JpaMeetingRequestEntity {
     }
 
     public static MeetingRequest toDomain(JpaMeetingRequestEntity entity) {
-
+//        if (entity.requestedBy != null)  {
+//            UserId requestedBy = UserId.of(entity.getRequestedBy().getUserId());
+//        }
         return new MeetingRequest(
                 entity.getEndDateTime(),
                 entity.isAllowed(),
                 new MeetingRequestId(entity.getMeetingRequestId()),
                 entity.getReferenceCode(),
-                null, // map later
+                null,
                 entity.getRecurrenceIntervalInMonths(),
                 entity.getReferenceCode(),
-                null, // map later
-                null, // map later
+                UserId.of(entity.requestedBy.getUserId()),
+                entity.getRequestFor() != null ? entity.getRequestFor().stream().map(user -> UserId.of(user.getUserId())).toList(): List.of(),
                 entity.getStartDateTime(),
                 entity.getStatus()
         );

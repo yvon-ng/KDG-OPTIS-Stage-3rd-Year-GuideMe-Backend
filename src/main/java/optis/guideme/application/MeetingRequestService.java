@@ -2,6 +2,7 @@ package optis.guideme.application;
 
 import optis.guideme.api.dto.MeetingRequestDto;
 import optis.guideme.domain.meetingRequest.*;
+import optis.guideme.domain.user.Manager;
 import optis.guideme.domain.user.Role;
 import optis.guideme.domain.user.User;
 import optis.guideme.domain.user.UserId;
@@ -41,7 +42,7 @@ public class MeetingRequestService {
 
         //TODO: maybe this with a db search instead of loading full user objects in service ...
         boolean isAllowed =
-                requester.getRole() == Role.MANAGER || requestedUsers.stream().anyMatch(user -> user.getRole().equals(Role.MANAGER));
+                requester instanceof Manager || requestedUsers.stream().anyMatch(user -> user instanceof Manager);
 
         MeetingRequest meetingRequest = new MeetingRequest(
                 meetingRequestDto.endDateTime(),
