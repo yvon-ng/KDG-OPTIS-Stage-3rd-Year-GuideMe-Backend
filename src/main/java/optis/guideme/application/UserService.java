@@ -1,9 +1,6 @@
 package optis.guideme.application;
 
-import optis.guideme.domain.user.Invitation;
-import optis.guideme.domain.user.Role;
-import optis.guideme.domain.user.User;
-import optis.guideme.domain.user.UserId;
+import optis.guideme.domain.user.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,7 +9,11 @@ import java.util.Optional;
 @Service
 @Transactional
 public class UserService {
-    //TODO repo
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public Optional<User> getUser(UserId userId) {
         return Optional.empty();

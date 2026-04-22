@@ -20,7 +20,7 @@ repositories {
 
 dependencyManagement {
     imports {
-        mavenBom "com.azure.spring:spring-cloud-azure-dependencies:5.10.0"
+        mavenBom "com.azure.spring:spring-cloud-azure-dependencies:7.2.0"
     }
 }
 
