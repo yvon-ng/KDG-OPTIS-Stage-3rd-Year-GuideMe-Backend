@@ -1,9 +1,8 @@
 package optis.guideme.domain.meeting;
 
-import optis.guideme.domain.user.User;
-import optis.guideme.domain.user.UserId;
+import java.util.UUID;
 
 public class Attendee {
-    private UserId userId;
+    private UUID userId;
     private MeetingId meetingId;
 }

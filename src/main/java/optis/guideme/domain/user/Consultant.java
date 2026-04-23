@@ -1,38 +1,51 @@
 package optis.guideme.domain.user;
 
 
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import optis.guideme.domain.exception.WrongInputException;
-import optis.guideme.domain.user.client.Client;
-import optis.guideme.domain.user.client.ClientAssignment;
-import optis.guideme.domain.user.client.ClientRating;
+//import optis.guideme.domain.user.client.ClientAssignment;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@DiscriminatorValue("CONSULTANT")
 public class Consultant extends User {
-    private ClientAssignment clientAssignment; // nullable
-    private List<ClientRating> clientRatings = new ArrayList<>();
+    //    private ClientAssignment clientAssignment; // nullable
+    private String clientName;
+    private LocalDate startDateAtClient;
+    @ElementCollection
+    private final List<ClientRating> clientRatings = new ArrayList<>();
 
-    public Consultant(UserId id, String firstName, String lastName, String email) {
-        super(id, firstName, lastName, email);
+    public Consultant(UUID userId, String firstName, String lastName, String email) {
+        super(userId, firstName, lastName, email);
     }
 
-    public void assignToClient(Client client, LocalDate startDate) {
-        if (this.clientAssignment != null) {
+    public void assignToClient(String clientName, LocalDate startDateAtClient) {
+        if (this.clientName != null) {
             throw new IllegalStateException("Already assigned to a client");
         }
-        this.clientAssignment = new ClientAssignment(client, startDate);
+        this.clientName = clientName;
+        this.startDateAtClient = startDateAtClient;
     }
 
-    public void changeClient(Client client, LocalDate startDate) {
-        this.clientAssignment = new ClientAssignment(client, startDate);
+    public void changeClient(String clientName, LocalDate startDateAtClient) {
+        this.clientName = clientName;
+        this.startDateAtClient = startDateAtClient;
     }
 
     public void rateCurrentClient(ClientRating rating) {
-        if (clientAssignment == null) {
+        if (clientName == null) {
             throw new WrongInputException("Cannot rate Client without being assigned to one");
         }
         clientRatings.add(rating);
