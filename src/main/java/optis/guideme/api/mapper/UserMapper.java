@@ -1,14 +1,15 @@
-package optis.guideme.api.dto;
+package optis.guideme.api.mapper;
 
+import optis.guideme.api.dto.response.ClientRatingDto;
+import optis.guideme.api.dto.response.UserDto;
 import optis.guideme.domain.user.Consultant;
 import optis.guideme.domain.user.User;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.util.List;
 
-public record UserDto(String firstName, String lastName, String email, String clientName, LocalDate startDateAtClient, List<ClientRatingDto> clientRatings) {
-    public static UserDto fromDomain(User user) {
+public class UserMapper {
+    public static UserDto toDto(User user) {
         String clientName  = null; // null when not a consultant
         LocalDate startDateAtClient = null; // null when not a consultant
         List<ClientRatingDto> clientRatings = List.of();
@@ -18,7 +19,7 @@ public record UserDto(String firstName, String lastName, String email, String cl
 
             clientRatings = consultant.getClientRatings()
                     .stream()
-                    .map(ClientRatingDto::fromDomain)
+                    .map(ClientRatingMapper::toDto)
                     .toList();
 
             startDateAtClient = consultant.getStartDateAtClient();

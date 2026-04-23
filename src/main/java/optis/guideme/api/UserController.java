@@ -1,7 +1,8 @@
 package optis.guideme.api;
 
 import lombok.NonNull;
-import optis.guideme.api.dto.UserDto;
+import optis.guideme.api.dto.response.UserDto;
+import optis.guideme.api.mapper.UserMapper;
 import optis.guideme.application.UserService;
 import optis.guideme.domain.exception.NotFoundException;
 import optis.guideme.domain.user.User;
@@ -27,10 +28,9 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<@NonNull UserDto> me(@AuthenticationPrincipal Jwt jwt){
+    public UserDto me(@AuthenticationPrincipal Jwt jwt){
         UUID userId = UUID.fromString(jwt.getSubject());
-        User user = userService.getUser(userId).orElseThrow(() -> new NotFoundException("User not found with id: " + userId));
-        return ResponseEntity.ok(UserDto.fromDomain(user));
+        return userService.getUser(userId);
     }
 
 

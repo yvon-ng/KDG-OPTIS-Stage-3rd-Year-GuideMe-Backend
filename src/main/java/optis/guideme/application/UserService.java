@@ -1,5 +1,8 @@
 package optis.guideme.application;
 
+import optis.guideme.api.dto.response.UserDto;
+import optis.guideme.api.mapper.UserMapper;
+import optis.guideme.domain.exception.NotFoundException;
 import optis.guideme.domain.user.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,8 +19,8 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public Optional<User> getUser(UUID userId) {
-        return this.userRepository.findById(userId);
+    public UserDto getUser(UUID userId) {
+        return UserMapper.toDto(this.userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found with id: " + userId)));
     }
 
     public Optional<User> addUser(UUID userId, String email, Role role) {
