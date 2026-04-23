@@ -1,4 +1,4 @@
--- --insert user
+--insert user
 
 INSERT INTO users(user_id, email, first_name, last_name, role, client_name, start_date_at_client)
 VALUES ('00000000-0000-0000-0000-000000000001', 'Keshia', 'Niemegeerts', 'keshia@test.com', 'MANAGER', null, null),

@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import optis.guideme.domain.exception.WrongInputException;
-//import optis.guideme.domain.user.client.ClientAssignment;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -21,7 +20,6 @@ import java.util.UUID;
 @Entity
 @DiscriminatorValue("CONSULTANT")
 public class Consultant extends User {
-    //    private ClientAssignment clientAssignment; // nullable
     private String clientName;
     private LocalDate startDateAtClient;
     @ElementCollection
