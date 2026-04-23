@@ -8,4 +8,8 @@ public record MeetingId(UUID meetingId){
     public MeetingId{
         Assert.notNull(meetingId, "Error: UserId Can't be null");
     }
+
+    public static MeetingId of(UUID meetingId) {
+        return new MeetingId(meetingId);
+    }
 }

@@ -1,4 +1,4 @@
-package optis.guideme.persistence.meeting;
+package optis.guideme.persistence.meetingRequest;
 
 import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;

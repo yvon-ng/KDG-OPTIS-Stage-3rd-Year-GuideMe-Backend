@@ -8,37 +8,16 @@ import optis.guideme.persistence.user.JpaUserRepository;
 import org.springframework.stereotype.Service;
 @Service
 public class UserService {
-    private final JpaUserRepository jpaUserRepository;
+    private final UserRepository userRepository;
     private final UserFactory userFactory;
 
-    public UserService(JpaUserRepository jpaUserRepository, UserFactory userFactory) {
-        this.jpaUserRepository = jpaUserRepository;
+    public UserService(UserRepository userRepository, UserFactory userFactory) {
+        this.userRepository = userRepository;
         this.userFactory = userFactory;
     }
 
     public User findById(UserId userId) {
-        JpaUserEntity user = jpaUserRepository.findById(userId.userId())
-                .orElseThrow(() -> new NotFoundException("user not found with id: " + userId));
-        return toDomain(user);
-    }
-
-    private User toDomain(JpaUserEntity user) {
-        UserId id = UserId.of(user.getUserId());
-
-        return switch(user.getRole()) {
-            case MANAGER -> new Manager(
-                    id,
-                    user.getFirstName(),
-                    user.getLastName(),
-                    user.getEmail()
-            );
-            case CONSULTANT ->  new Consultant(
-                    id,
-                    user.getFirstName(),
-                    user.getLastName(),
-                    user.getEmail()
-            );
-        };
+        return userRepository.findById(userId.userId());
     }
 
     private JpaUserEntity toJpa(User user){
@@ -59,7 +38,7 @@ public class UserService {
 
     //method to easily check if a user is a manaeger or no
     public boolean isManager(UserId userId) {
-        return jpaUserRepository.existsByUserIdAndRole(userId.userId(), Role.MANAGER);
+        return userRepository.existsByUserIdAndRole(userId.userId(), Role.MANAGER);
     }
 
 

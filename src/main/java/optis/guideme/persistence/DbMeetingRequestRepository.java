@@ -2,8 +2,8 @@ package optis.guideme.persistence;
 
 import optis.guideme.domain.meetingRequest.MeetingRequest;
 import optis.guideme.domain.meetingRequest.MeetingRequestRepository;
-import optis.guideme.persistence.meeting.JpaMeetingRequestEntity;
-import optis.guideme.persistence.meeting.JpaMeetingRequestRepository;
+import optis.guideme.persistence.meetingRequest.JpaMeetingRequestEntity;
+import optis.guideme.persistence.meetingRequest.JpaMeetingRequestRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository

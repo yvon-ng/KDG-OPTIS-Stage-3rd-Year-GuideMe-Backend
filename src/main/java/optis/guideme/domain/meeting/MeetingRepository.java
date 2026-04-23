@@ -4,5 +4,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MeetingRepository {
-    void save(Meeting meeting);
+    Meeting save(Meeting meeting);
 }
