@@ -1,7 +1,5 @@
 package optis.guideme.domain.meeting;
 
-import optis.guideme.domain.user.UserId;
-
 import java.time.LocalDateTime;
 
 public class Reminder {

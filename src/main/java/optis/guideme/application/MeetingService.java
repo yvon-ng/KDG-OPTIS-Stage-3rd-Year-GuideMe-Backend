@@ -1,10 +1,10 @@
 package optis.guideme.application;
 
-import optis.guideme.api.dto.AttendeeDto;
-import optis.guideme.api.dto.MeetingDto;
+import optis.guideme.api.dto.request.AttendeeDto;
+import optis.guideme.api.dto.request.MeetingDto;
+import optis.guideme.api.mapper.MeetingMapper;
 import optis.guideme.domain.meeting.Meeting;
-import optis.guideme.domain.meeting.MeetingId;
-import optis.guideme.domain.meeting.MeetingRepository;
+import optis.guideme.repository.MeetingRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -12,21 +12,14 @@ import java.util.UUID;
 @Service
 public class MeetingService {
 private final MeetingRepository meetingRepository;
+private final MeetingMapper mapper;
 
-    public MeetingService(MeetingRepository meetingRepository) {
+    public MeetingService(MeetingRepository meetingRepository, MeetingMapper mapper) {
         this.meetingRepository = meetingRepository;
+        this.mapper = mapper;
     }
 
-    public Meeting createNewMeeting(MeetingDto meetingDto){
-        Meeting meeting =  new Meeting(
-                MeetingId.of(UUID.randomUUID()),
-                meetingDto.endDateTime(),
-                meetingDto.name(),
-                meetingDto.occured(),
-                meetingDto.referenceCode(),
-                meetingDto.sharedUsers().stream().map(AttendeeDto::toDomain).toList(),
-                meetingDto.startDateTime()
-        );
-        return meetingRepository.save(meeting);
+    public MeetingDto createNewMeeting(MeetingDto meetingDto){
+        return mapper.toDto(meetingRepository.save(mapper.toDomain(meetingDto)));
     }
 }
