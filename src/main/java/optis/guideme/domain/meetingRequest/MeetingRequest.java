@@ -8,7 +8,6 @@ import lombok.NonNull;
 import optis.guideme.domain.exception.WrongInputException;
 import optis.guideme.domain.meeting.Meeting;
 import optis.guideme.domain.user.Manager;
-import optis.guideme.domain.user.Role;
 import optis.guideme.domain.user.User;
 
 import java.time.LocalDateTime;
