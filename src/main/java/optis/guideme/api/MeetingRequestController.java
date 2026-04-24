@@ -1,6 +1,7 @@
 package optis.guideme.api;
 
-import optis.guideme.api.dto.request.MeetingRequestDto;
+import optis.guideme.api.dto.request.NewMeetingRequestDto;
+import optis.guideme.api.dto.response.MeetingRequestDto;
 import optis.guideme.application.MeetingRequestService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +18,7 @@ public class MeetingRequestController {
     }
 
     @PostMapping("requests")
-    public MeetingRequestDto createMeetingRequest(@RequestBody MeetingRequestDto meetingRequestDto) {
-       return meetingRequestService.createMeetingRequest(meetingRequestDto);
+    public MeetingRequestDto createMeetingRequest(@RequestBody NewMeetingRequestDto newMeetingRequestDto) {
+       return meetingRequestService.createMeetingRequest(newMeetingRequestDto);
     }
 }

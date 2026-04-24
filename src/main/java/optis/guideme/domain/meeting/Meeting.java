@@ -4,14 +4,15 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import optis.guideme.domain.exception.WrongInputException;
+import optis.guideme.domain.user.Role;
+import optis.guideme.domain.user.User;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,18 +27,19 @@ public class Meeting {
     private String referenceCode; //should be same as meetingrequest
     private LocalDateTime startDateTime;
     @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Attendee> sharedUsers =  new ArrayList<>(); // atleast two; 1 manager 1 consultant !
+    private List<Attendee> attendees =  new ArrayList<>(); // atleast two; 1 manager 1 consultant !
     private LocalDateTime endDateTime;
     private boolean occured;
 
-    public Meeting( LocalDateTime endDateTime, String name, boolean occured, String referenceCode, List<Attendee> sharedUsers, LocalDateTime startDateTime) {
+
+    public Meeting( LocalDateTime endDateTime, String name, boolean occured, LocalDateTime startDateTime) {
         this.endDateTime = endDateTime;
         this.name = name;
         this.occured = occured;
-        this.referenceCode = referenceCode;
-        this.sharedUsers = sharedUsers;
+        this.attendees = new ArrayList<>();
         this.startDateTime = startDateTime;
     }
+
 
     public Quarter getQuarter() {
         return Quarter.fromMonth(startDateTime.getMonthValue());
@@ -47,8 +49,35 @@ public class Meeting {
         return (name != null && !name.isBlank()) ? name : referenceCode;
     }
 
-////    //add attendee to meeting
-//    public void addAttendee(Attendee attendee) {
-//        this.sharedUsers.add(attendee);
-//    }
+    //add attendee to meeting
+    public void addAttendee(User user, Role role) {
+        Attendee attendee = new Attendee(role, user);
+        this.attendees.add(attendee);
+        attendee.addAttendeeToMeeting(this);
+    }
+
+    //validate sharedUsers
+    public void validateMinimumRoles(List<Attendee> attendees) {
+        long managers = attendees.stream()
+                .filter(attendee -> attendee.getRole() == Role.MANAGER)
+                .count();
+        long consultants = attendees.stream()
+                .filter(attendee -> attendee.getRole() == Role.CONSULTANT)
+                .count();
+        if (attendees.size() < 2) {
+            throw new WrongInputException("Minimum roles required");
+        }
+
+        if (managers < 1 || consultants < 1){
+            throw new WrongInputException("Minimum roles required");
+        }
+    }
+
+
+    public void assignReferenceCode(String referenceCode) { // use getter if already assigned
+        if (this.referenceCode != null) {
+            throw new WrongInputException("Reference code already assigned");
+        }
+        this.referenceCode = referenceCode;
+    }
 }

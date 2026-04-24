@@ -45,27 +45,20 @@ public class MeetingRequest {
     private UUID previousRequestId;
     private boolean isAllowed = false;
 
-    public MeetingRequest(LocalDateTime endDateTime, boolean isAllowed, String name, UUID previousRequestId, int recurrenceIntervalInMonths, String referenceCode, @NonNull User requestedBy, List<User> requestFor, LocalDateTime startDateTime, Status status) {
+    public MeetingRequest(LocalDateTime endDateTime, boolean isAllowed, String name, UUID previousRequestId, int recurrenceIntervalInMonths, @NonNull User requestedBy, List<User> requestFor, LocalDateTime startDateTime, Status status) {
         this.endDateTime = endDateTime;
         this.isAllowed = isAllowed;
-        this.name = name;
-        this.previousRequestId = previousRequestId;
-        this.recurrenceIntervalInMonths = recurrenceIntervalInMonths;
-        this.referenceCode = referenceCode;
-        this.requestedBy = requestedBy;
-        this.requestFor = requestFor;
-        this.startDateTime = startDateTime;
         this.status = status;
-    }
-
-    //todo probeer zonder simplename en me instance of
-    public boolean isAllowed() {
-        if (requestedBy instanceof Manager || requestFor.stream().anyMatch(User -> User.getClass().getSimpleName().equalsIgnoreCase("MANAGER"))) {
-            isAllowed = true;
-        } else {
-            isAllowed = false;
+        this.startDateTime = startDateTime;
+        this.requestFor = requestFor;
+        this.requestedBy = requestedBy;
+        if (!(requestedBy instanceof Manager ||
+                requestFor.stream().anyMatch(user -> user instanceof Manager))) {
+            throw new WrongInputException("At least one manager required");
         }
-        return isAllowed;
+        this.recurrenceIntervalInMonths = recurrenceIntervalInMonths;
+        this.previousRequestId = previousRequestId;
+        this.name = name;
     }
 
     public Meeting accept(){
@@ -86,4 +79,5 @@ public class MeetingRequest {
     public String getDisplayName() {
         return (name != null && !name.isBlank()) ? name : referenceCode;
     }
+
 }

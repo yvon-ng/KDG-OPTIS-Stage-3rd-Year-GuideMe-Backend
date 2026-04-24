@@ -1,12 +1,8 @@
 package optis.guideme.api;
 
-import lombok.NonNull;
-import optis.guideme.api.dto.request.MeetingDto;
-import optis.guideme.api.mapper.MeetingMapper;
+import optis.guideme.api.dto.request.NewMeetingDto;
+import optis.guideme.api.dto.response.MeetingDto;
 import optis.guideme.application.MeetingService;
-import optis.guideme.domain.meeting.Meeting;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +18,7 @@ public class MeetingController {
     }
 
     @PostMapping
-    public MeetingDto createNewMeeting(@RequestBody MeetingDto meetingDto) {
-        return meetingService.createNewMeeting(meetingDto);
+    public MeetingDto createNewMeeting(@RequestBody NewMeetingDto newMeetingDto) {
+        return meetingService.createNewMeeting(newMeetingDto);
     }
 }

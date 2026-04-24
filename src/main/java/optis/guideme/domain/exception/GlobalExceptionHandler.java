@@ -12,4 +12,5 @@ public class GlobalExceptionHandler {
     public ResponseEntity<@NonNull String> handleWrongInputException(WrongInputException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
+
 }
