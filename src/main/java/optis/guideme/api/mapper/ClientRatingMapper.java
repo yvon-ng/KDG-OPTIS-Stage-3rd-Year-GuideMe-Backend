@@ -7,7 +7,7 @@ public class ClientRatingMapper {
     public static ClientRatingDto toDto(ClientRating rating) {
         return new ClientRatingDto(
                 rating.getClientName(),
-                rating.getRating(),
+                rating.getRating().getValue(),
                 rating.getDate()
         );
     }

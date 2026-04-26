@@ -28,14 +28,13 @@ public class UserController {
 
     @GetMapping("/me")
     public UserDto me(@AuthenticationPrincipal Jwt jwt){
-        UUID userId = UUID.fromString(jwt.getSubject());
+        UUID userId = UUID.fromString(jwt.getClaim("oid"));
         return userService.getUser(userId);
     }
 
-
     @GetMapping("/test")
-    public void testCall(@AuthenticationPrincipal Jwt jwt){
-        logger.info("testCall is gelukt");
+    public void testCall(){
+        logger.info("INFO: De test call naar een public endpoint is gelukt!");
     }
 
 //    @GetMapping("/invite")

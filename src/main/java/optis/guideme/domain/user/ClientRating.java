@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @Getter
 public class ClientRating {
     private String clientName;
+    @Enumerated(EnumType.STRING)
     private Rating rating;
     private LocalDate date;
 }
