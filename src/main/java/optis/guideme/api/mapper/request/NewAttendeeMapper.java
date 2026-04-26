@@ -26,8 +26,11 @@ public class NewAttendeeMapper {
     }
 
     public AttendeeDto toResponseDto(Attendee attendee) {
+        User user = attendee.getUser();
         return new AttendeeDto(
-                attendee.getUser().getUserId()
+                user.getUserId(),
+                user.getFirstName(),
+                user.getLastName()
         );
     }
 

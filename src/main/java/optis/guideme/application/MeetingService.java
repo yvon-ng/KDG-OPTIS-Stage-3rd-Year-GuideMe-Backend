@@ -23,9 +23,15 @@ private final NewAttendeeMapper attendeeMapper;
     }
 
     public MeetingDto createNewMeeting(NewMeetingDto newMeetingDto){
-        List<Attendee> attendees = newMeetingDto.sharedUsers().stream().map(attendeeMapper::toDomain).toList();
+        List<Attendee> attendees = newMeetingDto.attendees().stream().map(attendeeMapper::toDomain).toList();
         Meeting meeting = mapper.toDomain(newMeetingDto);
         meeting.validateMinimumRoles(attendees);
         return mapper.toResponseDto(meetingRepository.save(meeting));
+    }
+
+    public List<MeetingDto> getAllMeetings() {
+        return meetingRepository.findAll().stream().map(
+                mapper::toResponseDto
+        ).toList();
     }
 }

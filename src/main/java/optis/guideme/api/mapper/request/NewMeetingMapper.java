@@ -27,7 +27,7 @@ public class NewMeetingMapper {
                 false,
                 newMeetingDto.startDateTime()
         );
-        newMeetingDto.sharedUsers().forEach(a -> {
+        newMeetingDto.attendees().forEach(a -> {
             User user = userRepository.findById(a.userId()).orElseThrow();
             meeting.addAttendee(user, a.role());
         });

@@ -3,11 +3,11 @@ package optis.guideme.api;
 import optis.guideme.api.dto.request.NewMeetingDto;
 import optis.guideme.api.dto.response.MeetingDto;
 import optis.guideme.application.MeetingService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("api/meetings")
 public class MeetingController {
@@ -20,5 +20,10 @@ public class MeetingController {
     @PostMapping
     public MeetingDto createNewMeeting(@RequestBody NewMeetingDto newMeetingDto) {
         return meetingService.createNewMeeting(newMeetingDto);
+    }
+
+    @GetMapping
+    public List<MeetingDto> getAllMeetings() {
+        return meetingService.getAllMeetings();
     }
 }

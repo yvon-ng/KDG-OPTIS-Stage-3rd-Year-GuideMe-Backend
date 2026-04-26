@@ -5,6 +5,8 @@ import optis.guideme.api.mapper.request.NewMeetingRequestMapper;
 import optis.guideme.repository.MeetingRequestRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class MeetingRequestService {
     private final MeetingRequestRepository meetingRequestRepository;
@@ -17,6 +19,12 @@ public class MeetingRequestService {
 
     public MeetingRequestDto createMeetingRequest(NewMeetingRequestDto newMeetingRequestDto) {
         return mapper.toResponseDto(meetingRequestRepository.save(mapper.toDomain(newMeetingRequestDto)));
+    }
+
+    public List<MeetingRequestDto> getAllMeetingRequests(){
+        return meetingRequestRepository.findAll().stream().map(
+                mapper::toResponseDto
+        ).toList();
     }
 }
 
