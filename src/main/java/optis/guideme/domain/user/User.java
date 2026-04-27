@@ -21,6 +21,7 @@ public abstract class User {
     private String lastName;
     private String email;
     private String avatar;
+
 //    private List<Goal> goals;
 //    private List<Reminder> reminders;
 }

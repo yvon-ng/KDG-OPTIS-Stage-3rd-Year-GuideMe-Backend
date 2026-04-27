@@ -3,6 +3,7 @@ package optis.guideme.application;
 import optis.guideme.api.dto.response.UserDto;
 import optis.guideme.api.mapper.UserMapper;
 import optis.guideme.domain.exception.NotFoundException;
+import optis.guideme.domain.factories.UserFactory;
 import optis.guideme.domain.user.*;
 import optis.guideme.repository.UserRepository;
 import org.springframework.stereotype.Service;

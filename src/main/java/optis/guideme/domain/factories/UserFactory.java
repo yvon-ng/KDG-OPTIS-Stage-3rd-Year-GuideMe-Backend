@@ -2,10 +2,13 @@ package optis.guideme.domain.factories;
 
 import optis.guideme.api.dto.ActiveDirectoryUserDto;
 import optis.guideme.domain.user.*;
+import optis.guideme.domain.user.*;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.UUID;
 
+@Component
 public class UserFactory {
 
     public User addNewUser(ActiveDirectoryUserDto adUser) {
