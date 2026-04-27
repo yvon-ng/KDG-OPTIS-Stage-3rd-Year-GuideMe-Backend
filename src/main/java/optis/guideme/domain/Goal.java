@@ -1,6 +1,6 @@
 package optis.guideme.domain;
 
-import optis.guideme.domain.user.UserId;
+import optis.guideme.domain.user.User;
 
 import java.time.LocalDate;
 
@@ -11,7 +11,7 @@ public class Goal {
     private LocalDate dueDate;
     private LocalDate dateOfAchievement;
 
-    private UserId userId;
+    private User userId;
 
     public boolean isAchieved() {
         return dateOfAchievement != null;

@@ -1,17 +1,15 @@
 package optis.guideme.api;
 
-import lombok.NonNull;
-import optis.guideme.api.dto.MeetingRequestDto;
+import optis.guideme.api.dto.request.NewMeetingRequestDto;
+import optis.guideme.api.dto.response.MeetingRequestDto;
 import optis.guideme.application.MeetingRequestService;
-import optis.guideme.domain.meetingRequest.MeetingRequest;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
-@RequestMapping("/api/meeting-requests")
+import java.util.List;
+
+@CrossOrigin(origins = "http://localhost:4200")
+@RestController
+@RequestMapping("api/meeting-requests")
 public class MeetingRequestController {
     private final MeetingRequestService meetingRequestService;
 
@@ -19,9 +17,13 @@ public class MeetingRequestController {
         this.meetingRequestService = meetingRequestService;
     }
 
-    @PostMapping("/requests")
-    public ResponseEntity<@NonNull MeetingRequestDto> sendMeetingRequest(@RequestBody MeetingRequestDto meetingRequestDto) {
-        MeetingRequest meetingRequest = meetingRequestService.createMeetingRequest(meetingRequestDto);
-        return ResponseEntity.ok(MeetingRequestDto.fromDomain(meetingRequest));
+    @PostMapping("requests")
+    public MeetingRequestDto createMeetingRequest(@RequestBody NewMeetingRequestDto newMeetingRequestDto) {
+       return meetingRequestService.createMeetingRequest(newMeetingRequestDto);
+    }
+
+    @GetMapping("requests")
+    public List<MeetingRequestDto> getMeetingRequests() {
+        return meetingRequestService.getAllMeetingRequests();
     }
 }

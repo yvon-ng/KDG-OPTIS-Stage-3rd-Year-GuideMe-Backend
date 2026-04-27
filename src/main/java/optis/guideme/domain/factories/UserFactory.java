@@ -16,8 +16,8 @@ public class UserFactory {
         Role role = determineRoleFromAdGroups(adUser.getMemberOf());
 
         return switch (role) {
-            case MANAGER -> new Manager(UserId.of(UUID.randomUUID()),adUser.getGivenName(), adUser.getSurname(), adUser.getMail());
-            case CONSULTANT -> new Consultant(UserId.of(UUID.randomUUID()),adUser.getGivenName(), adUser.getSurname(), adUser.getMail());
+            case MANAGER -> new Manager(UUID.randomUUID(),adUser.getGivenName(), adUser.getSurname(), adUser.getMail());
+            case CONSULTANT -> new Consultant(UUID.randomUUID(),adUser.getGivenName(), adUser.getSurname(), adUser.getMail());
         };
     }
 

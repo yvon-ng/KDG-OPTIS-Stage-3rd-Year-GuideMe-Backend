@@ -1,6 +1,6 @@
 package optis.guideme.domain;
 
-import optis.guideme.domain.user.UserId;
+import optis.guideme.domain.user.User;
 
 import java.time.LocalDateTime;
 
@@ -9,5 +9,5 @@ public class Notification {
     private String description;
     private boolean isRead;
     private LocalDateTime receivedAt;
-    private UserId receiver;
+    private User receiver;
 }

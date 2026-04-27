@@ -1,81 +1,31 @@
 package optis.guideme.application;
-
-import optis.guideme.api.dto.MeetingRequestDto;
-import optis.guideme.domain.exception.WrongInputException;
-import optis.guideme.domain.meetingRequest.*;
-import optis.guideme.domain.user.Manager;
-import optis.guideme.domain.user.User;
-import optis.guideme.domain.user.UserId;
-import optis.guideme.persistence.DbMeetingRequestRepository;
+import optis.guideme.api.dto.request.NewMeetingRequestDto;
+import optis.guideme.api.dto.response.MeetingRequestDto;
+import optis.guideme.api.mapper.request.NewMeetingRequestMapper;
+import optis.guideme.repository.MeetingRequestRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
-
 
 @Service
 public class MeetingRequestService {
-    private final DbMeetingRequestRepository dbMeetingRequestRepository;
-    private final DefaultReferenceCodeGenerator defaultReferenceCodeGenerator;
-    private final UserService userService;
+    private final MeetingRequestRepository meetingRequestRepository;
+    private final NewMeetingRequestMapper mapper;
 
-
-    public MeetingRequestService(DbMeetingRequestRepository dbMeetingRequestRepository, DefaultReferenceCodeGenerator defaultReferenceCodeGenerator, UserService userService) {
-        this.dbMeetingRequestRepository = dbMeetingRequestRepository;
-        this.defaultReferenceCodeGenerator = defaultReferenceCodeGenerator;
-        this.userService = userService;
+    public MeetingRequestService(MeetingRequestRepository meetingRequestRepository, NewMeetingRequestMapper mapper) {
+        this.meetingRequestRepository = meetingRequestRepository;
+        this.mapper = mapper;
     }
 
-    public MeetingRequest createMeetingRequest(MeetingRequestDto meetingRequestDto) {
-        UserId requestedBy = UserId.of(meetingRequestDto.requestedBy());
+    public MeetingRequestDto createMeetingRequest(NewMeetingRequestDto newMeetingRequestDto) {
+        return mapper.toResponseDto(meetingRequestRepository.save(mapper.toDomain(newMeetingRequestDto)));
+    }
 
-        List<UserId> requestFor = meetingRequestDto.requestFor().stream()
-                .map(UserId::of)
-                .toList();
-
-        //check if request is allowed (at leasty one manager)
-        User requester = userService.findById(requestedBy);
-        List<User> requestedUsers = meetingRequestDto.requestFor().stream()
-                .map(UserId::of)
-                .map(userService::findById)
-                .toList();
-
-        boolean isAllowed =
-                requester instanceof Manager || requestedUsers.stream().anyMatch(user -> user instanceof Manager);
-
-        if (!isAllowed) {
-            throw new WrongInputException("Meeting Requests must include at least one manager!");
-        }
-
-        MeetingRequest meetingRequest = new MeetingRequest(
-                meetingRequestDto.endDateTime(),
-                true,
-                new MeetingRequestId(UUID.randomUUID()),
-                meetingRequestDto.name(),
-                meetingRequestDto.previousRequestId(),
-                meetingRequestDto.recurrence(),
-                null,
-                requestedBy,
-                requestFor,
-                meetingRequestDto.startDateTime(),
-                Status.PENDING
-        );
-
-        //getrequested users names:
-        //todo find solution for people with the sam e names
-        List<String> names = requestedUsers.stream()
-                .map(User::getFirstName)
-                .toList();
-
-        while (meetingRequest.getReferenceCode() == null){
-                String refCode = defaultReferenceCodeGenerator.generateReferenceCode(meetingRequest, names);
-                //TODO hardcoded for now: check if ref code is unique in db
-                boolean isUnique = true;
-                if (isUnique){
-                    meetingRequest.assignReferenceCode(refCode);
-                }
-        }
-        return dbMeetingRequestRepository.save(meetingRequest);
+    public List<MeetingRequestDto> getAllMeetingRequests(){
+        return meetingRequestRepository.findAll().stream().map(
+                mapper::toResponseDto
+        ).toList();
     }
 }
+
 
