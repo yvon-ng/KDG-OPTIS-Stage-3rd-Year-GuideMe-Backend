@@ -12,6 +12,7 @@ import optis.guideme.domain.exception.WrongInputException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @AllArgsConstructor

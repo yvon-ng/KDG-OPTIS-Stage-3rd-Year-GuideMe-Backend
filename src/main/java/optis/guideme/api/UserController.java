@@ -1,11 +1,7 @@
 package optis.guideme.api;
 
-import lombok.NonNull;
 import optis.guideme.api.dto.response.UserDto;
-import optis.guideme.api.mapper.UserMapper;
 import optis.guideme.application.UserService;
-import optis.guideme.domain.exception.NotFoundException;
-import optis.guideme.domain.user.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
