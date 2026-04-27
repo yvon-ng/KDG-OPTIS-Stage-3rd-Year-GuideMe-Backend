@@ -31,7 +31,8 @@ public class UserMapper {
                 user.getEmail(),
                 clientName,
                 startDateAtClient,
-                clientRatings
+                clientRatings,
+                user.getAvatar()
         );
     }
 }

@@ -25,8 +25,8 @@ public class Consultant extends User {
     @ElementCollection
     private final List<ClientRating> clientRatings = new ArrayList<>();
 
-    public Consultant(UUID userId, String firstName, String lastName, String email) {
-        super(userId, firstName, lastName, email);
+    public Consultant(UUID userId, String firstName, String lastName, String email, String avatar) {
+        super(userId, firstName, lastName, email, avatar);
     }
 
     public void assignToClient(String clientName, LocalDate startDateAtClient) {
