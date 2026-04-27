@@ -1,17 +1,18 @@
 package optis.guideme.domain.meetingRequest;
 
-import optis.guideme.domain.user.User;
+import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;
+import java.util.List;
 
+@Component
 public class DefaultReferenceCodeGenerator { // !!!!!!!!  use in service and check in db if code already exist
     public static final String REFERENCE_CODE_TEMPLATE = "%s-Q%d-%02d-%s";
     private static final SecureRandom RANDOM = new SecureRandom();
 
-    public String generateReferenceCode(MeetingRequest request) {
+    public String generateReferenceCode(MeetingRequest request, List<String> names) {
         // get all attendees first names, turn it into PascalCase if they have no firstname then take "Unknown"
-        String names = request.getRequestFor().stream()
-                .map(User::getFirstName)
+        String formattedNames = names.stream()
                 .map(name -> {
                     if (name == null || name.trim().isEmpty()) {
                         return "Unknown";
@@ -39,7 +40,7 @@ public class DefaultReferenceCodeGenerator { // !!!!!!!!  use in service and che
 
         return String.format(
                 REFERENCE_CODE_TEMPLATE,
-                names,
+                formattedNames,
                 quarter,
                 year,
                 randomCode
