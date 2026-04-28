@@ -1,20 +1,15 @@
 package optis.guideme.domain.user;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
-
-@Entity
+@Embeddable
+@Getter
 public class ClientRating {
-    @Id
-    @GeneratedValue
-    private UUID clientId;
-    private String currentClient;
+    private String clientName;
+    @Enumerated(EnumType.STRING)
     private Rating rating;
     private LocalDate date;
 }
