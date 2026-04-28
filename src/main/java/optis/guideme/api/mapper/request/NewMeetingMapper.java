@@ -4,9 +4,6 @@ import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewMeetingDto;
 import optis.guideme.api.dto.response.MeetingDto;
 import optis.guideme.domain.meeting.Meeting;
-import optis.guideme.domain.meetingRequest.DefaultReferenceCodeGenerator;
-import optis.guideme.domain.user.User;
-import optis.guideme.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor

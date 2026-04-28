@@ -4,9 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import optis.guideme.domain.meeting.Meeting;
-import optis.guideme.domain.user.User;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;

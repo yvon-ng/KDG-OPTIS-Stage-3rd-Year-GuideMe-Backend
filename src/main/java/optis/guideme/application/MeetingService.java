@@ -3,7 +3,6 @@ package optis.guideme.application;
 import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewMeetingDto;
 import optis.guideme.api.dto.response.MeetingDto;
-import optis.guideme.api.mapper.request.NewAttendeeMapper;
 import optis.guideme.api.mapper.request.NewMeetingMapper;
 import optis.guideme.domain.exception.NotFoundException;
 import optis.guideme.domain.meeting.Attendee;
