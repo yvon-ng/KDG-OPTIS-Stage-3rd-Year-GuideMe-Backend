@@ -4,6 +4,7 @@ import optis.guideme.domain.meeting.Meeting;
 import optis.guideme.domain.user.User;
 
 import java.util.List;
+import java.util.UUID;
 
 public class Note {
 
@@ -13,7 +14,7 @@ public class Note {
 
     private Meeting meeting;
     private List<User> sharedUsers;
-    private User owner;
+    private UUID owner;
 
     public void publish(Visibility visibility) { // to share or make private
         this.visibility = visibility;

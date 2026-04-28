@@ -2,6 +2,7 @@ package optis.guideme.domain.factories;
 
 import optis.guideme.api.dto.ActiveDirectoryUserDto;
 import optis.guideme.domain.user.*;
+import optis.guideme.domain.user.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -16,8 +17,8 @@ public class UserFactory {
         Role role = determineRoleFromAdGroups(adUser.getMemberOf());
 
         return switch (role) {
-            case MANAGER -> new Manager(UUID.randomUUID(),adUser.getGivenName(), adUser.getSurname(), adUser.getMail());
-            case CONSULTANT -> new Consultant(UUID.randomUUID(),adUser.getGivenName(), adUser.getSurname(), adUser.getMail());
+            case MANAGER -> new Manager(UUID.fromString(adUser.getObjectId()), adUser.getGivenName(), adUser.getSurname(), adUser.getMail(), null); //todo check if objectid is correct
+            case CONSULTANT -> new Consultant(UUID.fromString(adUser.getObjectId()), adUser.getGivenName(), adUser.getSurname(), adUser.getMail(), null); //todo check if objectid is correct
         };
     }
 

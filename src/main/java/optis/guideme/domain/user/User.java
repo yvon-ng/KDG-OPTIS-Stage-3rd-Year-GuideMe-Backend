@@ -7,20 +7,21 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
-@Getter
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="users")
+@Entity
+@Table(name = "users")
+@Getter
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="role")
+@DiscriminatorColumn(name = "role")
 public abstract class User {
     @Id
     private UUID userId;
     private String firstName;
     private String lastName;
     private String email;
+    private String avatar;
 
-    //    private List<Goal> goals;
+//    private List<Goal> goals;
 //    private List<Reminder> reminders;
 }
