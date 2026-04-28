@@ -1,5 +1,6 @@
 package optis.guideme.api.mapper.request;
 
+import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewMeetingRequestDto;
 import optis.guideme.api.dto.response.MeetingRequestDto;
 import optis.guideme.domain.exception.NotFoundException;
@@ -12,16 +13,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Component
 public class NewMeetingRequestMapper {
     private final UserRepository userRepository;
     private final DefaultReferenceCodeGenerator defaultReferenceCodeGenerator;
 
-
-    public NewMeetingRequestMapper(UserRepository userRepository, DefaultReferenceCodeGenerator defaultReferenceCodeGenerator) {
-        this.userRepository = userRepository;
-        this.defaultReferenceCodeGenerator = defaultReferenceCodeGenerator;
-    }
     public MeetingRequest toDomain(NewMeetingRequestDto newMeetingRequestDto) {
         User requestedBy = userRepository.findById(newMeetingRequestDto.requestedBy()).orElseThrow(() -> new NotFoundException("User not found with id " + newMeetingRequestDto.requestedBy()));
         List<User> requestFor = userRepository.findAllById(newMeetingRequestDto.requestFor());

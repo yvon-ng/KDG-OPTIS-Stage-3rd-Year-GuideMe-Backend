@@ -5,11 +5,13 @@ import optis.guideme.api.dto.response.MeetingRequestDto;
 import optis.guideme.api.mapper.request.NewMeetingRequestMapper;
 import optis.guideme.repository.MeetingRequestRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
+@Transactional
 public class MeetingRequestService {
     private final MeetingRequestRepository meetingRequestRepository;
     private final NewMeetingRequestMapper mapper;

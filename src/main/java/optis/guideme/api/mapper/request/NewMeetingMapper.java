@@ -1,5 +1,6 @@
 package optis.guideme.api.mapper.request;
 
+import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewMeetingDto;
 import optis.guideme.api.dto.response.MeetingDto;
 import optis.guideme.domain.meeting.Meeting;
@@ -8,31 +9,17 @@ import optis.guideme.domain.user.User;
 import optis.guideme.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
+@RequiredArgsConstructor
 @Component
 public class NewMeetingMapper {
     private final NewAttendeeMapper mapper;
-    private final UserRepository userRepository;
-    private final DefaultReferenceCodeGenerator defaultReferenceCodeGenerator;
-
-    public NewMeetingMapper(NewAttendeeMapper mapper, UserRepository userRepository, DefaultReferenceCodeGenerator defaultReferenceCodeGenerator) {
-        this.mapper = mapper;
-        this.userRepository = userRepository;
-        this.defaultReferenceCodeGenerator = defaultReferenceCodeGenerator;
-    }
 
     public Meeting toDomain(NewMeetingDto newMeetingDto) {
-        Meeting meeting = new Meeting(
-                newMeetingDto.endDateTime(),
+        return new Meeting(
                 newMeetingDto.name(),
-                false,
+                newMeetingDto.endDateTime(),
                 newMeetingDto.startDateTime()
         );
-        newMeetingDto.attendees().forEach(a -> {
-            User user = userRepository.findById(a.userId()).orElseThrow();
-            meeting.addAttendee(user, a.role());
-        });
-        meeting.assignReferenceCode(defaultReferenceCodeGenerator.generateReferenceCodeFromMeeting(meeting));
-        return meeting;
     }
     public MeetingDto toResponseDto(Meeting meeting) {
         return new MeetingDto(

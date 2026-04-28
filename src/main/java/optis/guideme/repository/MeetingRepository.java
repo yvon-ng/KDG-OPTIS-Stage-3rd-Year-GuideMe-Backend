@@ -9,5 +9,5 @@ import java.util.UUID;
 
 @Repository
 public interface MeetingRepository extends JpaRepository<@NonNull Meeting, @NonNull UUID> {
-    Meeting save(Meeting meeting);
+//    Meeting save(Meeting meeting);
 }

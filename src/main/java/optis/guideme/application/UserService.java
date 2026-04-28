@@ -12,9 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import java.util.UUID;
 
-@RequiredArgsConstructor
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
 
