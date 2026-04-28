@@ -20,38 +20,30 @@ public class Note {
     private String description;
     private Visibility visibility;
 
-    @ManyToOne
-    @JoinColumn(name = "meeting_id")
-    private Meeting meeting;
-    @ManyToMany
-    @JoinTable(
-            name = "shared_user_notes",
-            joinColumns = @JoinColumn(name = "note_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private List<User> sharedUsers;
-
-    @ManyToOne
-    @JoinColumn(name = "owner_user_id")
-    private User owner;
+    private UUID meeting;
+    private List<UUID> sharedUsers;
+    private UUID owner;
 
     public void publish(Visibility visibility) { // to share or make private
         this.visibility = visibility;
     }
 
-    public void publish(Meeting meeting) { // to share with meeting attendees
+    public void publish(UUID meetingId) { // to share with meeting attendees
         this.visibility = Visibility.MEETING_PARTICIPANTS;
-        this.meeting = meeting;
+        this.meeting = meetingId;
+        //ATTENDEES SHOULD BE ADDED TO SHARED USER LIST VIA SERVICE
     }
 
-    public void share(User user) { // to share with user
+    public void share(UUID userId) { // to share with user
         if (sharedUsers == null) {
             sharedUsers = new ArrayList<>();
         }
-        sharedUsers.add(user);
+        sharedUsers.add(userId);
     }
 
-    public void hide(User user) { // to revoke from user
-        sharedUsers.remove(user);
+    public void hide(UUID userId) { // to revoke from user
+        if (sharedUsers != null) {
+            sharedUsers.remove(userId);
+        }
     }
 }

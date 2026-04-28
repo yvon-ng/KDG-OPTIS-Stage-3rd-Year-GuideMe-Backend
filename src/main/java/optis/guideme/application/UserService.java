@@ -18,10 +18,6 @@ import java.util.UUID;
 public class UserService {
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
     public UserDto getUser(UUID userId) {
         return UserMapper.toDto(this.userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found with id: " + userId)));
     }

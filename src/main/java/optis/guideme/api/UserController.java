@@ -1,5 +1,6 @@
 package optis.guideme.api;
 
+import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.response.UserDto;
 import optis.guideme.application.UserService;
 import org.slf4j.Logger;
@@ -13,14 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/user")
 public class UserController {
     private final UserService userService;
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
-
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
 
     @GetMapping("/me")
     public UserDto me(@AuthenticationPrincipal Jwt jwt){
