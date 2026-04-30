@@ -13,7 +13,7 @@ public class NewNoteMapper {
     public Note toDomain(NewNoteDto newNoteDto) {
         Visibility visibility = newNoteDto.visibility() == null
                 ? Visibility.PRIVATE
-                : Visibility.valueOf(newNoteDto.visibility().toUpperCase());
+                : newNoteDto.visibility();
 
         return new Note(
                 newNoteDto.title(),
@@ -29,7 +29,7 @@ public class NewNoteMapper {
                 note.getNoteId(),
                 note.getTitle(),
                 note.getDescription(),
-                note.getVisibility().toString(),
+                note.getVisibility(),
                 note.getOwner()
         );
     }
