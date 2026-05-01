@@ -9,6 +9,7 @@ import optis.guideme.repository.NoteRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -22,5 +23,9 @@ public class NoteService {
         Note note = newNoteMapper.toDomain(newNoteDto);
         note.assignOwner(userId);
         return newNoteMapper.toResponseDto(noteRepository.save(note));
+    }
+
+    public List<NoteDto> getAllNotes(UUID userId) {
+        return noteRepository.findAllByOwner(userId).stream().map(newNoteMapper::toResponseDto).toList();
     }
 }

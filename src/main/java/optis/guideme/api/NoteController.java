@@ -6,11 +6,9 @@ import optis.guideme.api.dto.response.NoteDto;
 import optis.guideme.application.NoteService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -23,5 +21,11 @@ public class NoteController {
     public NoteDto createNewNote(@AuthenticationPrincipal Jwt jwt, @RequestBody NewNoteDto newNoteDto){
         UUID userId = UUID.fromString(jwt.getClaim("oid"));
         return noteService.createNewNote(userId, newNoteDto);
+    }
+
+    @GetMapping
+    public List<NoteDto> getMyNotes(@AuthenticationPrincipal Jwt jwt){
+        UUID userId = UUID.fromString(jwt.getClaim("oid"));
+        return noteService.getAllNotes(userId);
     }
 }
