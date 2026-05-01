@@ -9,6 +9,7 @@ import optis.guideme.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,5 +30,16 @@ public class UserService {
         Invitation invitation = new Invitation(email, role);
 
         return Optional.empty();
+    }
+
+    public List<User> getUsersByIds(List<UUID> ids) {
+        return userRepository.findAllById(ids);
+    }
+
+    public List<UserDto> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(UserMapper::toDto)
+                .toList();
     }
 }

@@ -32,7 +32,8 @@ public class UserMapper {
                 clientName,
                 startDateAtClient,
                 clientRatings,
-                user.getAvatar()
+                user.getAvatar(),
+                user.getUserId()
         );
     }
 }
