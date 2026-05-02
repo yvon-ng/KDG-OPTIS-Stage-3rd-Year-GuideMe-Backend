@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -30,13 +32,16 @@ public class Note {
     @Column(name = "user_id")
     private List<UUID> sharedUsers;
     private UUID owner;
+    private LocalDateTime creationTime;
 
+    //For adding new notes only
     public Note(String title, String description, Visibility visibility, UUID meeting, List<UUID> sharedUsers) {
         this.title = title;
         this.description = description;
         this.visibility = visibility;
         this.meeting = meeting;
         this.sharedUsers = (sharedUsers != null) ? new ArrayList<>(sharedUsers) : new ArrayList<>();
+        this.creationTime = LocalDateTime.now();
     }
 
     public void publish(Visibility visibility) { // to share or make private

@@ -30,7 +30,8 @@ public class NewNoteMapper {
                 note.getTitle(),
                 note.getDescription(),
                 note.getVisibility(),
-                note.getOwner()
+                note.getOwner(),
+                note.getCreationTime()
         );
     }
 }
