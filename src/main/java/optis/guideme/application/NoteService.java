@@ -3,6 +3,7 @@ package optis.guideme.application;
 import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewNoteDto;
 import optis.guideme.api.dto.response.NoteDto;
+import optis.guideme.api.dto.response.NotesDto;
 import optis.guideme.api.mapper.request.NewNoteMapper;
 import optis.guideme.domain.note.Note;
 import optis.guideme.repository.NoteRepository;
@@ -22,10 +23,10 @@ public class NoteService {
     public NoteDto createNewNote(UUID userId, NewNoteDto newNoteDto) {
         Note note = newNoteMapper.toDomain(newNoteDto);
         note.assignOwner(userId);
-        return newNoteMapper.toResponseDto(noteRepository.save(note));
+        return newNoteMapper.toNoteResponseDto(noteRepository.save(note));
     }
 
-    public List<NoteDto> getAllNotes(UUID userId) {
-        return noteRepository.findAllByOwner(userId).stream().map(newNoteMapper::toResponseDto).toList();
+    public List<NotesDto> getAllNotes(UUID userId) {
+        return noteRepository.findAllByOwner(userId).stream().map(newNoteMapper::toNotesResponseDto).toList();
     }
 }

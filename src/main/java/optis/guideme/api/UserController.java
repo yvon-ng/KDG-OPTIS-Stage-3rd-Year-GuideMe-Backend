@@ -19,17 +19,11 @@ import java.util.UUID;
 @RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
-    private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @GetMapping("/me")
     public UserDto me(@AuthenticationPrincipal Jwt jwt){
         UUID userId = UUID.fromString(jwt.getClaim("oid"));
         return userService.getUser(userId);
-    }
-
-    @GetMapping("/test")
-    public void testCall(){
-        logger.info("INFO: De test call naar een public endpoint is gelukt!");
     }
 
 //    @GetMapping("/invite")

@@ -3,6 +3,7 @@ package optis.guideme.api;
 import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewNoteDto;
 import optis.guideme.api.dto.response.NoteDto;
+import optis.guideme.api.dto.response.NotesDto;
 import optis.guideme.application.NoteService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -24,7 +25,7 @@ public class NoteController {
     }
 
     @GetMapping
-    public List<NoteDto> getMyNotes(@AuthenticationPrincipal Jwt jwt){
+    public List<NotesDto> getMyNotes(@AuthenticationPrincipal Jwt jwt){
         UUID userId = UUID.fromString(jwt.getClaim("oid"));
         return noteService.getAllNotes(userId);
     }

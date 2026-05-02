@@ -1,9 +1,12 @@
 package optis.guideme.domain.note;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,8 +23,9 @@ public class Note {
     @GeneratedValue
     private UUID noteId;
     private String title;
-    @Column(columnDefinition = "TEXT")
-    private String description;
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    private JsonNode description;
     @Enumerated(EnumType.STRING)
     private Visibility visibility;
     private UUID meeting;
@@ -36,7 +40,7 @@ public class Note {
     private LocalDateTime creationTime;
 
     //For adding new notes only
-    public Note(String title, String description, Visibility visibility, UUID meeting, List<UUID> sharedUsers) {
+    public Note(String title, JsonNode description, Visibility visibility, UUID meeting, List<UUID> sharedUsers) {
         this.title = title;
         this.description = description;
         this.visibility = visibility;
