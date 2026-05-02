@@ -8,6 +8,8 @@ import optis.guideme.domain.meeting.Attendee;
 import optis.guideme.domain.meeting.Meeting;
 import optis.guideme.repository.MeetingRepository;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -33,5 +35,9 @@ private final NewAttendeeMapper attendeeMapper;
         return meetingRepository.findAll().stream().map(
                 mapper::toResponseDto
         ).toList();
+    }
+
+    public MeetingDto getNextMeeting() {
+        return mapper.toResponseDto(meetingRepository.findFirstByStartDateTimeAfterOrderByStartDateTimeAsc(LocalDateTime.now()).orElseThrow());
     }
 }
