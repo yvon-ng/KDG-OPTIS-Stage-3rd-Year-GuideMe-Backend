@@ -34,6 +34,16 @@ public class MeetingRequestService {
         ).toList();
     }
 
+    public List<MeetingRequestDto> getIncomingMeetingRequests(UUID userId) {
+        return meetingRequestRepository.getIncomingMeetingRequests(userId).stream().map(
+                mapper::toResponseDto
+        ).toList();
+    }
+
+    public List<MeetingRequestDto> getOutgoingMeetingRequests(UUID userId) {
+        return meetingRequestRepository.getOutgoingMeetingRequests(userId).stream().map(
+        mapper::toResponseDto).toList();
+    }
 }
 
 

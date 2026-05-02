@@ -1,5 +1,6 @@
 package optis.guideme.api;
 
+import lombok.AllArgsConstructor;
 import optis.guideme.api.dto.request.NewMeetingRequestDto;
 import optis.guideme.api.dto.response.MeetingRequestDto;
 import optis.guideme.application.MeetingRequestService;
@@ -10,14 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("api/meeting-requests")
 public class MeetingRequestController {
     private final MeetingRequestService meetingRequestService;
-
-    public MeetingRequestController(MeetingRequestService meetingRequestService) {
-        this.meetingRequestService = meetingRequestService;
-    }
 
     @PostMapping
     public MeetingRequestDto createMeetingRequest(@AuthenticationPrincipal Jwt jwt, @RequestBody NewMeetingRequestDto newMeetingRequestDto) {
@@ -28,5 +26,17 @@ public class MeetingRequestController {
     @GetMapping
     public List<MeetingRequestDto> getMeetingRequests() {
         return meetingRequestService.getAllMeetingRequests();
+    }
+
+    @GetMapping("me/incoming")
+    public List<MeetingRequestDto> getIncomingMeetingRequests(@AuthenticationPrincipal Jwt jwt) {
+        UUID userId = UUID.fromString(jwt.getClaim("oid"));
+        return meetingRequestService.getIncomingMeetingRequests(userId);
+    }
+
+    @GetMapping("me/outgoing")
+    public List<MeetingRequestDto> getOutgoingMeetingRequests(@AuthenticationPrincipal Jwt jwt) {
+        UUID userId = UUID.fromString(jwt.getClaim("oid"));
+        return meetingRequestService.getOutgoingMeetingRequests(userId);
     }
 }
