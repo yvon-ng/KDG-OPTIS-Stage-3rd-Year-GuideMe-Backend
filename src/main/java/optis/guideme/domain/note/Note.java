@@ -20,6 +20,7 @@ public class Note {
     @GeneratedValue
     private UUID noteId;
     private String title;
+    @Column(columnDefinition = "TEXT")
     private String description;
     @Enumerated(EnumType.STRING)
     private Visibility visibility;
