@@ -33,8 +33,7 @@ public class UserMapper {
                 clientName,
                 startDateAtClient,
                 clientRatings,
-                user.getAvatar(),
-                user.getUserId()
+                user.getAvatar()
         );
     }
 }
