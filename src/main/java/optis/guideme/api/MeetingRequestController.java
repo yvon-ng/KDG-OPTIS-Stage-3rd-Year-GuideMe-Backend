@@ -1,17 +1,16 @@
 package optis.guideme.api;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewMeetingRequestDto;
 import optis.guideme.api.dto.response.MeetingRequestDto;
 import optis.guideme.application.MeetingRequestService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.UUID;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("api/meeting-requests")
 public class MeetingRequestController {

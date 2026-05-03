@@ -1,5 +1,6 @@
 package optis.guideme.api.mapper.request;
 
+import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewAttendeeDto;
 import optis.guideme.api.dto.response.AttendeeDto;
 import optis.guideme.domain.exception.NotFoundException;
@@ -9,13 +10,10 @@ import optis.guideme.domain.user.User;
 import optis.guideme.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
+@RequiredArgsConstructor
 @Component
 public class NewAttendeeMapper {
     private final UserRepository userRepository;
-
-    public NewAttendeeMapper(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     public Attendee toDomain(NewAttendeeDto newAttendeeDto){
        User user = userRepository.findById(newAttendeeDto.userId()).orElseThrow(() -> new NotFoundException("User not found with id " + newAttendeeDto.userId()));

@@ -8,12 +8,14 @@ import optis.guideme.domain.meetingRequest.MeetingRequest;
 import optis.guideme.domain.user.User;
 import optis.guideme.repository.MeetingRequestRepository;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
-@RequiredArgsConstructor
+
 @Service
+@RequiredArgsConstructor
+@Transactional
 public class MeetingRequestService {
     private final MeetingRequestRepository meetingRequestRepository;
     private final NewMeetingRequestMapper mapper;
