@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -40,8 +41,10 @@ public class MeetingService {
     }
 
     public List<MeetingDto> getAllMeetings() {
-        return meetingRepository.findAll().stream().map(
-                mapper::toResponseDto
-        ).toList();
+        return meetingRepository.findAll().stream().map(mapper::toResponseDto).toList();
+    }
+
+    public List<MeetingDto> getAllMeetingsByUser(UUID userId) {
+        return meetingRepository.findAllByAttendees_User_UserId(userId).stream().map(mapper::toResponseDto).toList();
     }
 }

@@ -27,7 +27,7 @@ public class NewMeetingMapper {
                                 mapper::toResponseDto
                         )
                         .toList(),
-                meeting.isOccured()
+                meeting.isOccurred()
         );
     }
 

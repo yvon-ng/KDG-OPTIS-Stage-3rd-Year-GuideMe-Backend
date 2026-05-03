@@ -4,9 +4,12 @@ import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewMeetingDto;
 import optis.guideme.api.dto.response.MeetingDto;
 import optis.guideme.application.MeetingService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
@@ -22,5 +25,11 @@ public class MeetingController {
     @GetMapping
     public List<MeetingDto> getAllMeetings() {
         return meetingService.getAllMeetings();
+    }
+
+    @GetMapping("myMeetings")
+    public List<MeetingDto> getMyMeetings(@AuthenticationPrincipal Jwt jwt) {
+        UUID userId = UUID.fromString(jwt.getClaim("oid"));
+        return meetingService.getAllMeetingsByUser(userId);
     }
 }
