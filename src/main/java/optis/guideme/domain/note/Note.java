@@ -1,35 +1,78 @@
 package optis.guideme.domain.note;
 
-import optis.guideme.domain.meeting.Meeting;
-import optis.guideme.domain.user.User;
+import com.fasterxml.jackson.databind.JsonNode;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Entity
+@Getter
+@Table(name="notes")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Note {
-
+    @Id
+    @GeneratedValue
+    private UUID noteId;
     private String title;
-    private String description;
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    private JsonNode description;
+    @Enumerated(EnumType.STRING)
     private Visibility visibility;
-
-    private Meeting meeting;
-    private List<User> sharedUsers;
+    private UUID meeting;
+    @ElementCollection
+    @CollectionTable(
+            name = "shared_user_notes",
+            joinColumns = @JoinColumn(name = "note_id")
+    )
+    @Column(name = "user_id")
+    private List<UUID> sharedUsers;
     private UUID owner;
+    private LocalDateTime creationTime;
+
+    //For adding new notes only
+    public Note(String title, JsonNode description, Visibility visibility, UUID meeting, List<UUID> sharedUsers) {
+        this.title = title;
+        this.description = description;
+        this.visibility = visibility;
+        this.meeting = meeting;
+        this.sharedUsers = (sharedUsers != null) ? new ArrayList<>(sharedUsers) : new ArrayList<>();
+        this.creationTime = LocalDateTime.now();
+    }
 
     public void publish(Visibility visibility) { // to share or make private
         this.visibility = visibility;
     }
 
-    public void publish(Meeting meeting) { // to share with meeting attendees
+    public void publish(UUID meetingId) { // to share with meeting attendees
         this.visibility = Visibility.MEETING_PARTICIPANTS;
-        this.meeting = meeting;
+        this.meeting = meetingId;
+        //ATTENDEES SHOULD BE ADDED TO SHARED USER LIST VIA SERVICE
     }
 
-    public void share(User user) { // to share with user
-        sharedUsers.add(user);
+    public void share(UUID userId) { // to share with user
+        if (sharedUsers == null) {
+            sharedUsers = new ArrayList<>();
+        }
+        sharedUsers.add(userId);
     }
 
-    public void hide(User user) { // to revoke from user
-        sharedUsers.remove(user);
+    public void hide(UUID userId) { // to revoke from user
+        if (sharedUsers != null) {
+            sharedUsers.remove(userId);
+        }
+    }
+
+    public void assignOwner(UUID userId) {
+        this.owner = userId;
     }
 }

@@ -32,12 +32,12 @@ public class Meeting {
     private boolean occured;
 
 
-    public Meeting( LocalDateTime endDateTime, String name, boolean occured, LocalDateTime startDateTime) {
-        this.endDateTime = endDateTime;
+    public Meeting(String name, LocalDateTime startDateTime, LocalDateTime endDateTime) {
         this.name = name;
-        this.occured = occured;
-        this.attendees = new ArrayList<>();
         this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+        this.occured = false;
+        this.attendees = new ArrayList<>();
     }
 
 
