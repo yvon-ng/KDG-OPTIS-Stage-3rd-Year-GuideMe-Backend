@@ -40,6 +40,15 @@ public class Meeting {
         this.attendees = new ArrayList<>();
     }
 
+    //constructor to create new Meeting after .accept() MeetingRequest
+    public Meeting( String name, LocalDateTime startDateTime, LocalDateTime endDateTime,  String referenceCode,  List<Attendee> attendees) {
+        this.name = name;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+        this.referenceCode = referenceCode;
+        this.attendees = attendees;
+        this.occured = false;
+    }
 
     public Quarter getQuarter() {
         return Quarter.fromMonth(startDateTime.getMonthValue());

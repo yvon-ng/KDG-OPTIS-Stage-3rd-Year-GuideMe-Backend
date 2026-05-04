@@ -2,6 +2,7 @@ package optis.guideme.api;
 
 import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewMeetingRequestDto;
+import optis.guideme.api.dto.response.MeetingDto;
 import optis.guideme.api.dto.response.MeetingRequestDto;
 import optis.guideme.application.MeetingRequestService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -37,5 +38,10 @@ public class MeetingRequestController {
     public List<MeetingRequestDto> getOutgoingMeetingRequests(@AuthenticationPrincipal Jwt jwt) {
         UUID userId = UUID.fromString(jwt.getClaim("oid"));
         return meetingRequestService.getOutgoingMeetingRequests(userId);
+    }
+
+    @PostMapping("/accept{meetingRequestId}")
+    public MeetingDto acceptMeetingRequest(@PathVariable UUID meetingRequestId) {
+        return meetingRequestService.acceptRequest(meetingRequestId);
     }
 }

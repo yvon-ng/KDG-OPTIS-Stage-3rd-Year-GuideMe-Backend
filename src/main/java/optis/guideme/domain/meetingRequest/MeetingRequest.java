@@ -51,8 +51,15 @@ public class MeetingRequest {
         this.requestedBy = userId;
     }
 
-    public Meeting accept(){
-        return new Meeting();
+    public Meeting accept(MeetingRequest meetingRequest) {
+        return new Meeting(
+//               meetingRequest.name,
+//               meetingRequest.startDateTime,
+//               meetingRequest.endDateTime,
+//               meetingRequest.referenceCode,
+////               meetingRequest.requestFor.stream().ma
+////               )
+        );
     }
 
     public boolean isRecurrent(){

@@ -1,8 +1,11 @@
 package optis.guideme.application;
 import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewMeetingRequestDto;
+import optis.guideme.api.dto.response.MeetingDto;
 import optis.guideme.api.dto.response.MeetingRequestDto;
+import optis.guideme.api.mapper.request.NewMeetingMapper;
 import optis.guideme.api.mapper.request.NewMeetingRequestMapper;
+import optis.guideme.domain.meeting.Meeting;
 import optis.guideme.domain.meetingRequest.DefaultReferenceCodeGenerator;
 import optis.guideme.domain.meetingRequest.MeetingRequest;
 import optis.guideme.domain.user.User;
@@ -19,6 +22,7 @@ import java.util.UUID;
 public class MeetingRequestService {
     private final MeetingRequestRepository meetingRequestRepository;
     private final NewMeetingRequestMapper mapper;
+    private final NewMeetingMapper meetingMapper;
     private final DefaultReferenceCodeGenerator defaultReferenceCodeGenerator;
     private final UserService userService;
 
@@ -45,6 +49,12 @@ public class MeetingRequestService {
     public List<MeetingRequestDto> getOutgoingMeetingRequests(UUID userId) {
         return meetingRequestRepository.getOutgoingMeetingRequests(userId).stream().map(
         mapper::toResponseDto).toList();
+    }
+
+    public MeetingDto acceptRequest(UUID meetingRequestId) {
+        MeetingRequest meetingRequest = meetingRequestRepository.findById(meetingRequestId).orElseThrow();
+        Meeting meeting = meetingRequest.accept(meetingRequest);
+        return meetingMapper.toResponseDto(meeting);
     }
 }
 
