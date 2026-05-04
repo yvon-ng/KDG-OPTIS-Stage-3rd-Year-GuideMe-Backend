@@ -49,7 +49,7 @@ public class Meeting {
         return (name != null && !name.isBlank()) ? name : referenceCode;
     }
 
-    //add attendee to meeting
+    //add attendee to meetingId
     public void addAttendee(User user, Role role) {
         Attendee attendee = new Attendee(role, user);
         this.attendees.add(attendee);

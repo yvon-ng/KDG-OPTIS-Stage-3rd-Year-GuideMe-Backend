@@ -12,5 +12,5 @@ import java.util.UUID;
 @Repository
 public interface MeetingRepository extends JpaRepository<@NonNull Meeting, @NonNull UUID> {
     List<Meeting> findAllByAttendees_User_UserId(UUID userId);
-//    Meeting save(Meeting meeting);
+//    Meeting save(Meeting meetingId);
 }

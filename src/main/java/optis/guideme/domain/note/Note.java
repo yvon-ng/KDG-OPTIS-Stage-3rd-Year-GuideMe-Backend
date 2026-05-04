@@ -28,7 +28,7 @@ public class Note {
     private JsonNode description;
     @Enumerated(EnumType.STRING)
     private Visibility visibility;
-    private UUID meeting;
+    private UUID meetingId;
     @ElementCollection
     @CollectionTable(
             name = "shared_user_notes",
@@ -40,11 +40,11 @@ public class Note {
     private LocalDateTime creationTime;
 
     //For adding new notes only
-    public Note(String title, JsonNode description, Visibility visibility, UUID meeting, List<UUID> sharedUsers) {
+    public Note(String title, JsonNode description, Visibility visibility, UUID meetingId, List<UUID> sharedUsers) {
         this.title = title;
         this.description = description;
         this.visibility = visibility;
-        this.meeting = meeting;
+        this.meetingId = meetingId;
         this.sharedUsers = (sharedUsers != null) ? new ArrayList<>(sharedUsers) : new ArrayList<>();
         this.creationTime = LocalDateTime.now();
     }
@@ -53,9 +53,9 @@ public class Note {
         this.visibility = visibility;
     }
 
-    public void publish(UUID meetingId) { // to share with meeting attendees
+    public void publish(UUID meetingId) { // to share with meetingId attendees
         this.visibility = Visibility.MEETING_PARTICIPANTS;
-        this.meeting = meetingId;
+        this.meetingId = meetingId;
         //ATTENDEES SHOULD BE ADDED TO SHARED USER LIST VIA SERVICE
     }
 
