@@ -6,6 +6,7 @@ import optis.guideme.api.dto.response.NoteDto;
 import optis.guideme.api.dto.response.NotesDto;
 import optis.guideme.api.mapper.request.NewNoteMapper;
 import optis.guideme.domain.note.Note;
+import optis.guideme.domain.note.Visibility;
 import optis.guideme.repository.NoteRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,5 +29,13 @@ public class NoteService {
 
     public List<NotesDto> getAllNotes(UUID userId) {
         return noteRepository.findAllByOwner(userId).stream().map(newNoteMapper::toNotesResponseDto).toList();
+    }
+
+    public List<NotesDto> getAllPrivateNotes(UUID userId) {
+        return noteRepository.getAllByOwnerAndVisibility(userId, Visibility.PRIVATE).stream().map(newNoteMapper::toNotesResponseDto).toList();
+    }
+
+    public List<NotesDto> getAllMeetingNotes(UUID userId) {
+        return noteRepository.getAllByOwnerAndMeetingIdIsNotNull(userId).stream().map(newNoteMapper::toNotesResponseDto).toList();
     }
 }
