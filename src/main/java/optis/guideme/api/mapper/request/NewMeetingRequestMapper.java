@@ -40,7 +40,7 @@ public class NewMeetingRequestMapper {
                 meetingRequest.getReferenceCode(),
                 meetingRequest.getStartDateTime(),
                 meetingRequest.getEndDateTime(),
-                meetingRequest.getRecurrenceIntervalInMonths(),
+                meetingRequest.getRecurrencePerYear(),
                 meetingRequest.getRequestFor(),
                 meetingRequest.getPreviousRequestId(),
                 meetingRequest.getPreviousRequestId()

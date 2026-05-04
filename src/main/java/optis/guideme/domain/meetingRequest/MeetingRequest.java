@@ -4,10 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import optis.guideme.domain.exception.WrongInputException;
 import optis.guideme.domain.meeting.Meeting;
-import optis.guideme.domain.user.Manager;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,7 +24,7 @@ public class MeetingRequest {
     private String referenceCode;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
-    private int recurrenceIntervalInMonths;
+    private int recurrencePerYear;
     @Enumerated(EnumType.STRING)
     private Status status;
     @Column(name = "requested_by")
@@ -39,12 +37,12 @@ public class MeetingRequest {
     private UUID previousRequestId;
     private boolean isAllowed = false;
 
-    public MeetingRequest(LocalDateTime endDateTime, String name, int recurrenceIntervalInMonths, List<UUID> requestFor, LocalDateTime startDateTime) {
+    public MeetingRequest(LocalDateTime endDateTime, String name, int recurrencePerYear, List<UUID> requestFor, LocalDateTime startDateTime) {
         this.endDateTime = endDateTime;
         this.status = Status.PENDING;
         this.startDateTime = startDateTime;
         this.requestFor = requestFor;
-        this.recurrenceIntervalInMonths = recurrenceIntervalInMonths;
+        this.recurrencePerYear = recurrencePerYear;
         this.previousRequestId = null;
         this.name = name;
     }
@@ -58,7 +56,7 @@ public class MeetingRequest {
     }
 
     public boolean isRecurrent(){
-        return recurrenceIntervalInMonths != 0;
+        return recurrencePerYear != 0;
     }
 
     public void assignReferenceCode(String referenceCode) { // use getter if already assigned
