@@ -23,4 +23,9 @@ public class MeetingController {
     public List<MeetingDto> getAllMeetings() {
         return meetingService.getAllMeetings();
     }
+
+    @GetMapping("me/next")
+    public MeetingDto getNextMeeting() {
+        return meetingService.getNextMeeting();
+    }
 }

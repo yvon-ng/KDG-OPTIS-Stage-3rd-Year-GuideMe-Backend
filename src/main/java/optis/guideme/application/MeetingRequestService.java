@@ -3,11 +3,15 @@ import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewMeetingRequestDto;
 import optis.guideme.api.dto.response.MeetingRequestDto;
 import optis.guideme.api.mapper.request.NewMeetingRequestMapper;
+import optis.guideme.domain.meetingRequest.DefaultReferenceCodeGenerator;
+import optis.guideme.domain.meetingRequest.MeetingRequest;
+import optis.guideme.domain.user.User;
 import optis.guideme.repository.MeetingRequestRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
+import java.util.UUID;
+
 
 @Service
 @RequiredArgsConstructor
@@ -15,15 +19,32 @@ import java.util.List;
 public class MeetingRequestService {
     private final MeetingRequestRepository meetingRequestRepository;
     private final NewMeetingRequestMapper mapper;
+    private final DefaultReferenceCodeGenerator defaultReferenceCodeGenerator;
+    private final UserService userService;
 
-    public MeetingRequestDto createMeetingRequest(NewMeetingRequestDto newMeetingRequestDto) {
-        return mapper.toResponseDto(meetingRequestRepository.save(mapper.toDomain(newMeetingRequestDto)));
+    public MeetingRequestDto createMeetingRequest(UUID userId, NewMeetingRequestDto newMeetingRequestDto) {
+        MeetingRequest meetingRequest = mapper.toDomain(newMeetingRequestDto);
+        meetingRequest.assignRequestedBy(userId);
+        List<User> requestFor = userService.getUsersByIds(newMeetingRequestDto.requestFor());
+        meetingRequest.assignReferenceCode(defaultReferenceCodeGenerator.generateReferenceCode(meetingRequest, requestFor));
+        return mapper.toResponseDto(meetingRequestRepository.save(meetingRequest));
     }
 
     public List<MeetingRequestDto> getAllMeetingRequests(){
         return meetingRequestRepository.findAll().stream().map(
                 mapper::toResponseDto
         ).toList();
+    }
+
+    public List<MeetingRequestDto> getIncomingMeetingRequests(UUID userId) {
+        return meetingRequestRepository.getIncomingMeetingRequests(userId).stream().map(
+                mapper::toResponseDto
+        ).toList();
+    }
+
+    public List<MeetingRequestDto> getOutgoingMeetingRequests(UUID userId) {
+        return meetingRequestRepository.getOutgoingMeetingRequests(userId).stream().map(
+        mapper::toResponseDto).toList();
     }
 }
 

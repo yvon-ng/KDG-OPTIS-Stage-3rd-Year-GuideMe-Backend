@@ -8,7 +8,6 @@ import lombok.NonNull;
 import optis.guideme.domain.exception.WrongInputException;
 import optis.guideme.domain.meeting.Meeting;
 import optis.guideme.domain.user.Manager;
-import optis.guideme.domain.user.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,34 +29,28 @@ public class MeetingRequest {
     private int recurrenceIntervalInMonths;
     @Enumerated(EnumType.STRING)
     private Status status;
-    @ManyToOne
-    @JoinColumn(name="requested_by")
-    @NonNull
-    private User requestedBy;
-    @ManyToMany
-    @JoinTable(
-            name = "meeting_request_participants",
-            joinColumns = @JoinColumn(name="meeting_request_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private List<User> requestFor;
+    @Column(name = "requested_by")
+    private UUID requestedBy;
+
+    @ElementCollection
+    @CollectionTable(name = "meeting_request_participants", joinColumns = @JoinColumn(name = "meeting_request_id"))
+    @Column(name = "user_id")
+    private List<UUID> requestFor;
     private UUID previousRequestId;
     private boolean isAllowed = false;
 
-    public MeetingRequest(LocalDateTime endDateTime, boolean isAllowed, String name, UUID previousRequestId, int recurrenceIntervalInMonths, @NonNull User requestedBy, List<User> requestFor, LocalDateTime startDateTime, Status status) {
+    public MeetingRequest(LocalDateTime endDateTime, String name, int recurrenceIntervalInMonths, List<UUID> requestFor, LocalDateTime startDateTime) {
         this.endDateTime = endDateTime;
-        this.isAllowed = isAllowed;
-        this.status = status;
+        this.status = Status.PENDING;
         this.startDateTime = startDateTime;
         this.requestFor = requestFor;
-        this.requestedBy = requestedBy;
-        if (!(requestedBy instanceof Manager ||
-                requestFor.stream().anyMatch(user -> user instanceof Manager))) {
-            throw new WrongInputException("At least one manager required");
-        }
         this.recurrenceIntervalInMonths = recurrenceIntervalInMonths;
-        this.previousRequestId = previousRequestId;
+        this.previousRequestId = null;
         this.name = name;
+    }
+
+    public void assignRequestedBy(UUID userId){
+        this.requestedBy = userId;
     }
 
     public Meeting accept(){

@@ -13,7 +13,7 @@ import optis.guideme.repository.MeetingRepository;
 import optis.guideme.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -43,5 +43,9 @@ public class MeetingService {
         return meetingRepository.findAll().stream().map(
                 mapper::toResponseDto
         ).toList();
+    }
+
+    public MeetingDto getNextMeeting() {
+        return mapper.toResponseDto(meetingRepository.findFirstByStartDateTimeAfterOrderByStartDateTimeAsc(LocalDateTime.now()).orElseThrow());
     }
 }
