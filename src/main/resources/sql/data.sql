@@ -12,7 +12,7 @@ VALUES
     ('00000000-0000-0000-0000-000000000010','SYNC Q3', 'KJE-002', '2026-08-23T10:00:00', '2026-08-23T11:00:00', false),
     ('00000000-0000-0000-0000-000000000020','SYNC Q1', 'FJE-003', '2026-01-21T10:00:00', '2026-01-21T11:00:00', true);
 
-INSERT INTO meeting_requests(meeting_request_id, previous_request_id, name, reference_code, start_date_time, end_date_time, recurrence_interval_in_months, requested_by, is_allowed, status)
+INSERT INTO meeting_requests(meeting_request_id, previous_request_id, name, reference_code, start_date_time, end_date_time, recurrence_per_year, requested_by, is_allowed, status)
 VALUES
     ('01111111-1111-1111-1111-111111111111', null, 'YEARLY SYNC', 'BAY-123', '2026-01-18T14:00:00', '2026-01-18T15:00:00', 1, '00000000-0000-0000-0000-000000000001', true, 'COUNTER_REQUESTED'),
     ('11111111-1111-1111-1111-111111111111', '01111111-1111-1111-1111-111111111111', 'YEARLY SYNC', 'BAY-123', '2026-01-18T10:00:00', '2026-01-18T11:00:00', 1, '00000000-0000-0000-0000-000000000002', true, 'ACCEPTED'),
