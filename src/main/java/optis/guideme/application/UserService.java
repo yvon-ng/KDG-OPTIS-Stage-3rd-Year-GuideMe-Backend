@@ -42,4 +42,8 @@ public class UserService {
                 .map(UserMapper::toDto)
                 .toList();
     }
+
+    public Optional<UserDto> getUserById(UUID userId) {
+        return userRepository.findById(userId).map(UserMapper::toDto);
+    }
 }
