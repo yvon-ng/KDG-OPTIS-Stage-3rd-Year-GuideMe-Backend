@@ -28,6 +28,11 @@ public class MeetingController {
         return meetingService.getAllMeetings();
     }
 
+    @GetMapping("me/next")
+    public MeetingDto getNextMeeting() {
+        return meetingService.getNextMeeting();
+    }
+
     @GetMapping("myMeetings")
     public List<MeetingDto> getMyMeetings(@AuthenticationPrincipal Jwt jwt) {
         UUID userId = UUID.fromString(jwt.getClaim("oid"));

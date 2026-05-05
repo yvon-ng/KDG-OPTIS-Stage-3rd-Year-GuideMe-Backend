@@ -31,4 +31,19 @@ public class UserService {
     public List<UserDto> getAllUsersExceptMe(UUID userId) {
         return userRepository.findAllByUserIdNot(userId).stream().map(UserMapper::toDto).toList();
     }
+
+    public List<User> getUsersByIds(List<UUID> ids) {
+        return userRepository.findAllById(ids);
+    }
+
+    public List<UserDto> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(UserMapper::toDto)
+                .toList();
+    }
+
+    public Optional<UserDto> getUserById(UUID userId) {
+        return userRepository.findById(userId).map(UserMapper::toDto);
+    }
 }

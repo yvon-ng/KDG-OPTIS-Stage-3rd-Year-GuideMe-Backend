@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,7 +17,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/users")
+@RequestMapping("api/user")
 public class UserController {
     private final UserService userService;
 
@@ -25,6 +26,12 @@ public class UserController {
         UUID userId = UUID.fromString(jwt.getClaim("oid"));
         return userService.getUser(userId);
     }
+
+    @GetMapping("/all")
+    public List<UserDto> all(){
+        return userService.getAllUsers();
+    }
+
 
 //    @GetMapping("/invite")
 //    public ResponseEntity<@NonNull InvitationDto> inviteUser(@AuthenticationPrincipal Jwt jwt, NewInvitationDto newInvitationDto){
@@ -39,4 +46,11 @@ public class UserController {
         UUID userId = UUID.fromString(jwt.getClaim("oid"));
         return userService.getAllUsersExceptMe(userId);
     }
+
+    @GetMapping("/{id}")
+    public UserDto getUser(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID id){
+       UUID userId = UUID.fromString(jwt.getClaim("oid"));
+        return userService.getUser(id);
+    }
+
 }

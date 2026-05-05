@@ -7,12 +7,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.Arrays;
+import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.List;
 import java.util.UUID;
 
 @Repository
 public interface MeetingRepository extends JpaRepository<@NonNull Meeting, @NonNull UUID> {
+    Optional<Meeting> findFirstByStartDateTimeAfterOrderByStartDateTimeAsc(LocalDateTime now);;
+
     List<Meeting> findAllByAttendees_User_UserId(UUID userId);
 
     @Query("""
@@ -23,5 +26,4 @@ public interface MeetingRepository extends JpaRepository<@NonNull Meeting, @NonN
     List<Attendee> findOtherAttendees(UUID meetingId, UUID userId);
 
     Meeting findMeetingByMeetingId(UUID meetingId);
-//    Meeting save(Meeting meetingId);
 }

@@ -8,7 +8,6 @@ import optis.guideme.api.mapper.request.NewAttendeeMapper;
 import optis.guideme.api.mapper.request.NewMeetingMapper;
 import optis.guideme.domain.exception.ForbiddenException;
 import optis.guideme.domain.exception.NotFoundException;
-import optis.guideme.domain.exception.WrongInputException;
 import optis.guideme.domain.meeting.Attendee;
 import optis.guideme.domain.meeting.Meeting;
 import optis.guideme.domain.meetingRequest.DefaultReferenceCodeGenerator;
@@ -18,7 +17,7 @@ import optis.guideme.repository.MeetingRepository;
 import optis.guideme.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -62,5 +61,10 @@ public class MeetingService {
             throw new ForbiddenException("you're not part of this meeting");
         }
 
-        return attendeeRepository.findOtherAttendees(meetingId, userId).stream().map(attendeeMapper::toResponseDto).toList();    }
+        return attendeeRepository.findOtherAttendees(meetingId, userId).stream().map(attendeeMapper::toResponseDto).toList();
+    }
+
+    public MeetingDto getNextMeeting() {
+        return meetingMapper.toResponseDto(meetingRepository.findFirstByStartDateTimeAfterOrderByStartDateTimeAsc(LocalDateTime.now()).orElseThrow());
+    }
 }

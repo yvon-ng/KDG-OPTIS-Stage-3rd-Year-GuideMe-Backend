@@ -3,38 +3,21 @@ package optis.guideme.api.mapper.request;
 import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewMeetingRequestDto;
 import optis.guideme.api.dto.response.MeetingRequestDto;
-import optis.guideme.domain.exception.NotFoundException;
-import optis.guideme.domain.meetingRequest.DefaultReferenceCodeGenerator;
 import optis.guideme.domain.meetingRequest.MeetingRequest;
-import optis.guideme.domain.meetingRequest.Status;
-import optis.guideme.domain.user.User;
-import optis.guideme.repository.UserRepository;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Component
 public class NewMeetingRequestMapper {
-    private final UserRepository userRepository;
-    private final DefaultReferenceCodeGenerator defaultReferenceCodeGenerator;
 
     public MeetingRequest toDomain(NewMeetingRequestDto newMeetingRequestDto) {
-        User requestedBy = userRepository.findById(newMeetingRequestDto.requestedBy()).orElseThrow(() -> new NotFoundException("User not found with id " + newMeetingRequestDto.requestedBy()));
-        List<User> requestFor = userRepository.findAllById(newMeetingRequestDto.requestFor());
-        MeetingRequest meetingRequest = new MeetingRequest(
+        return new MeetingRequest(
                 newMeetingRequestDto.endDateTime(),
-                false,
                 newMeetingRequestDto.name(),
-                newMeetingRequestDto.previousRequestId(),
                 newMeetingRequestDto.recurrence(),
-                requestedBy,
-                requestFor,
-                newMeetingRequestDto.startDateTime(),
-                Status.PENDING
+                newMeetingRequestDto.requestFor(),
+                newMeetingRequestDto.startDateTime()
         );
-        meetingRequest.assignReferenceCode(defaultReferenceCodeGenerator.generateReferenceCode(meetingRequest));
-        return meetingRequest;
     }
 //    public NewMeetingRequestDto toDto(MeetingRequest  meetingRequest) {
 //        return new NewMeetingRequestDto(
@@ -57,10 +40,8 @@ public class NewMeetingRequestMapper {
                 meetingRequest.getReferenceCode(),
                 meetingRequest.getStartDateTime(),
                 meetingRequest.getEndDateTime(),
-                meetingRequest.getRecurrenceIntervalInMonths(),
-                meetingRequest.getRequestFor().stream().map(
-                        User::getUserId
-                ).toList(),
+                meetingRequest.getRecurrencePerYear(),
+                meetingRequest.getRequestFor(),
                 meetingRequest.getPreviousRequestId(),
                 meetingRequest.getPreviousRequestId()
         );
