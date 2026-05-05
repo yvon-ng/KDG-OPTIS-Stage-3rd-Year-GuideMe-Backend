@@ -20,7 +20,7 @@ public class NewNoteMapper {
                 newNoteDto.title(),
                 newNoteDto.description(),
                 visibility,
-                newNoteDto.meeting(),
+                newNoteDto.meetingId(),
                 newNoteDto.sharedUsers()
         );
     }

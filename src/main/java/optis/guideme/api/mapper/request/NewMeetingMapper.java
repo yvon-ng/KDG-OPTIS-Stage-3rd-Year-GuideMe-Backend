@@ -20,14 +20,15 @@ public class NewMeetingMapper {
     }
     public MeetingDto toResponseDto(Meeting meeting) {
         return new MeetingDto(
+                meeting.getMeetingId(),
                 meeting.getName(),
                 meeting.getReferenceCode(),
                 meeting.getStartDateTime(),
                 meeting.getAttendees().stream().map(
                                 mapper::toResponseDto
-                        )
-                        .toList(),
-                meeting.isOccured()
+                        ).toList(),
+                meeting.getEndDateTime(),
+                meeting.isOccurred()
         );
     }
 

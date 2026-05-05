@@ -29,4 +29,16 @@ public class NoteController {
         UUID userId = UUID.fromString(jwt.getClaim("oid"));
         return noteService.getAllNotes(userId);
     }
+
+    @GetMapping("/private")
+    public List<NotesDto> getMyPrivateNotes(@AuthenticationPrincipal Jwt jwt){
+        UUID userId = UUID.fromString(jwt.getClaim("oid"));
+        return noteService.getAllPrivateNotes(userId);
+    }
+
+    @GetMapping("/meetings")
+    public List<NotesDto> getMyMeetingNotes(@AuthenticationPrincipal Jwt jwt){
+        UUID userId = UUID.fromString(jwt.getClaim("oid"));
+        return noteService.getAllMeetingNotes(userId);
+    }
 }

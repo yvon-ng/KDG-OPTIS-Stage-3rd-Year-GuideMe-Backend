@@ -33,14 +33,14 @@ public class Meeting {
     ) // atleast two; 1 manager 1 consultant !
     private List<Attendee> attendees = new ArrayList<>();
     private LocalDateTime endDateTime;
-    private boolean occured;
+    private boolean occurred;
 
 
     public Meeting(String name, LocalDateTime startDateTime, LocalDateTime endDateTime) {
         this.name = name;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
-        this.occured = false;
+        this.occurred = false;
         this.attendees = new ArrayList<>();
     }
 
@@ -62,12 +62,12 @@ public class Meeting {
         return (name != null && !name.isBlank()) ? name : referenceCode;
     }
 
-//    //add attendee to meeting
-//    public void addAttendee(User user, Role role) {
-//        Attendee attendee = new Attendee(role, user);
-//        this.attendees.add(attendee);
-//        attendee.addAttendeeToMeeting(this);
-//    }
+    //add attendee to meetingId
+    public void addAttendee(User user, Role role) {
+        Attendee attendee = new Attendee(role, user);
+        this.attendees.add(attendee);
+        attendee.addAttendeeToMeeting(this);
+    }
 
     //validate sharedUsers
     public void validateMinimumRoles(List<Attendee> attendees) {
