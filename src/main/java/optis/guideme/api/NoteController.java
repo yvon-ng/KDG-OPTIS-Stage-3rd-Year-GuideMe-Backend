@@ -1,6 +1,7 @@
 package optis.guideme.api;
 
 import lombok.RequiredArgsConstructor;
+import optis.guideme.api.dto.UpdateNoteDto;
 import optis.guideme.api.dto.request.NewNoteDto;
 import optis.guideme.api.dto.response.NoteDto;
 import optis.guideme.api.dto.response.NotesDto;
@@ -40,5 +41,17 @@ public class NoteController {
     public List<NotesDto> getMyMeetingNotes(@AuthenticationPrincipal Jwt jwt){
         UUID userId = UUID.fromString(jwt.getClaim("oid"));
         return noteService.getAllMeetingNotes(userId);
+    }
+
+    @GetMapping("/{noteId}")
+    public NoteDto getNote(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID noteId){
+        UUID userId = UUID.fromString(jwt.getClaim("oid"));
+        return noteService.getNote(noteId);
+    }
+
+    @PutMapping("/{noteId}")
+    public NoteDto updateNote(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID noteId, @RequestBody UpdateNoteDto updateNoteDto){
+        UUID userId = UUID.fromString(jwt.getClaim("oid"));
+        return noteService.updateNote(userId, noteId, updateNoteDto);
     }
 }

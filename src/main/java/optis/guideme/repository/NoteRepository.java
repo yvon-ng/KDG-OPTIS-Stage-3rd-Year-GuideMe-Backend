@@ -17,4 +17,6 @@ public interface NoteRepository extends JpaRepository<@NonNull Note,@NonNull UUI
     List<Note> getAllByOwnerAndVisibility(UUID owner, Visibility visibility);
 
     List<Note> getAllByOwnerAndMeetingIdIsNotNull(UUID owner);
+
+    Note findNoteByNoteId(UUID noteId);
 }

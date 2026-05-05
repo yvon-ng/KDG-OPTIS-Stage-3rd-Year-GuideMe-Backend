@@ -32,7 +32,9 @@ public class NewNoteMapper {
                 note.getDescription(),
                 note.getVisibility(),
                 note.getOwner(),
-                note.getCreationTime()
+                note.getCreationTime(),
+                note.getMeetingId(),
+                note.getSharedUsers()
         );
     }
 
