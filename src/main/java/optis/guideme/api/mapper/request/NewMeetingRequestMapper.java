@@ -19,20 +19,6 @@ public class NewMeetingRequestMapper {
                 newMeetingRequestDto.startDateTime()
         );
     }
-//    public NewMeetingRequestDto toDto(MeetingRequest  meetingRequest) {
-//        return new NewMeetingRequestDto(
-//                meetingRequest.getName(),
-//                meetingRequest.getStartDateTime(),
-//                meetingRequest.getEndDateTime(),
-//                meetingRequest.getRecurrenceIntervalInMonths(),
-//                meetingRequest.getRequestFor()
-//                        .stream()
-//                        .map(User::getUserId)
-//                        .toList(),
-//                meetingRequest.getPreviousRequestId(),
-//                meetingRequest.getRequestedBy().getUserId()
-//        );
-//    }
 
     public MeetingRequestDto toResponseDto(MeetingRequest meetingRequest) {
         return new MeetingRequestDto(

@@ -1,15 +1,11 @@
 package optis.guideme.api.mapper;
 
 import lombok.RequiredArgsConstructor;
-import optis.guideme.api.dto.request.NewNoteDto;
 import optis.guideme.api.dto.request.NewUserDto;
 import optis.guideme.api.dto.response.ClientRatingDto;
 import optis.guideme.api.dto.response.UserDto;
 import optis.guideme.domain.factories.UserFactory;
-import optis.guideme.domain.note.Note;
-import optis.guideme.domain.note.Visibility;
 import optis.guideme.domain.user.Consultant;
-import optis.guideme.domain.user.Role;
 import optis.guideme.domain.user.User;
 import org.springframework.stereotype.Component;
 

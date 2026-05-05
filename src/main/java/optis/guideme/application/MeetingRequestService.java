@@ -3,7 +3,6 @@ import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewMeetingRequestDto;
 import optis.guideme.api.dto.response.MeetingDto;
 import optis.guideme.api.dto.response.MeetingRequestDto;
-import optis.guideme.api.mapper.UserMapper;
 import optis.guideme.api.mapper.request.NewMeetingMapper;
 import optis.guideme.api.mapper.request.NewMeetingRequestMapper;
 import optis.guideme.domain.meeting.Attendee;
@@ -17,11 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 
 @Service
@@ -33,7 +29,6 @@ public class MeetingRequestService {
     private final NewMeetingMapper meetingMapper;
     private final DefaultReferenceCodeGenerator defaultReferenceCodeGenerator;
     private final UserService userService;
-    private final UserMapper userMapper;
     private final MeetingService meetingService;
 
     public MeetingRequestDto createMeetingRequest(UUID userId, NewMeetingRequestDto newMeetingRequestDto) {

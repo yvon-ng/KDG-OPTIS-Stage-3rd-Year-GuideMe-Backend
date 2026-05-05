@@ -25,7 +25,6 @@ public class MeetingService {
     private final NewMeetingMapper meetingMapper;
     private final DefaultReferenceCodeGenerator defaultReferenceCodeGenerator;
     private final NewAttendeeMapper attendeeMapper;
-    private final UserService userService;
 
     public MeetingDto createNewMeeting(NewMeetingDto newMeetingDto) {
         Meeting meeting = meetingMapper.toDomain(newMeetingDto);
@@ -45,16 +44,6 @@ public class MeetingService {
     public List<MeetingDto> getAllMeetingsByUser(UUID userId) {
         return meetingRepository.findAllByAttendeesUserId(userId).stream().map(meetingMapper::toResponseDto).toList();
     }
-
-//    public List<AttendeeDto> getMeetingAttendees(UUID userId, UUID meetingId) {
-//        boolean isParticipant = attendeeRepository.existsByMeeting_MeetingIdAndUser_UserId(meetingId, userId);
-//
-//        if (!isParticipant) {
-//            throw new ForbiddenException("you're not part of this meeting");
-//        }
-//
-//        return attendeeRepository.findOtherAttendees(meetingId, userId).stream().map(attendeeMapper::toResponseDto).toList();
-//    }
 
     public List<AttendeeDto> getMeetingAttendees(UUID userId, UUID meetingId){
         Meeting meeting = meetingRepository.findMeetingByMeetingId(meetingId);

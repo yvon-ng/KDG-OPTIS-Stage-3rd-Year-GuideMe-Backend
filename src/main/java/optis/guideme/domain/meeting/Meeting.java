@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import optis.guideme.domain.exception.WrongInputException;
 import optis.guideme.domain.user.Role;
-import optis.guideme.domain.user.User;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -61,13 +60,6 @@ public class Meeting {
     public String getDisplayName() {
         return (name != null && !name.isBlank()) ? name : referenceCode;
     }
-
-    //add attendee to meetingId
-//    public void addAttendee(User user, Role role) {
-//        Attendee attendee = new Attendee(role, user);
-//        this.attendees.add(attendee);
-//        attendee.addAttendeeToMeeting(this);
-//    }
 
     //validate sharedUsers
     public void validateMinimumRoles(List<Attendee> attendees) {
