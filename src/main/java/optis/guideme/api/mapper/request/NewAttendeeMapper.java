@@ -10,26 +10,29 @@ import optis.guideme.domain.user.User;
 import optis.guideme.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @RequiredArgsConstructor
 @Component
 public class NewAttendeeMapper {
     private final UserRepository userRepository;
 
     public Attendee toDomain(NewAttendeeDto newAttendeeDto){
-       User user = userRepository.findById(newAttendeeDto.userId()).orElseThrow(() -> new NotFoundException("User not found with id " + newAttendeeDto.userId()));
+        UUID userId = newAttendeeDto.userId();
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
         return new Attendee(
-                Role.valueOf(user.getClass().getSimpleName().toUpperCase()),
-                user
+                userId,
+                Role.valueOf(user.getClass().getSimpleName().toUpperCase())
         );
     }
 
     public AttendeeDto toResponseDto(Attendee attendee) {
-        User user = attendee.getUser();
+        UUID userId = attendee.getUserId();
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
         return new AttendeeDto(
                 user.getUserId(),
                 user.getFirstName(),
                 user.getLastName()
         );
     }
-
 }

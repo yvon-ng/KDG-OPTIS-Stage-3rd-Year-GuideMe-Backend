@@ -5,9 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import optis.guideme.domain.exception.WrongInputException;
+import optis.guideme.domain.meeting.Attendee;
 import optis.guideme.domain.meeting.Meeting;
+import optis.guideme.domain.user.User;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -52,14 +55,16 @@ public class MeetingRequest {
     }
 
     public Meeting accept(MeetingRequest meetingRequest) {
+//        List<Attendee> attendees = new ArrayList<>();
+//        attendees.add(new Attendee())
         return new Meeting(
 //               meetingRequest.name,
 //               meetingRequest.startDateTime,
 //               meetingRequest.endDateTime,
 //               meetingRequest.referenceCode,
-////               meetingRequest.requestFor.stream().ma
-////               )
-        );
+//
+               );
+//        );
     }
 
     public boolean isRecurrent(){

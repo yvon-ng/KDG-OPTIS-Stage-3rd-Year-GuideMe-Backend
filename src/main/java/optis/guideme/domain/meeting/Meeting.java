@@ -26,8 +26,12 @@ public class Meeting {
     private String name; //should be same as meetingrequest
     private String referenceCode; //should be same as meetingrequest
     private LocalDateTime startDateTime;
-    @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Attendee> attendees =  new ArrayList<>(); // atleast two; 1 manager 1 consultant !
+    @ElementCollection
+    @CollectionTable(
+            name = "meeting_attendees",
+            joinColumns = @JoinColumn(name = "meeting_id")
+    ) // atleast two; 1 manager 1 consultant !
+    private List<Attendee> attendees = new ArrayList<>();
     private LocalDateTime endDateTime;
     private boolean occured;
 
@@ -58,12 +62,12 @@ public class Meeting {
         return (name != null && !name.isBlank()) ? name : referenceCode;
     }
 
-    //add attendee to meeting
-    public void addAttendee(User user, Role role) {
-        Attendee attendee = new Attendee(role, user);
-        this.attendees.add(attendee);
-        attendee.addAttendeeToMeeting(this);
-    }
+//    //add attendee to meeting
+//    public void addAttendee(User user, Role role) {
+//        Attendee attendee = new Attendee(role, user);
+//        this.attendees.add(attendee);
+//        attendee.addAttendeeToMeeting(this);
+//    }
 
     //validate sharedUsers
     public void validateMinimumRoles(List<Attendee> attendees) {

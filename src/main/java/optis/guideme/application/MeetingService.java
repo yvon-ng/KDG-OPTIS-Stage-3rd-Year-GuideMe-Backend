@@ -22,16 +22,12 @@ import java.util.List;
 public class MeetingService {
     private final MeetingRepository meetingRepository;
     private final NewMeetingMapper mapper;
-    private final UserRepository userRepository;
     private final DefaultReferenceCodeGenerator defaultReferenceCodeGenerator;
 
     public MeetingDto createNewMeeting(NewMeetingDto newMeetingDto) {
         Meeting meeting = mapper.toDomain(newMeetingDto);
         List<Attendee> attendees = newMeetingDto.attendees().stream()
-                .map(a -> {
-                    User user = userRepository.findById(a.userId()).orElseThrow(() -> new NotFoundException("User Not found with id " + a.userId()));
-                    return new Attendee(a.role(), user);
-                })
+                .map(a -> new Attendee(a.userId(), a.role()))
                 .toList();
 
         meeting.validateMinimumRoles(attendees);
