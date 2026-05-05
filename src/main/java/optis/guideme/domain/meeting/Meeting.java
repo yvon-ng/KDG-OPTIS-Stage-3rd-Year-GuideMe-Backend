@@ -29,14 +29,14 @@ public class Meeting {
     @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Attendee> attendees =  new ArrayList<>(); // atleast two; 1 manager 1 consultant !
     private LocalDateTime endDateTime;
-    private boolean occured;
+    private boolean occurred;
 
 
     public Meeting(String name, LocalDateTime startDateTime, LocalDateTime endDateTime) {
         this.name = name;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
-        this.occured = false;
+        this.occurred = false;
         this.attendees = new ArrayList<>();
     }
 
@@ -49,7 +49,7 @@ public class Meeting {
         return (name != null && !name.isBlank()) ? name : referenceCode;
     }
 
-    //add attendee to meeting
+    //add attendee to meetingId
     public void addAttendee(User user, Role role) {
         Attendee attendee = new Attendee(role, user);
         this.attendees.add(attendee);
