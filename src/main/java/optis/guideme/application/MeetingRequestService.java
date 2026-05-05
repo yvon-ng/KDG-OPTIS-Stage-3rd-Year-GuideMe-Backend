@@ -3,8 +3,10 @@ import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewMeetingRequestDto;
 import optis.guideme.api.dto.response.MeetingDto;
 import optis.guideme.api.dto.response.MeetingRequestDto;
+import optis.guideme.api.mapper.UserMapper;
 import optis.guideme.api.mapper.request.NewMeetingMapper;
 import optis.guideme.api.mapper.request.NewMeetingRequestMapper;
+import optis.guideme.domain.meeting.Attendee;
 import optis.guideme.domain.meeting.Meeting;
 import optis.guideme.domain.meetingRequest.DefaultReferenceCodeGenerator;
 import optis.guideme.domain.meetingRequest.MeetingRequest;
@@ -12,8 +14,14 @@ import optis.guideme.domain.user.User;
 import optis.guideme.repository.MeetingRequestRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @Service
@@ -25,6 +33,8 @@ public class MeetingRequestService {
     private final NewMeetingMapper meetingMapper;
     private final DefaultReferenceCodeGenerator defaultReferenceCodeGenerator;
     private final UserService userService;
+    private final UserMapper userMapper;
+    private final MeetingService meetingService;
 
     public MeetingRequestDto createMeetingRequest(UUID userId, NewMeetingRequestDto newMeetingRequestDto) {
         MeetingRequest meetingRequest = mapper.toDomain(newMeetingRequestDto);
@@ -53,7 +63,13 @@ public class MeetingRequestService {
 
     public MeetingDto acceptRequest(UUID meetingRequestId) {
         MeetingRequest meetingRequest = meetingRequestRepository.findById(meetingRequestId).orElseThrow();
-        Meeting meeting = meetingRequest.accept(meetingRequest);
+        User requestedByUser = userService.getUserEntity(meetingRequest.getRequestedBy());
+        List<User> requestedForUsers = userService.getUsersByIds(meetingRequest.getRequestFor());
+        List<Attendee> attendees = new ArrayList<>();
+        attendees.add(new Attendee(meetingRequest.getRequestedBy(), requestedByUser.getRole()));
+        attendees.addAll(requestedForUsers.stream().map(user -> new Attendee(user.getUserId(), user.getRole())).toList());
+        Meeting meeting = meetingRequest.accept(attendees);
+        meetingService.save(meeting);
         return meetingMapper.toResponseDto(meeting);
     }
 }

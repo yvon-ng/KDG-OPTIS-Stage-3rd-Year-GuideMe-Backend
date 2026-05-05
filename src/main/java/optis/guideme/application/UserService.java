@@ -18,9 +18,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     public UserDto getUser(UUID userId) {
-        return UserMapper.toDto(userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found with id: " + userId)));
+        return userMapper.toResponseDto(userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found with id: " + userId)));
     }
 
     public Optional<User> addUser(UUID userId, String email, Role role) {
@@ -29,7 +30,7 @@ public class UserService {
     }
 
     public List<UserDto> getAllUsersExceptMe(UUID userId) {
-        return userRepository.findAllByUserIdNot(userId).stream().map(UserMapper::toDto).toList();
+        return userRepository.findAllByUserIdNot(userId).stream().map(userMapper::toResponseDto).toList();
     }
 
     public List<User> getUsersByIds(List<UUID> ids) {
@@ -39,11 +40,11 @@ public class UserService {
     public List<UserDto> getAllUsers() {
         List<User> users = userRepository.findAll();
         return users.stream()
-                .map(UserMapper::toDto)
+                .map(userMapper::toResponseDto)
                 .toList();
     }
 
-    public Optional<UserDto> getUserById(UUID userId) {
-        return userRepository.findById(userId).map(UserMapper::toDto);
+    public User getUserEntity(UUID userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found with id: " + userId));
     }
 }

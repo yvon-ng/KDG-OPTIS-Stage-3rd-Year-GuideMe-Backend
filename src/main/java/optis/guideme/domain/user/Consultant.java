@@ -48,4 +48,9 @@ public class Consultant extends User {
         }
         clientRatings.add(rating);
     }
+
+    @Override
+    public Role getRole() {
+        return Role.CONSULTANT;
+    }
 }

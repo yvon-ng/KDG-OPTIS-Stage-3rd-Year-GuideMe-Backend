@@ -1,6 +1,5 @@
 package optis.guideme.domain.meeting;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -13,7 +12,6 @@ import java.util.UUID;
 @Embeddable
 public class Attendee {
 
-    @Column(name = "user_id")
     private UUID userId;
 
     @Enumerated(EnumType.STRING)

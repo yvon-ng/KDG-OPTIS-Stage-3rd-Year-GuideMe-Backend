@@ -28,7 +28,7 @@ public class Meeting {
     private LocalDateTime startDateTime;
     @ElementCollection
     @CollectionTable(
-            name = "meeting_attendees",
+            name = "attendees",
             joinColumns = @JoinColumn(name = "meeting_id")
     ) // atleast two; 1 manager 1 consultant !
     private List<Attendee> attendees = new ArrayList<>();
@@ -51,7 +51,7 @@ public class Meeting {
         this.endDateTime = endDateTime;
         this.referenceCode = referenceCode;
         this.attendees = attendees;
-        this.occured = false;
+        this.occurred = false;
     }
 
     public Quarter getQuarter() {
@@ -63,11 +63,11 @@ public class Meeting {
     }
 
     //add attendee to meetingId
-    public void addAttendee(User user, Role role) {
-        Attendee attendee = new Attendee(role, user);
-        this.attendees.add(attendee);
-        attendee.addAttendeeToMeeting(this);
-    }
+//    public void addAttendee(User user, Role role) {
+//        Attendee attendee = new Attendee(role, user);
+//        this.attendees.add(attendee);
+//        attendee.addAttendeeToMeeting(this);
+//    }
 
     //validate sharedUsers
     public void validateMinimumRoles(List<Attendee> attendees) {

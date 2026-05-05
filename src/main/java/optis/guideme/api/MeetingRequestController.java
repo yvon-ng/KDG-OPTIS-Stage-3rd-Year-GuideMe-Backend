@@ -40,7 +40,7 @@ public class MeetingRequestController {
         return meetingRequestService.getOutgoingMeetingRequests(userId);
     }
 
-    @PostMapping("/accept{meetingRequestId}")
+    @PostMapping("/accept/{meetingRequestId}")
     public MeetingDto acceptMeetingRequest(@PathVariable UUID meetingRequestId) {
         return meetingRequestService.acceptRequest(meetingRequestId);
     }

@@ -15,24 +15,22 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Component
 public class NewAttendeeMapper {
-    private final UserRepository userRepository;
+//    private final UserRepository userRepository;
 
     public Attendee toDomain(NewAttendeeDto newAttendeeDto){
-        UUID userId = newAttendeeDto.userId();
-        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
+        //UUID userId = newAttendeeDto.userId();
+//        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
         return new Attendee(
-                userId,
-                Role.valueOf(user.getClass().getSimpleName().toUpperCase())
+                newAttendeeDto.userId(),
+                newAttendeeDto.role()
         );
     }
 
     public AttendeeDto toResponseDto(Attendee attendee) {
-        UUID userId = attendee.getUserId();
-        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
+        //UUID userId = attendee.getUserId();
+//        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
         return new AttendeeDto(
-                user.getUserId(),
-                user.getFirstName(),
-                user.getLastName()
+                attendee.getUserId()
         );
     }
 }

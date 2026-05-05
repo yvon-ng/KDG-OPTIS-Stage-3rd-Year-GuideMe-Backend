@@ -24,4 +24,7 @@ public abstract class User {
 
 //    private List<Goal> goals;
 //    private List<Reminder> reminders;
+
+    public abstract Role getRole();
+
 }

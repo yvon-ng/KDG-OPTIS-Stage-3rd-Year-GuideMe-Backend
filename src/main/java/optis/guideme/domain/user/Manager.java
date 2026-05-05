@@ -17,4 +17,9 @@ public class Manager extends User {
     public Manager(UUID userId , String firstName, String lastName, String email, String avatar) {
         super(userId, firstName, lastName, email, avatar);
     }
+
+    @Override
+    public Role getRole() {
+        return Role.MANAGER;
+    }
 }

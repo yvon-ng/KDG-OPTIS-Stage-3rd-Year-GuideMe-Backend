@@ -54,17 +54,16 @@ public class MeetingRequest {
         this.requestedBy = userId;
     }
 
-    public Meeting accept(MeetingRequest meetingRequest) {
-//        List<Attendee> attendees = new ArrayList<>();
-//        attendees.add(new Attendee())
-        return new Meeting(
+    public Meeting accept(List<Attendee> attendees) {
+//          return new Meeting(
 //               meetingRequest.name,
 //               meetingRequest.startDateTime,
 //               meetingRequest.endDateTime,
 //               meetingRequest.referenceCode,
 //
-               );
+//               );
 //        );
+        return new Meeting(this.name, this.startDateTime, this.endDateTime, this.referenceCode, attendees);
     }
 
     public boolean isRecurrent(){
