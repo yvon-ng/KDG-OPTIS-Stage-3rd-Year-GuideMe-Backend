@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import optis.guideme.api.dto.UpdateNoteDto;
+import optis.guideme.domain.exception.ForbiddenException;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -70,6 +72,18 @@ public class Note {
         if (sharedUsers != null) {
             sharedUsers.remove(userId);
         }
+    }
+
+    public void update(UUID ownerId, UpdateNoteDto updateNoteDto) {
+        if (!owner.equals(ownerId)) {
+            throw new ForbiddenException("No rights to update this note");
+        }
+
+        this.title = updateNoteDto.title();
+        this.description = updateNoteDto.description();
+        this.visibility = updateNoteDto.visibility();
+        this.meetingId = updateNoteDto.meetingId();
+        this.sharedUsers = updateNoteDto.sharedUsers();
     }
 
     public void assignOwner(UUID userId) {

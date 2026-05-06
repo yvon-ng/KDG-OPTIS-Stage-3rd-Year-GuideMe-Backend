@@ -1,9 +1,10 @@
 package optis.guideme.api;
 
 import lombok.RequiredArgsConstructor;
+import optis.guideme.api.dto.UpdateNoteDto;
 import optis.guideme.api.dto.request.NewNoteDto;
 import optis.guideme.api.dto.response.NoteDto;
-import optis.guideme.api.dto.response.NotesDto;
+import optis.guideme.api.dto.response.NotePreviewDto;
 import optis.guideme.application.NoteService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -25,20 +26,32 @@ public class NoteController {
     }
 
     @GetMapping
-    public List<NotesDto> getMyNotes(@AuthenticationPrincipal Jwt jwt){
+    public List<NotePreviewDto> getMyNotes(@AuthenticationPrincipal Jwt jwt){
         UUID userId = UUID.fromString(jwt.getClaim("oid"));
         return noteService.getAllNotes(userId);
     }
 
     @GetMapping("/private")
-    public List<NotesDto> getMyPrivateNotes(@AuthenticationPrincipal Jwt jwt){
+    public List<NotePreviewDto> getMyPrivateNotes(@AuthenticationPrincipal Jwt jwt){
         UUID userId = UUID.fromString(jwt.getClaim("oid"));
         return noteService.getAllPrivateNotes(userId);
     }
 
     @GetMapping("/meetings")
-    public List<NotesDto> getMyMeetingNotes(@AuthenticationPrincipal Jwt jwt){
+    public List<NotePreviewDto> getMyMeetingNotes(@AuthenticationPrincipal Jwt jwt){
         UUID userId = UUID.fromString(jwt.getClaim("oid"));
         return noteService.getAllMeetingNotes(userId);
+    }
+
+    @GetMapping("/{noteId}")
+    public NoteDto getNote(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID noteId){
+        UUID userId = UUID.fromString(jwt.getClaim("oid"));
+        return noteService.getNote(noteId);
+    }
+
+    @PutMapping("/{noteId}")
+    public NoteDto updateNote(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID noteId, @RequestBody UpdateNoteDto updateNoteDto){
+        UUID userId = UUID.fromString(jwt.getClaim("oid"));
+        return noteService.updateNote(userId, noteId, updateNoteDto);
     }
 }
