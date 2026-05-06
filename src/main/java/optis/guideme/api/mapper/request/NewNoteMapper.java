@@ -3,7 +3,7 @@ package optis.guideme.api.mapper.request;
 import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewNoteDto;
 import optis.guideme.api.dto.response.NoteDto;
-import optis.guideme.api.dto.response.NotesDto;
+import optis.guideme.api.dto.response.NotePreviewDto;
 import optis.guideme.domain.note.Note;
 import optis.guideme.domain.note.Visibility;
 import org.springframework.stereotype.Component;
@@ -38,8 +38,8 @@ public class NewNoteMapper {
         );
     }
 
-    public NotesDto toNotesResponseDto(Note note) {
-        return new NotesDto(
+    public NotePreviewDto toNotesResponseDto(Note note) {
+        return new NotePreviewDto(
                 note.getNoteId(),
                 note.getTitle(),
                 note.getVisibility(),

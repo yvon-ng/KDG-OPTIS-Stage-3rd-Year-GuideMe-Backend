@@ -4,18 +4,14 @@ import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.UpdateNoteDto;
 import optis.guideme.api.dto.request.NewNoteDto;
 import optis.guideme.api.dto.response.NoteDto;
-import optis.guideme.api.dto.response.NotesDto;
+import optis.guideme.api.dto.response.NotePreviewDto;
 import optis.guideme.api.mapper.request.NewNoteMapper;
-import optis.guideme.domain.exception.ForbiddenException;
 import optis.guideme.domain.exception.NotFoundException;
 import optis.guideme.domain.note.Note;
 import optis.guideme.domain.note.Visibility;
 import optis.guideme.repository.NoteRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.UUID;
@@ -33,15 +29,15 @@ public class NoteService {
         return newNoteMapper.toNoteResponseDto(noteRepository.save(note));
     }
 
-    public List<NotesDto> getAllNotes(UUID userId) {
+    public List<NotePreviewDto> getAllNotes(UUID userId) {
         return noteRepository.findAllByOwner(userId).stream().map(newNoteMapper::toNotesResponseDto).toList();
     }
 
-    public List<NotesDto> getAllPrivateNotes(UUID userId) {
+    public List<NotePreviewDto> getAllPrivateNotes(UUID userId) {
         return noteRepository.getAllByOwnerAndVisibility(userId, Visibility.PRIVATE).stream().map(newNoteMapper::toNotesResponseDto).toList();
     }
 
-    public List<NotesDto> getAllMeetingNotes(UUID userId) {
+    public List<NotePreviewDto> getAllMeetingNotes(UUID userId) {
         return noteRepository.getAllByOwnerAndMeetingIdIsNotNull(userId).stream().map(newNoteMapper::toNotesResponseDto).toList();
     }
 

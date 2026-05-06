@@ -1,7 +1,6 @@
 package optis.guideme.repository;
 
 import lombok.NonNull;
-import optis.guideme.api.dto.response.NotesDto;
 import optis.guideme.domain.note.Note;
 import optis.guideme.domain.note.Visibility;
 import org.springframework.data.jpa.repository.JpaRepository;
