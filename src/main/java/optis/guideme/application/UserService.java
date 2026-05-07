@@ -33,8 +33,12 @@ public class UserService {
         return userRepository.findAllByUserIdNot(userId).stream().map(userMapper::toResponseDto).toList();
     }
 
-    public List<User> getUsersByIds(List<UUID> ids) {
+    public List<User> getUsersEntitiesByIds(List<UUID> ids) {
         return userRepository.findAllById(ids);
+    }
+
+    public List<UserDto> getUsersByIds(List<UUID> ids) {
+        return userRepository.findAllById(ids).stream().map(userMapper::toResponseDto).toList();
     }
 
     public List<UserDto> getAllUsers() {
@@ -47,4 +51,6 @@ public class UserService {
     public User getUserEntity(UUID userId) {
         return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found with id: " + userId));
     }
+
+
 }

@@ -52,14 +52,6 @@ public class MeetingRequest {
     }
 
     public Meeting accept(List<Attendee> attendees) {
-//          return new Meeting(
-//               meetingRequest.name,
-//               meetingRequest.startDateTime,
-//               meetingRequest.endDateTime,
-//               meetingRequest.referenceCode,
-//
-//               );
-//        );
         return new Meeting(this.name, this.startDateTime, this.endDateTime, this.referenceCode, attendees);
     }
 

@@ -34,7 +34,7 @@ public class MeetingRequestService {
     public MeetingRequestDto createMeetingRequest(UUID userId, NewMeetingRequestDto newMeetingRequestDto) {
         MeetingRequest meetingRequest = mapper.toDomain(newMeetingRequestDto);
         meetingRequest.assignRequestedBy(userId);
-        List<User> requestFor = userService.getUsersByIds(newMeetingRequestDto.requestFor());
+        List<User> requestFor = userService.getUsersEntitiesByIds(newMeetingRequestDto.requestFor());
         meetingRequest.assignReferenceCode(defaultReferenceCodeGenerator.generateReferenceCode(meetingRequest, requestFor));
         return mapper.toResponseDto(meetingRequestRepository.save(meetingRequest));
     }
@@ -59,7 +59,7 @@ public class MeetingRequestService {
     public MeetingDto acceptRequest(UUID meetingRequestId) {
         MeetingRequest meetingRequest = meetingRequestRepository.findById(meetingRequestId).orElseThrow();
         User requestedByUser = userService.getUserEntity(meetingRequest.getRequestedBy());
-        List<User> requestedForUsers = userService.getUsersByIds(meetingRequest.getRequestFor());
+        List<User> requestedForUsers = userService.getUsersEntitiesByIds(meetingRequest.getRequestFor());
         List<Attendee> attendees = new ArrayList<>();
         attendees.add(new Attendee(meetingRequest.getRequestedBy(), requestedByUser.getRole()));
         attendees.addAll(requestedForUsers.stream().map(user -> new Attendee(user.getUserId(), user.getRole())).toList());

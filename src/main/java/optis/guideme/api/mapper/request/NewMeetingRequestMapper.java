@@ -22,6 +22,7 @@ public class NewMeetingRequestMapper {
 
     public MeetingRequestDto toResponseDto(MeetingRequest meetingRequest) {
         return new MeetingRequestDto(
+                meetingRequest.getMeetingRequestId(),
                 meetingRequest.getName(),
                 meetingRequest.getReferenceCode(),
                 meetingRequest.getStartDateTime(),

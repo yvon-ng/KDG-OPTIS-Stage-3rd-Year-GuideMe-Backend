@@ -3,14 +3,9 @@ package optis.guideme.api;
 import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.response.UserDto;
 import optis.guideme.application.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -53,4 +48,8 @@ public class UserController {
         return userService.getUser(id);
     }
 
+    @PostMapping("/attendees")
+    public List<UserDto> getUsersByIds(@RequestBody List<UUID> ids) {
+        return userService.getUsersByIds(ids);
+    }
 }
