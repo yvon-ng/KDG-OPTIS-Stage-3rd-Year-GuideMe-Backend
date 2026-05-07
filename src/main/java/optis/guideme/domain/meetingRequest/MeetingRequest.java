@@ -52,6 +52,7 @@ public class MeetingRequest {
     }
 
     public Meeting accept(List<Attendee> attendees) {
+        this.status = Status.ACCEPTED;
         return new Meeting(this.name, this.startDateTime, this.endDateTime, this.referenceCode, attendees);
     }
 
