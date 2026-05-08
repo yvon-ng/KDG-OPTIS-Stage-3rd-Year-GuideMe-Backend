@@ -1,8 +1,6 @@
 package optis.guideme.api.dto.request;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.NonNull;
-import org.jspecify.annotations.Nullable;
 
 import java.time.LocalDateTime;
 import java.util.List;

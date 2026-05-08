@@ -27,5 +27,5 @@ public abstract class User {
 
     public Role getRole(){
         return Role.valueOf(this.getClass().getAnnotation(DiscriminatorValue.class).value());
-    };
+    }
 }

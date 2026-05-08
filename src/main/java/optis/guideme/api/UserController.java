@@ -20,7 +20,7 @@ public class UserController {
     private final CurrentUserProvider currentUserProvider;
 
     @GetMapping("me")
-    public UserDto me(){;
+    public UserDto me(){
         return userService.getUser(currentUserProvider.getUserId());
     }
 
