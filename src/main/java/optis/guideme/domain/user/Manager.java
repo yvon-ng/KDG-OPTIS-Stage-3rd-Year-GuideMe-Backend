@@ -18,4 +18,8 @@ public class Manager extends User {
         super(userId, firstName, lastName, email, avatar);
     }
 
+    @Override
+    public Role getRole() {
+        return Role.MANAGER;
+    }
 }

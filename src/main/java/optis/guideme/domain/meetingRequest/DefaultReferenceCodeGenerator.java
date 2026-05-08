@@ -1,18 +1,22 @@
 package optis.guideme.domain.meetingRequest;
 
+import lombok.RequiredArgsConstructor;
 import optis.guideme.domain.meeting.Attendee;
 import optis.guideme.domain.meeting.Meeting;
 import optis.guideme.domain.user.User;
+import optis.guideme.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.UUID;
 
+@RequiredArgsConstructor
 @Component
 public class DefaultReferenceCodeGenerator { // !!!!!!!!  use in service and check in db if code already exist
     public static final String REFERENCE_CODE_TEMPLATE = "%s-Q%d-%02d-%s";
     private static final SecureRandom RANDOM = new SecureRandom();
+    private final UserRepository userRepository;
 
     public String generateReferenceCode(MeetingRequest request, List<User> requestFor) {
         // get all attendees first names, turn it into PascalCase if they have no firstname then take "Unknown"
@@ -54,9 +58,11 @@ public class DefaultReferenceCodeGenerator { // !!!!!!!!  use in service and che
 
     public String generateReferenceCodeFromMeeting(Meeting meeting) {
         // get all attendees first names, turn it into PascalCase if they have no firstname then take "Unknown"
-        List<User> users = meeting.getAttendees().stream().map(
-                Attendee::getUser
+        List<UUID> userIds = meeting.getAttendees().stream().map(
+                Attendee::getUserId
         ).toList();
+
+        List<User> users = userRepository.findAllById(userIds);
 
         String names = users.stream()
                 .map(User::getFirstName)

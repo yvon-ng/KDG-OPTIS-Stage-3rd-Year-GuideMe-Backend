@@ -2,6 +2,7 @@ package optis.guideme.api;
 
 import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewMeetingRequestDto;
+import optis.guideme.api.dto.response.MeetingDto;
 import optis.guideme.api.dto.response.MeetingRequestDto;
 import optis.guideme.api.mapper.CurrentUserProvider;
 import optis.guideme.application.MeetingRequestService;
@@ -33,5 +34,10 @@ public class MeetingRequestController {
     @GetMapping("me/outgoing")
     public List<MeetingRequestDto> getOutgoingMeetingRequests() {
         return meetingRequestService.getOutgoingMeetingRequests(currentUserProvider.getUserId());
+    }
+
+    @PostMapping("/accept/{meetingRequestId}")
+    public MeetingDto acceptMeetingRequest(@PathVariable UUID meetingRequestId) {
+        return meetingRequestService.acceptRequest(meetingRequestId);
     }
 }
