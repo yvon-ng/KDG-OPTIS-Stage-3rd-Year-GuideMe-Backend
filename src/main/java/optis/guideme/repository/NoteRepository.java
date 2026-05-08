@@ -1,7 +1,6 @@
 package optis.guideme.repository;
 
 import lombok.NonNull;
-import optis.guideme.api.dto.response.NotesDto;
 import optis.guideme.domain.note.Note;
 import optis.guideme.domain.note.Visibility;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,4 +16,6 @@ public interface NoteRepository extends JpaRepository<@NonNull Note,@NonNull UUI
     List<Note> getAllByOwnerAndVisibility(UUID owner, Visibility visibility);
 
     List<Note> getAllByOwnerAndMeetingIdIsNotNull(UUID owner);
+
+    Note findNoteByNoteId(UUID noteId);
 }

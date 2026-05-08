@@ -45,7 +45,7 @@ public class UserController {
     @GetMapping("/{id}")
     public UserDto getUser(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID id){
        UUID userId = UUID.fromString(jwt.getClaim("oid"));
-        return userService.getUser(id);
+       return userService.getUser(id);
     }
 
     @PostMapping("/attendees")
