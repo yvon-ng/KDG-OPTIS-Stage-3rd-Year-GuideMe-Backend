@@ -3,23 +3,21 @@ package optis.guideme.api;
 import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewMeetingRequestDto;
 import optis.guideme.api.dto.response.MeetingRequestDto;
+import optis.guideme.api.mapper.CurrentUserProvider;
 import optis.guideme.application.MeetingRequestService;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api/meeting-requests")
 public class MeetingRequestController {
     private final MeetingRequestService meetingRequestService;
+    private final CurrentUserProvider currentUserProvider;
 
     @PostMapping
-    public MeetingRequestDto createMeetingRequest(@AuthenticationPrincipal Jwt jwt, @RequestBody NewMeetingRequestDto newMeetingRequestDto) {
-       UUID userId = UUID.fromString(jwt.getClaim("oid"));
-       return meetingRequestService.createMeetingRequest(userId, newMeetingRequestDto);
+    public MeetingRequestDto createMeetingRequest(@RequestBody NewMeetingRequestDto newMeetingRequestDto) {
+       return meetingRequestService.createMeetingRequest(currentUserProvider.getUserId(), newMeetingRequestDto);
     }
 
     @GetMapping
@@ -28,14 +26,12 @@ public class MeetingRequestController {
     }
 
     @GetMapping("me/incoming")
-    public List<MeetingRequestDto> getIncomingMeetingRequests(@AuthenticationPrincipal Jwt jwt) {
-        UUID userId = UUID.fromString(jwt.getClaim("oid"));
-        return meetingRequestService.getIncomingMeetingRequests(userId);
+    public List<MeetingRequestDto> getIncomingMeetingRequests() {
+        return meetingRequestService.getIncomingMeetingRequests(currentUserProvider.getUserId());
     }
 
     @GetMapping("me/outgoing")
-    public List<MeetingRequestDto> getOutgoingMeetingRequests(@AuthenticationPrincipal Jwt jwt) {
-        UUID userId = UUID.fromString(jwt.getClaim("oid"));
-        return meetingRequestService.getOutgoingMeetingRequests(userId);
+    public List<MeetingRequestDto> getOutgoingMeetingRequests() {
+        return meetingRequestService.getOutgoingMeetingRequests(currentUserProvider.getUserId());
     }
 }

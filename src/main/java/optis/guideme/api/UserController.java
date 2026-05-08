@@ -2,11 +2,8 @@ package optis.guideme.api;
 
 import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.response.UserDto;
+import optis.guideme.api.mapper.CurrentUserProvider;
 import optis.guideme.application.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,14 +17,14 @@ import java.util.UUID;
 @RequestMapping("api/users")
 public class UserController {
     private final UserService userService;
+    private final CurrentUserProvider currentUserProvider;
 
-    @GetMapping("/me")
-    public UserDto me(@AuthenticationPrincipal Jwt jwt){
-        UUID userId = UUID.fromString(jwt.getClaim("oid"));
-        return userService.getUser(userId);
+    @GetMapping("me")
+    public UserDto me(){;
+        return userService.getUser(currentUserProvider.getUserId());
     }
 
-    @GetMapping("/all")
+    @GetMapping("all")
     public List<UserDto> all(){
         return userService.getAllUsers();
     }
@@ -41,15 +38,13 @@ public class UserController {
 //        return ResponseEntity.ok();
 //    }
 
-    @GetMapping("/others")
-    public List<UserDto> getAllUsersExceptMe(@AuthenticationPrincipal Jwt jwt){
-        UUID userId = UUID.fromString(jwt.getClaim("oid"));
-        return userService.getAllUsersExceptMe(userId);
+    @GetMapping("others")
+    public List<UserDto> getAllUsersExceptMe(){
+        return userService.getAllUsersExceptMe(currentUserProvider.getUserId());
     }
 
-    @GetMapping("/{id}")
-    public UserDto getUser(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID id){
-       UUID userId = UUID.fromString(jwt.getClaim("oid"));
+    @GetMapping("{id}")
+    public UserDto getUser(@PathVariable UUID id){
        return userService.getUser(id);
     }
 

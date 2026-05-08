@@ -15,7 +15,7 @@ import java.util.UUID;
 public class Attendee {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private UUID attendeeId;
     @ManyToOne
     @JoinColumn(name = "meeting_id")

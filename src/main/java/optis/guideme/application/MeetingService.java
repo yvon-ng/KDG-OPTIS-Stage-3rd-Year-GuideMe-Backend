@@ -37,7 +37,7 @@ public class MeetingService {
         List<Attendee> attendees = newMeetingDto.attendees().stream()
                 .map(a -> {
                     User user = userRepository.findById(a.userId()).orElseThrow(() -> new NotFoundException("User Not found with id " + a.userId()));
-                    return new Attendee(a.role(), user);
+                    return new Attendee(user.getRole(), user);
                 })
                 .toList();
 
