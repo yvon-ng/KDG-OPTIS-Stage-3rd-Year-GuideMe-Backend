@@ -64,8 +64,21 @@ public class MeetingService {
     }
 
     public MeetingContextDto getNextAndLastMeeting(UUID userId) {
-        MeetingDto nextMeeting = meetingMapper.toResponseDto(meetingRepository.findFirstByAttendees_UserIdAndStartDateTimeAfterOrderByStartDateTimeAsc(userId, LocalDateTime.now()).orElseThrow());
-        MeetingDto latestMeeting = meetingMapper.toResponseDto(meetingRepository.findFirstByAttendees_UserIdAndStartDateTimeBeforeOrderByStartDateTimeDesc(userId, LocalDateTime.now()).orElseThrow());
+        MeetingDto nextMeeting = meetingRepository
+                .findFirstByAttendees_UserIdAndStartDateTimeAfterOrderByStartDateTimeAsc(
+                        userId,
+                        LocalDateTime.now()
+                )
+                .map(meetingMapper::toResponseDto)
+                .orElse(null);
+
+        MeetingDto latestMeeting = meetingRepository
+                .findFirstByAttendees_UserIdAndStartDateTimeBeforeOrderByStartDateTimeDesc(
+                        userId,
+                        LocalDateTime.now()
+                )
+                .map(meetingMapper::toResponseDto)
+                .orElse(null);
         return meetingContextMapper.toContextDto(nextMeeting, latestMeeting);
     }
 
