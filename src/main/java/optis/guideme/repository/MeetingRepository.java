@@ -11,7 +11,10 @@ import java.util.UUID;
 
 @Repository
 public interface MeetingRepository extends JpaRepository<@NonNull Meeting, @NonNull UUID> {
-    Optional<Meeting> findFirstByStartDateTimeAfterOrderByStartDateTimeAsc(LocalDateTime now);
+    //after + asc -> nearest future method
+    Optional<Meeting> findFirstByAttendees_UserIdAndStartDateTimeAfterOrderByStartDateTimeAsc(UUID userId, LocalDateTime now);
+    //before + asc -> latest meeting
+    Optional<Meeting> findFirstByAttendees_UserIdAndStartDateTimeBeforeOrderByStartDateTimeDesc(UUID userId, LocalDateTime now);
 
     List<Meeting> findAllByAttendeesUserId(UUID userId);
 

@@ -1,8 +1,10 @@
 package optis.guideme.api;
 
+import jakarta.annotation.security.RolesAllowed;
 import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewMeetingDto;
 import optis.guideme.api.dto.response.AttendeeDto;
+import optis.guideme.api.dto.response.MeetingContextDto;
 import optis.guideme.api.dto.response.MeetingDto;
 import optis.guideme.application.MeetingService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,9 +30,10 @@ public class MeetingController {
         return meetingService.getAllMeetings();
     }
 
-    @GetMapping("me/next")
-    public MeetingDto getNextMeeting() {
-        return meetingService.getNextMeeting();
+    @GetMapping("me/context")
+    public MeetingContextDto getNextAndLastMeeting(@AuthenticationPrincipal Jwt jwt) {
+        UUID userId = UUID.fromString(jwt.getClaim("oid"));
+        return meetingService.getNextAndLastMeeting(userId);
     }
 
     @GetMapping("myMeetings")
@@ -44,4 +47,10 @@ public class MeetingController {
         UUID userId = UUID.fromString(jwt.getClaim("oid"));
         return meetingService.getMeetingAttendees(userId, meetingId);
     }
+
+    @PostMapping("/create")
+    public MeetingDto createMeeting(@RequestBody NewMeetingDto newMeetingDto) {
+        return meetingService.createNewMeeting(newMeetingDto);
+    }
+
 }

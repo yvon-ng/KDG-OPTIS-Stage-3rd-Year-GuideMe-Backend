@@ -3,7 +3,9 @@ package optis.guideme.application;
 import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewMeetingDto;
 import optis.guideme.api.dto.response.AttendeeDto;
+import optis.guideme.api.dto.response.MeetingContextDto;
 import optis.guideme.api.dto.response.MeetingDto;
+import optis.guideme.api.mapper.MeetingContextMapper;
 import optis.guideme.api.mapper.request.NewAttendeeMapper;
 import optis.guideme.api.mapper.request.NewMeetingMapper;
 import optis.guideme.domain.exception.ForbiddenException;
@@ -25,6 +27,7 @@ public class MeetingService {
     private final NewMeetingMapper meetingMapper;
     private final DefaultReferenceCodeGenerator defaultReferenceCodeGenerator;
     private final NewAttendeeMapper attendeeMapper;
+    private final MeetingContextMapper meetingContextMapper;
 
     public MeetingDto createNewMeeting(NewMeetingDto newMeetingDto) {
         Meeting meeting = meetingMapper.toDomain(newMeetingDto);
@@ -60,8 +63,10 @@ public class MeetingService {
                 .toList();
     }
 
-    public MeetingDto getNextMeeting() {
-        return meetingMapper.toResponseDto(meetingRepository.findFirstByStartDateTimeAfterOrderByStartDateTimeAsc(LocalDateTime.now()).orElseThrow());
+    public MeetingContextDto getNextAndLastMeeting(UUID userId) {
+        MeetingDto nextMeeting = meetingMapper.toResponseDto(meetingRepository.findFirstByAttendees_UserIdAndStartDateTimeAfterOrderByStartDateTimeAsc(userId, LocalDateTime.now()).orElseThrow());
+        MeetingDto latestMeeting = meetingMapper.toResponseDto(meetingRepository.findFirstByAttendees_UserIdAndStartDateTimeBeforeOrderByStartDateTimeDesc(userId, LocalDateTime.now()).orElseThrow());
+        return meetingContextMapper.toContextDto(nextMeeting, latestMeeting);
     }
 
     public void save(Meeting meeting) {
