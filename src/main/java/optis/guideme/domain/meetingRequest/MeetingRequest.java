@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import optis.guideme.domain.exception.WrongInputException;
+import optis.guideme.domain.meeting.Attendee;
 import optis.guideme.domain.meeting.Meeting;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -51,8 +51,9 @@ public class MeetingRequest {
         this.requestedBy = userId;
     }
 
-    public Meeting accept(){
-        return new Meeting();
+    public Meeting accept(List<Attendee> attendees) {
+        this.status = Status.ACCEPTED;
+        return new Meeting(this.name, this.startDateTime, this.endDateTime, this.referenceCode, attendees);
     }
 
     public boolean isRecurrent(){

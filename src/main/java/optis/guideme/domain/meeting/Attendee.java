@@ -1,37 +1,26 @@
 package optis.guideme.domain.meeting;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import optis.guideme.domain.user.Role;
-import optis.guideme.domain.user.User;
 
 import java.util.UUID;
 
-@AllArgsConstructor
-@Entity
-@NoArgsConstructor
 @Getter
+@Embeddable
 public class Attendee {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID attendeeId;
-    @ManyToOne
-    @JoinColumn(name = "meeting_id")
-    private Meeting meeting;
-    @ManyToOne
-    @JoinColumn(name="user_id")
-    private User user;
+    private UUID userId;
+
+    @Enumerated(EnumType.STRING)
     private Role role;
 
-    //domain constructor
-    public Attendee(Role role, User user) {
-        this.role = role;
-        this.user = user;
-    }
+    protected Attendee() {}
 
-    public void addAttendeeToMeeting(Meeting meeting) {
-        this.meeting = meeting;
+    public Attendee(UUID userId, Role role) {
+        this.userId = userId;
+        this.role = role;
     }
 }

@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import optis.guideme.domain.exception.WrongInputException;
 import optis.guideme.domain.user.Role;
-import optis.guideme.domain.user.User;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,8 +25,12 @@ public class Meeting {
     private String name; //should be same as meetingrequest
     private String referenceCode; //should be same as meetingrequest
     private LocalDateTime startDateTime;
-    @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Attendee> attendees =  new ArrayList<>(); // atleast two; 1 manager 1 consultant !
+    @ElementCollection
+    @CollectionTable(
+            name = "attendees",
+            joinColumns = @JoinColumn(name = "meeting_id")
+    ) // atleast two; 1 manager 1 consultant !
+    private List<Attendee> attendees = new ArrayList<>();
     private LocalDateTime endDateTime;
     private boolean occurred;
 
@@ -40,6 +43,15 @@ public class Meeting {
         this.attendees = new ArrayList<>();
     }
 
+    //constructor to create new Meeting after .accept() MeetingRequest
+    public Meeting( String name, LocalDateTime startDateTime, LocalDateTime endDateTime,  String referenceCode,  List<Attendee> attendees) {
+        this.name = name;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+        this.referenceCode = referenceCode;
+        this.attendees = attendees;
+        this.occurred = false;
+    }
 
     public Quarter getQuarter() {
         return Quarter.fromMonth(startDateTime.getMonthValue());
@@ -47,13 +59,6 @@ public class Meeting {
 
     public String getDisplayName() {
         return (name != null && !name.isBlank()) ? name : referenceCode;
-    }
-
-    //add attendee to meetingId
-    public void addAttendee(User user, Role role) {
-        Attendee attendee = new Attendee(role, user);
-        this.attendees.add(attendee);
-        attendee.addAttendeeToMeeting(this);
     }
 
     //validate sharedUsers
