@@ -1,6 +1,7 @@
 package optis.guideme.api;
 
 import lombok.RequiredArgsConstructor;
+import optis.guideme.api.dto.response.ClientScoreDto;
 import optis.guideme.api.dto.response.UserDto;
 import optis.guideme.api.mapper.CurrentUserProvider;
 import optis.guideme.application.UserService;
@@ -53,4 +54,10 @@ public class UserController {
     public List<UserDto> getUsersByIds(@RequestBody List<UUID> ids) {
         return userService.getUsersByIds(ids);
     }
+
+    @GetMapping("client-scores/recent")
+    public List<ClientScoreDto> getLatestClientScores(@RequestParam(defaultValue = "2") int limit) {
+        return userService.getLatestClientScores(currentUserProvider.getUserId(), limit);
+    }
+
 }

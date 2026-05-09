@@ -23,7 +23,7 @@ public class Consultant extends User {
     private String clientName;
     private LocalDate startDateAtClient;
     @ElementCollection
-    private final List<ClientRating> clientRatings = new ArrayList<>();
+    private List<ClientScore> clientScores = new ArrayList<>();
 
     public Consultant(UUID userId, String firstName, String lastName, String email, String avatar) {
         super(userId, firstName, lastName, email, avatar);
@@ -42,15 +42,21 @@ public class Consultant extends User {
         this.startDateAtClient = startDateAtClient;
     }
 
-    public void rateCurrentClient(ClientRating rating) {
+    public void addClientScore(ClientScore score) {
         if (clientName == null) {
-            throw new WrongInputException("Cannot rate Client without being assigned to one");
+            throw new WrongInputException("Cannot give Client a score without being assigned to one");
         }
-        clientRatings.add(rating);
+        clientScores.add(score);
     }
 
-    @Override
-    public Role getRole() {
-        return Role.CONSULTANT;
+    public List<ClientScore> getLatestClientScores(int limit) {
+        if (clientScores.isEmpty()) {
+            return List.of();
+        }
+
+        return clientScores
+                .stream()
+                .skip(Math.max(0, clientScores.size() - limit))
+                .toList();
     }
 }

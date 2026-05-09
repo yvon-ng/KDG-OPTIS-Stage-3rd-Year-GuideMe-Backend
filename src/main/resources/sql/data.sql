@@ -29,8 +29,8 @@ VALUES
     (null,  '00000000-0000-0000-0000-000000000020', '00000000-0000-0000-0000-000000000003'),
     (null,  '00000000-0000-0000-0000-000000000020', '00000000-0000-0000-0000-000000000001');
 
---insert client rating
-INSERT INTO consultant_client_ratings(consultant_user_id, client_name, rating, date)
+--insert client score
+INSERT INTO consultant_client_scores(consultant_user_id, client_name, score, date)
 VALUES ('4a94af3d-350a-4425-9a31-ba071e695a14','FujiFilm', 'SEVEN', date(now()));
 
 

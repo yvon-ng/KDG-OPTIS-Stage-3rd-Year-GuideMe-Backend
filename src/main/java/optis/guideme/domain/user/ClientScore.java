@@ -7,9 +7,9 @@ import java.time.LocalDate;
 
 @Embeddable
 @Getter
-public class ClientRating {
+public class ClientScore {
     private String clientName;
     @Enumerated(EnumType.STRING)
-    private Rating rating;
+    private Score score;
     private LocalDate date;
 }

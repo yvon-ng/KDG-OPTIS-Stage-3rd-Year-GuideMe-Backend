@@ -2,7 +2,7 @@ package optis.guideme.api.mapper;
 
 import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewUserDto;
-import optis.guideme.api.dto.response.ClientRatingDto;
+import optis.guideme.api.dto.response.ClientScoreDto;
 import optis.guideme.api.dto.response.UserDto;
 import optis.guideme.domain.factories.UserFactory;
 import optis.guideme.domain.user.Consultant;
@@ -25,15 +25,15 @@ public class UserMapper {
     public UserDto toResponseDto(User user) {
         String clientName  = null; // null when not a consultant
         LocalDate startDateAtClient = null; // null when not a consultant
-        List<ClientRatingDto> clientRatings = List.of();
+        List<ClientScoreDto> clientScores = List.of();
 
         if (user instanceof Consultant consultant) {
             clientName  = consultant.getClientName();
 
-            clientRatings = consultant.getClientRatings()
-                    .stream()
-                    .map(ClientRatingMapper::toDto)
-                    .toList();
+//            clientScores = consultant.getClientScores()
+//                    .stream()
+//                    .map(ClientScoreMapper::toDto)
+//                    .toList();
 
             startDateAtClient = consultant.getStartDateAtClient();
         }
@@ -45,7 +45,7 @@ public class UserMapper {
                 user.getEmail(),
                 clientName,
                 startDateAtClient,
-                clientRatings,
+//                clientScores,
                 user.getAvatar()
         );
     }

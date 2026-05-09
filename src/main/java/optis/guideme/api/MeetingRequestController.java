@@ -8,6 +8,7 @@ import optis.guideme.api.mapper.CurrentUserProvider;
 import optis.guideme.application.MeetingRequestService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController

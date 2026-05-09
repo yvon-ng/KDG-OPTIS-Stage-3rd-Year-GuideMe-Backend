@@ -1,8 +1,11 @@
 package optis.guideme.application;
 
 import lombok.RequiredArgsConstructor;
+import optis.guideme.api.dto.response.ClientScoreDto;
 import optis.guideme.api.dto.response.UserDto;
+import optis.guideme.api.mapper.ClientScoreMapper;
 import optis.guideme.api.mapper.UserMapper;
+import optis.guideme.domain.exception.ForbiddenException;
 import optis.guideme.domain.exception.NotFoundException;
 import optis.guideme.domain.user.*;
 import optis.guideme.repository.UserRepository;
@@ -19,6 +22,7 @@ import java.util.UUID;
 public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final ClientScoreMapper clientScoreMapper;
 
     public UserDto getUser(UUID userId) {
         return userMapper.toResponseDto(userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found with id: " + userId)));
@@ -53,4 +57,12 @@ public class UserService {
     }
 
 
+    public List<ClientScoreDto> getLatestClientScores(UUID userId, int limit) {
+        User user = getUserEntity(userId);
+        if (user instanceof Manager) {
+            throw new ForbiddenException("Manager cannot rate clients");
+        }
+        Consultant consultant = (Consultant) user;
+        return consultant.getLatestClientScores(limit).stream().map(clientScoreMapper::toDto).toList();
+    }
 }

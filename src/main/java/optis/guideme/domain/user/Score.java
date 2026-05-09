@@ -3,7 +3,7 @@ package optis.guideme.domain.user;
 import lombok.Getter;
 
 @Getter
-public enum Rating {
+public enum Score {
     ONE(1),
     TWO(2),
     THREE(3),
@@ -17,7 +17,7 @@ public enum Rating {
 
     private final int value;
 
-    Rating(int value) {
+    Score(int value) {
         this.value = value;
     }
 }
