@@ -65,7 +65,7 @@ public class UserService {
 
     public void rateCurrentClient(UUID userId, NewClientScoreDto newClientScoreDto) {
         Consultant consultant = getUserEntity(userId).asConsultant();
-        ClientScore newClientScore = new ClientScore(consultant.getClientName(), Score.fromValue(newClientScoreDto.score()), LocalDateTime.now());
+        ClientScore newClientScore = new ClientScore(consultant.getClientName(), clientScoreMapper.newClientScoreToDomain(newClientScoreDto), LocalDateTime.now());
         consultant.addClientScore(newClientScore);
     }
 }
