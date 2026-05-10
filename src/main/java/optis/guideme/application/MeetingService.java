@@ -44,8 +44,54 @@ public class MeetingService {
         return meetingRepository.findAll().stream().map(meetingMapper::toResponseDto).toList();
     }
 
-    public List<MeetingDto> getAllMeetingsByUser(UUID userId) {
-        return meetingRepository.findAllByAttendeesUserId(userId).stream().map(meetingMapper::toResponseDto).toList();
+    public List<MeetingDto> getAllMeetingsByUser(UUID userId,
+                                                 Integer quarter,
+                                                 Integer year,
+                                                 UUID personId) {
+        return meetingRepository
+                .findAllByAttendeesUserId(userId)
+                .stream()
+
+                .filter(meeting -> {
+                    if (year == null) {
+                        return true;
+                    }
+
+                    return meeting
+                            .getStartDateTime()
+                            .getYear() == year;
+                })
+
+                .filter(meeting -> {
+                    if (quarter == null) {
+                        return true;
+                    }
+
+                    int month = meeting
+                            .getStartDateTime()
+                            .getMonthValue();
+
+                    int meetingQuarter = ((month - 1) / 3) + 1;
+
+                    return meetingQuarter == quarter;
+                })
+
+                .filter(meeting -> {
+                    if (personId == null) {
+                        return true;
+                    }
+
+                    return meeting
+                            .getAttendees()
+                            .stream()
+                            .anyMatch(attendee ->
+                                    attendee.getUserId().equals(personId)
+                            );
+                })
+
+                .map(meetingMapper::toResponseDto)
+
+                .toList();
     }
 
     public List<AttendeeDto> getMeetingAttendees(UUID userId, UUID meetingId){

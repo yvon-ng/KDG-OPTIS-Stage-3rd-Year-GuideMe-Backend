@@ -37,9 +37,15 @@ public class MeetingController {
     }
 
     @GetMapping("myMeetings")
-    public List<MeetingDto> getMyMeetings(@AuthenticationPrincipal Jwt jwt) {
+    public List<MeetingDto> getMyMeetings(@AuthenticationPrincipal Jwt jwt,
+                                          @RequestParam(required = false) Integer quarter,
+                                          @RequestParam(required = false) Integer year,
+                                          @RequestParam(required = false) UUID personId) {
         UUID userId = UUID.fromString(jwt.getClaim("oid"));
-        return meetingService.getAllMeetingsByUser(userId);
+        return meetingService.getAllMeetingsByUser(userId,
+                                                    quarter,
+                                                    year,
+                                                    personId);
     }
 
     @GetMapping("/attendees/{meetingId}")
