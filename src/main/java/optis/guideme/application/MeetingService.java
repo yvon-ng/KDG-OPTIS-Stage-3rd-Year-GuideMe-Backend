@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewMeetingDto;
 import optis.guideme.api.dto.response.AttendeeDto;
 import optis.guideme.api.dto.response.MeetingDto;
-import optis.guideme.api.mapper.request.NewAttendeeMapper;
-import optis.guideme.api.mapper.request.NewMeetingMapper;
+import optis.guideme.api.mapper.AttendeeMapper;
+import optis.guideme.api.mapper.MeetingMapper;
 import optis.guideme.domain.exception.ForbiddenException;
 import optis.guideme.domain.meeting.Attendee;
 import optis.guideme.domain.meeting.Meeting;
@@ -13,6 +13,7 @@ import optis.guideme.domain.meetingRequest.DefaultReferenceCodeGenerator;
 import optis.guideme.repository.MeetingRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -22,14 +23,18 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class MeetingService {
     private final MeetingRepository meetingRepository;
-    private final NewMeetingMapper meetingMapper;
+    private final MeetingMapper meetingMapper;
     private final DefaultReferenceCodeGenerator defaultReferenceCodeGenerator;
-    private final NewAttendeeMapper attendeeMapper;
+    private final AttendeeMapper attendeeMapper;
+    private final UserService userService;
 
     public MeetingDto createNewMeeting(NewMeetingDto newMeetingDto) {
         Meeting meeting = meetingMapper.toDomain(newMeetingDto);
         List<Attendee> attendees = newMeetingDto.attendees().stream()
-                .map(a -> new Attendee(a.userId(), a.role()))
+                .map(a -> {
+                    var user = userService.getUserEntity(a.userId());
+                    return new Attendee(a.userId(), user.getRole());
+                })
                 .toList();
 
         meeting.validateMinimumRoles(attendees);
@@ -45,7 +50,7 @@ public class MeetingService {
         return meetingRepository.findAllByAttendeesUserId(userId).stream().map(meetingMapper::toResponseDto).toList();
     }
 
-    public List<AttendeeDto> getMeetingAttendees(UUID userId, UUID meetingId){
+    public List<AttendeeDto> getMeetingAttendees(UUID userId, UUID meetingId) {
         Meeting meeting = meetingRepository.findMeetingByMeetingId(meetingId);
         boolean isParticipant = meeting.getAttendees().stream()
                 .anyMatch(a -> a.getUserId().equals(userId));

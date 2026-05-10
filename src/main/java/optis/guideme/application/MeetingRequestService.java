@@ -3,8 +3,8 @@ import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewMeetingRequestDto;
 import optis.guideme.api.dto.response.MeetingDto;
 import optis.guideme.api.dto.response.MeetingRequestDto;
-import optis.guideme.api.mapper.request.NewMeetingMapper;
-import optis.guideme.api.mapper.request.NewMeetingRequestMapper;
+import optis.guideme.api.mapper.MeetingMapper;
+import optis.guideme.api.mapper.MeetingRequestMapper;
 import optis.guideme.domain.meeting.Attendee;
 import optis.guideme.domain.meeting.Meeting;
 import optis.guideme.domain.meetingRequest.DefaultReferenceCodeGenerator;
@@ -25,8 +25,8 @@ import java.util.UUID;
 @Transactional
 public class MeetingRequestService {
     private final MeetingRequestRepository meetingRequestRepository;
-    private final NewMeetingRequestMapper mapper;
-    private final NewMeetingMapper meetingMapper;
+    private final MeetingRequestMapper mapper;
+    private final MeetingMapper meetingMapper;
     private final DefaultReferenceCodeGenerator defaultReferenceCodeGenerator;
     private final UserService userService;
     private final MeetingService meetingService;

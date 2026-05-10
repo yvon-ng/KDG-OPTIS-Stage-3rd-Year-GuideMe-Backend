@@ -1,8 +1,8 @@
 package optis.guideme.api.dto.request;
-import optis.guideme.domain.user.Role;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
-public record NewAttendeeDto(UUID userId, Role role){
+public record NewAttendeeDto(@NotNull UUID userId){
 
 }

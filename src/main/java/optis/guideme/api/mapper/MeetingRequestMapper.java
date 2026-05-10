@@ -1,4 +1,4 @@
-package optis.guideme.api.mapper.request;
+package optis.guideme.api.mapper;
 
 import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewMeetingRequestDto;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class NewMeetingRequestMapper {
+public class MeetingRequestMapper {
 
     public MeetingRequest toDomain(NewMeetingRequestDto newMeetingRequestDto) {
         return new MeetingRequest(
