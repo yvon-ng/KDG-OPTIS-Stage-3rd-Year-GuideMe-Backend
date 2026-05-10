@@ -9,7 +9,6 @@ import optis.guideme.domain.user.Consultant;
 import optis.guideme.domain.user.User;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 

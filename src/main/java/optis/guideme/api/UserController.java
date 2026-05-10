@@ -62,9 +62,7 @@ public class UserController {
     }
 
     @PostMapping("client-scores/new")
-    public List<ClientScoreDto> rateCurrentClient(@RequestParam(defaultValue = "2") int limit, @RequestBody NewClientScoreDto newClientScoreDto) {
-        return userService.rateCurrentClient(currentUserProvider.getUserId(), newClientScoreDto, limit);
+    public void rateCurrentClient(@RequestBody NewClientScoreDto newClientScoreDto) {
+        userService.rateCurrentClient(currentUserProvider.getUserId(), newClientScoreDto);
     }
-
-
 }
