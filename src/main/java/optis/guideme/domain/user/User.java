@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import optis.guideme.domain.exception.ForbiddenException;
 
 import java.util.UUID;
 
@@ -27,5 +28,9 @@ public abstract class User {
 
     public Role getRole(){
         return Role.valueOf(this.getClass().getAnnotation(DiscriminatorValue.class).value());
+    }
+
+    public Consultant asConsultant() {
+        throw new ForbiddenException("User is not a consultant, Must be a consultant to give a client a score");
     }
 }

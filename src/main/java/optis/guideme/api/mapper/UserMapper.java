@@ -10,6 +10,7 @@ import optis.guideme.domain.user.User;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -24,17 +25,11 @@ public class UserMapper {
 
     public UserDto toResponseDto(User user) {
         String clientName  = null; // null when not a consultant
-        LocalDate startDateAtClient = null; // null when not a consultant
+        LocalDateTime startDateAtClient = null; // null when not a consultant
         List<ClientScoreDto> clientScores = List.of();
 
         if (user instanceof Consultant consultant) {
             clientName  = consultant.getClientName();
-
-//            clientScores = consultant.getClientScores()
-//                    .stream()
-//                    .map(ClientScoreMapper::toResponseDto)
-//                    .toList();
-
             startDateAtClient = consultant.getStartDateAtClient();
         }
 
@@ -45,7 +40,6 @@ public class UserMapper {
                 user.getEmail(),
                 clientName,
                 startDateAtClient,
-//                clientScores,
                 user.getAvatar()
         );
     }

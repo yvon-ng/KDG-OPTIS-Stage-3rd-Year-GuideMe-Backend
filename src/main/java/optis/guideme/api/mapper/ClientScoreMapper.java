@@ -16,7 +16,7 @@ public class ClientScoreMapper {
         return new ClientScoreDto(
                 score.getClientName(),
                 score.getScore().getValue(),
-                score.getDate()
+                score.getDateTime()
         );
     }
 }

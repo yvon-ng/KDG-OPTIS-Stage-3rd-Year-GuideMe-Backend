@@ -1,6 +1,6 @@
 package optis.guideme.api.dto.response;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-public record ClientScoreDto(String clientName, int score, LocalDate date) {
+public record ClientScoreDto(String clientName, int score, LocalDateTime date) {
 }
