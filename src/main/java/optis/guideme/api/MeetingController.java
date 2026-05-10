@@ -1,6 +1,5 @@
 package optis.guideme.api;
 
-import jakarta.annotation.security.RolesAllowed;
 import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewMeetingDto;
 import optis.guideme.api.dto.response.AttendeeDto;
@@ -22,7 +21,7 @@ public class MeetingController {
 
     @PostMapping
     public MeetingDto createNewMeeting(@RequestBody NewMeetingDto newMeetingDto) {
-        return meetingService.createNewMeeting(newMeetingDto);
+        return meetingService.createNewMeeting(currentUserProvider.getUserId(), newMeetingDto);
     }
 
     @GetMapping
@@ -31,9 +30,8 @@ public class MeetingController {
     }
 
     @GetMapping("me/context")
-    public MeetingContextDto getNextAndLastMeeting(@AuthenticationPrincipal Jwt jwt) {
-        UUID userId = UUID.fromString(jwt.getClaim("oid"));
-        return meetingService.getNextAndLastMeeting(userId);
+    public MeetingContextDto getNextAndLastMeeting() {
+        return meetingService.getNextAndLastMeeting(currentUserProvider.getUserId());
     }
 
     @GetMapping("my-meetings")
@@ -50,11 +48,6 @@ public class MeetingController {
     @GetMapping("attendees/{meetingId}")
     public List<AttendeeDto> getMeetingAttendees(@PathVariable UUID meetingId) {
         return meetingService.getMeetingAttendees(currentUserProvider.getUserId(), meetingId);
-    }
-
-    @PostMapping("/create")
-    public MeetingDto createMeeting(@RequestBody NewMeetingDto newMeetingDto) {
-        return meetingService.createNewMeeting(newMeetingDto);
     }
 
 }

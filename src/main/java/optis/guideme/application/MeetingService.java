@@ -12,11 +12,13 @@ import optis.guideme.domain.exception.ForbiddenException;
 import optis.guideme.domain.meeting.Attendee;
 import optis.guideme.domain.meeting.Meeting;
 import optis.guideme.domain.meetingRequest.DefaultReferenceCodeGenerator;
+import optis.guideme.domain.user.User;
 import optis.guideme.repository.MeetingRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,16 +33,19 @@ public class MeetingService {
     private final UserService userService;
     private final MeetingContextMapper meetingContextMapper;
 
-    public MeetingDto createNewMeeting(NewMeetingDto newMeetingDto) {
+    public MeetingDto createNewMeeting(UUID userId, NewMeetingDto newMeetingDto) {
         Meeting meeting = meetingMapper.toDomain(newMeetingDto);
-        List<Attendee> attendees = newMeetingDto.attendees().stream()
-                .map(a -> {
-                    var user = userService.getUserEntity(a.userId());
-                    return new Attendee(a.userId(), user.getRole());
-                })
-                .toList();
 
+        List<Attendee> attendees = new ArrayList<>(newMeetingDto.attendees().stream().map(
+                a -> {
+                    User user = userService.getUserEntity(a.userId());
+                    return new Attendee(a.userId(), user.getRole());
+                }).toList());
+
+        User currentUser = userService.getUserEntity(userId);
+        attendees.add(new Attendee(userId, currentUser.getRole()));
         meeting.validateMinimumRoles(attendees);
+        meeting.assignAttendees(attendees);
         meeting.assignReferenceCode(defaultReferenceCodeGenerator.generateReferenceCodeFromMeeting(meeting));
         return meetingMapper.toResponseDto(meetingRepository.save(meeting));
     }
