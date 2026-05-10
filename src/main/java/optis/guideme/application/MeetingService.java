@@ -47,7 +47,7 @@ public class MeetingService {
     public List<MeetingDto> getAllMeetingsByUser(UUID userId,
                                                  Integer quarter,
                                                  Integer year,
-                                                 UUID personId) {
+                                                 List<UUID> personIds) {
         return meetingRepository
                 .findAllByAttendeesUserId(userId)
                 .stream()
@@ -77,7 +77,7 @@ public class MeetingService {
                 })
 
                 .filter(meeting -> {
-                    if (personId == null) {
+                    if (personIds == null || personIds.isEmpty()) {
                         return true;
                     }
 
@@ -85,7 +85,7 @@ public class MeetingService {
                             .getAttendees()
                             .stream()
                             .anyMatch(attendee ->
-                                    attendee.getUserId().equals(personId)
+                                    personIds.contains(attendee.getUserId())
                             );
                 })
 

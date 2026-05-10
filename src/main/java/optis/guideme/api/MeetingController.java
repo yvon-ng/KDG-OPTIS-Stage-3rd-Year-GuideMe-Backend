@@ -40,12 +40,12 @@ public class MeetingController {
     public List<MeetingDto> getMyMeetings(@AuthenticationPrincipal Jwt jwt,
                                           @RequestParam(required = false) Integer quarter,
                                           @RequestParam(required = false) Integer year,
-                                          @RequestParam(required = false) UUID personId) {
+                                          @RequestParam(required = false) List<UUID> personIds) {
         UUID userId = UUID.fromString(jwt.getClaim("oid"));
         return meetingService.getAllMeetingsByUser(userId,
                                                     quarter,
                                                     year,
-                                                    personId);
+                                                    personIds);
     }
 
     @GetMapping("/attendees/{meetingId}")
