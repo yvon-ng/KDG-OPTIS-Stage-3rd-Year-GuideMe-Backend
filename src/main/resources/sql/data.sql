@@ -31,7 +31,8 @@ VALUES
 
 --insert client score
 INSERT INTO consultant_client_scores(consultant_user_id, client_name, score, date)
-VALUES ('4a94af3d-350a-4425-9a31-ba071e695a14','FujiFilm', 'SEVEN', date(now()));
+VALUES ('4a94af3d-350a-4425-9a31-ba071e695a14','FujiFilm', 'SEVEN', '2026-02-10T10:00:00'),
+       ('4a94af3d-350a-4425-9a31-ba071e695a14','FujiFilm', 'TEN', '2026-04-15T10:00:00');
 
 
 --insert notes
