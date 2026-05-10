@@ -32,7 +32,7 @@ public class UserMapper {
 
 //            clientScores = consultant.getClientScores()
 //                    .stream()
-//                    .map(ClientScoreMapper::toDto)
+//                    .map(ClientScoreMapper::toResponseDto)
 //                    .toList();
 
             startDateAtClient = consultant.getStartDateAtClient();

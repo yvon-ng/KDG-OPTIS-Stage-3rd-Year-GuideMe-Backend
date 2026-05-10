@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewMeetingDto;
 import optis.guideme.api.dto.response.AttendeeDto;
 import optis.guideme.api.dto.response.MeetingDto;
-import optis.guideme.api.mapper.request.NewAttendeeMapper;
-import optis.guideme.api.mapper.request.NewMeetingMapper;
+import optis.guideme.api.mapper.AttendeeMapper;
+import optis.guideme.api.mapper.MeetingMapper;
 import optis.guideme.domain.exception.ForbiddenException;
 import optis.guideme.domain.meeting.Attendee;
 import optis.guideme.domain.meeting.Meeting;
@@ -23,9 +23,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class MeetingService {
     private final MeetingRepository meetingRepository;
-    private final NewMeetingMapper meetingMapper;
+    private final MeetingMapper meetingMapper;
     private final DefaultReferenceCodeGenerator defaultReferenceCodeGenerator;
-    private final NewAttendeeMapper attendeeMapper;
+    private final AttendeeMapper attendeeMapper;
     private final UserService userService;
 
     public MeetingDto createNewMeeting(NewMeetingDto newMeetingDto) {

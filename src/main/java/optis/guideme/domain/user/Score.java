@@ -20,4 +20,14 @@ public enum Score {
     Score(int value) {
         this.value = value;
     }
+
+    public static Score fromValue(int value) {
+        for (Score score : values()) {
+            if (score.value == value) {
+                return score;
+            }
+        }
+
+        throw new IllegalArgumentException("Invalid score value: " + value);
+    }
 }

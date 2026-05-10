@@ -1,4 +1,4 @@
-package optis.guideme.api.mapper.request;
+package optis.guideme.api.mapper;
 
 import optis.guideme.api.dto.request.NewNoteDto;
 import optis.guideme.api.dto.response.NoteDto;
@@ -8,7 +8,7 @@ import optis.guideme.domain.note.Visibility;
 import org.springframework.stereotype.Component;
 
 @Component
-public class NewNoteMapper {
+public class NoteMapper {
     public Note toDomain(NewNoteDto newNoteDto) {
         Visibility visibility = newNoteDto.visibility() == null
                 ? Visibility.PRIVATE

@@ -63,6 +63,6 @@ public class UserService {
             throw new ForbiddenException("Manager cannot rate clients");
         }
         Consultant consultant = (Consultant) user;
-        return consultant.getLatestClientScores(limit).stream().map(clientScoreMapper::toDto).toList();
+        return consultant.getLatestClientScores(limit).stream().map(clientScoreMapper::toResponseDto).toList();
     }
 }
