@@ -3,18 +3,22 @@ package optis.guideme.application;
 import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewMeetingDto;
 import optis.guideme.api.dto.response.AttendeeDto;
+import optis.guideme.api.dto.response.MeetingContextDto;
 import optis.guideme.api.dto.response.MeetingDto;
 import optis.guideme.api.mapper.AttendeeMapper;
 import optis.guideme.api.mapper.MeetingMapper;
+import optis.guideme.api.mapper.MeetingContextMapper;
 import optis.guideme.domain.exception.ForbiddenException;
 import optis.guideme.domain.meeting.Attendee;
 import optis.guideme.domain.meeting.Meeting;
 import optis.guideme.domain.meetingRequest.DefaultReferenceCodeGenerator;
+import optis.guideme.domain.user.User;
 import optis.guideme.repository.MeetingRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,17 +31,21 @@ public class MeetingService {
     private final DefaultReferenceCodeGenerator defaultReferenceCodeGenerator;
     private final AttendeeMapper attendeeMapper;
     private final UserService userService;
+    private final MeetingContextMapper meetingContextMapper;
 
-    public MeetingDto createNewMeeting(NewMeetingDto newMeetingDto) {
+    public MeetingDto createNewMeeting(UUID userId, NewMeetingDto newMeetingDto) {
         Meeting meeting = meetingMapper.toDomain(newMeetingDto);
-        List<Attendee> attendees = newMeetingDto.attendees().stream()
-                .map(a -> {
-                    var user = userService.getUserEntity(a.userId());
-                    return new Attendee(a.userId(), user.getRole());
-                })
-                .toList();
 
+        List<Attendee> attendees = new ArrayList<>(newMeetingDto.attendees().stream().map(
+                a -> {
+                    User user = userService.getUserEntity(a.userId());
+                    return new Attendee(a.userId(), user.getRole());
+                }).toList());
+
+        User currentUser = userService.getUserEntity(userId);
+        attendees.add(new Attendee(userId, currentUser.getRole()));
         meeting.validateMinimumRoles(attendees);
+        meeting.assignAttendees(attendees);
         meeting.assignReferenceCode(defaultReferenceCodeGenerator.generateReferenceCodeFromMeeting(meeting));
         return meetingMapper.toResponseDto(meetingRepository.save(meeting));
     }
@@ -46,8 +54,54 @@ public class MeetingService {
         return meetingRepository.findAll().stream().map(meetingMapper::toResponseDto).toList();
     }
 
-    public List<MeetingDto> getAllMeetingsByUser(UUID userId) {
-        return meetingRepository.findAllByAttendeesUserId(userId).stream().map(meetingMapper::toResponseDto).toList();
+    public List<MeetingDto> getAllMeetingsByUser(UUID userId,
+                                                 Integer quarter,
+                                                 Integer year,
+                                                 List<UUID> personIds) {
+        return meetingRepository
+                .findAllByAttendeesUserId(userId)
+                .stream()
+
+                .filter(meeting -> {
+                    if (year == null) {
+                        return true;
+                    }
+
+                    return meeting
+                            .getStartDateTime()
+                            .getYear() == year;
+                })
+
+                .filter(meeting -> {
+                    if (quarter == null) {
+                        return true;
+                    }
+
+                    int month = meeting
+                            .getStartDateTime()
+                            .getMonthValue();
+
+                    int meetingQuarter = ((month - 1) / 3) + 1;
+
+                    return meetingQuarter == quarter;
+                })
+
+                .filter(meeting -> {
+                    if (personIds == null || personIds.isEmpty()) {
+                        return true;
+                    }
+
+                    return meeting
+                            .getAttendees()
+                            .stream()
+                            .anyMatch(attendee ->
+                                    personIds.contains(attendee.getUserId())
+                            );
+                })
+
+                .map(meetingMapper::toResponseDto)
+
+                .toList();
     }
 
     public List<AttendeeDto> getMeetingAttendees(UUID userId, UUID meetingId) {
@@ -65,8 +119,23 @@ public class MeetingService {
                 .toList();
     }
 
-    public MeetingDto getNextMeeting() {
-        return meetingMapper.toResponseDto(meetingRepository.findFirstByStartDateTimeAfterOrderByStartDateTimeAsc(LocalDateTime.now()).orElseThrow());
+    public MeetingContextDto getNextAndLastMeeting(UUID userId) {
+        MeetingDto nextMeeting = meetingRepository
+                .findFirstByAttendees_UserIdAndStartDateTimeAfterOrderByStartDateTimeAsc(
+                        userId,
+                        LocalDateTime.now()
+                )
+                .map(meetingMapper::toResponseDto)
+                .orElse(null);
+
+        MeetingDto latestMeeting = meetingRepository
+                .findFirstByAttendees_UserIdAndStartDateTimeBeforeOrderByStartDateTimeDesc(
+                        userId,
+                        LocalDateTime.now()
+                )
+                .map(meetingMapper::toResponseDto)
+                .orElse(null);
+        return meetingContextMapper.toContextDto(nextMeeting, latestMeeting);
     }
 
     public void save(Meeting meeting) {

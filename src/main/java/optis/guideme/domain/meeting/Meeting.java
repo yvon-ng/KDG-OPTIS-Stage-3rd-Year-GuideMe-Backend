@@ -85,4 +85,8 @@ public class Meeting {
         }
         this.referenceCode = referenceCode;
     }
+
+    public void assignAttendees(List<Attendee> attendees) {
+        this.attendees = attendees;
+    }
 }
