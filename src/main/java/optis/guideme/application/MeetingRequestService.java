@@ -30,6 +30,7 @@ public class MeetingRequestService {
     private final DefaultReferenceCodeGenerator defaultReferenceCodeGenerator;
     private final UserService userService;
     private final MeetingService meetingService;
+    private final EmailService emailService;
 
     public MeetingRequestDto createMeetingRequest(UUID userId, NewMeetingRequestDto newMeetingRequestDto) {
         MeetingRequest meetingRequest = mapper.toDomain(newMeetingRequestDto);
@@ -65,6 +66,10 @@ public class MeetingRequestService {
         attendees.addAll(requestedForUsers.stream().map(user -> new Attendee(user.getUserId(), user.getRole())).toList());
         Meeting meeting = meetingRequest.accept(attendees);
         meetingService.save(meeting);
+
+        //send email
+        attendees.forEach(a -> emailService.sendEmailReminder(a.getUserId(), meeting));
+
         return meetingMapper.toResponseDto(meeting);
     }
 }
