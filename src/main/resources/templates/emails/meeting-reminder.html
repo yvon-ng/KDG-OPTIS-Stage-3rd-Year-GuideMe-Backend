@@ -9,86 +9,61 @@
     <title>Meeting Reminder Email</title>
 </head>
 <body style="background-color:#ffffff; max-width:600px; margin: 0; padding: 0;">
-<!-- Content container -->
-<!--<table>-->
-<!--    <tbody>-->
-<!--    <tr>-->
-<!--        <td>-->
-            <table role="presentation" style="background-color:#f4f4f7">
+<table role="presentation" style="background-color:#f4f4f7">
+    <tbody>
+    <tr>
+        <td data-id="__react-email-column" style="margin:0 auto;">
+            <table role="presentation" style="margin: 0;padding: 0;background-color:#ffffff;border-radius:12px">
                 <tbody>
-                <tr>
-                    <td data-id="__react-email-column" style="margin:0 auto;">
-                        <table role="presentation" style="margin: 0;padding: 0;background-color:#ffffff;border-radius:12px">
+                <tr style="margin:0;padding:0">
+                    <td data-id="__react-email-column"
+                        style="margin:0;padding:30px 20px;background-color:#2563eb;color:#ffffff">
+                        <h1 style="margin:0;padding:0;font-size:28px">Upcoming Meeting Reminder</h1>
+                    </td>
+                </tr>
+                <tr style="margin:0;padding:0">
+                    <td data-id="__react-email-column"
+                        style="margin:0;padding:40px 30px;color:#333333">
+                        <p style="padding:0;font-size:16px;margin: 0;">
+                            Hello<!-- --> {{UserName}}<!-- -->,
+                        </p>
+                        <p style="margin:0;padding:0;font-size:16px;line-height:1.6">
+                            This is a friendly reminder that your meeting will begin in
+                            <strong><!-- -->{{HoursBeforeStart}}<!-- --></strong>.
+                        </p>
+                        <table role="presentation"
+                               style="margin: 30px 0;padding: 0;background-color:#f9fafb;border-radius:12px; width: 100%">
                             <tbody>
-                            <tr style="margin:0;padding:0">
-                                <td
-                                        data-id="__react-email-column"
-                                        style="margin:0;padding:30px 20px;background-color:#2563eb;color:#ffffff"
-                                >
-                                    <h1 style="margin:0;padding:0;font-size:28px">Upcoming Meeting
-                                        Reminder</h1>
-                                </td>
-                            </tr>
-                            <tr style="margin:0;padding:0">
+                            <tr style="margin:0;padding:0;">
                                 <td data-id="__react-email-column"
-                                    style="margin:0;padding:40px 30px;color:#333333">
-                                    <p style="padding:0;font-size:16px;margin: 0;">
-                                        Hello
-                                        <!-- -->{{UserName}}<!-- --> ,
-                                    </p>
-                                    <p style="margin:0;padding:0;font-size:16px;line-height:1.6">
-                                        This is a friendly reminder that your meeting will begin in
-                                        <strong>1 hour</strong>.
-                                    </p>
-                                    <table
-                                            role="presentation"
-                                            style="margin: 30px 0;padding: 0;background-color:#f9fafb;border-radius:12px; width: 100%"
-                                    >
-                                        <tbody>
-                                        <tr style="margin:0;padding:0;">
-                                            <td data-id="__react-email-column"
-                                                style="margin:0;padding:20px">
-                                                <p style="margin:0 0 10px 0;padding:0;font-size:15px">
-                                                    <strong>Meeting:</strong>
-                                                    <!-- -->{{MeetingDisplayName}}
-                                                </p>
-                                                <p style="margin:0 0 10px 0;padding:0;font-size:15px">
-                                                    <strong>Time:</strong>
-                                                    <!-- -->{{MeetingTime}}
-                                                </p>
-                                                <p style="margin:0 0 10px 0;padding:0;font-size:15px">
-                                                    <strong>Date:</strong>
-                                                    <!-- -->{{MeetingDate}}<!-- -->
-                                                </p>
-                                                <p style="margin:0 0 10px 0;padding:0;font-size:15px">
-                                                    <strong>Attendees:</strong>
-                                                    <!-- -->{{MeetingAttendees}}
-                                                </p>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                    <p style="margin:0;padding:0;font-size:14px;color:#666666"><br/>GuideMe
-                                    </p>
-                                </td>
-                            </tr>
-                            <tr style="margin:0;padding:0">
-                                <td
-                                        data-id="__react-email-column"
-                                        style="margin:0;padding:20px;background-color:#f9fafb;color:#999999;font-size:12px"
-                                >
-                                    <p style="margin:0;padding:0">© GuideMe. All rights reserved.</p>
+                                    style="margin:0;padding:20px">
+                                    <p style="margin:0 0 10px 0;padding:0;font-size:15px"><strong>Meeting:</strong>
+                                        <!-- -->{{MeetingDisplayName}}</p>
+                                    <p style="margin:0 0 10px 0;padding:0;font-size:15px"><strong>Time:</strong><!-- -->
+                                        {{MeetingTime}}</p>
+                                    <p style="margin:0 0 10px 0;padding:0;font-size:15px"><strong>Date:</strong><!-- -->
+                                        {{MeetingDate}}<!-- --></p>
+                                    <p style="margin:0 0 10px 0;padding:0;font-size:15px"><strong>Attendees:</strong>
+                                        <!-- -->{{MeetingAttendees}}</p>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
+                        <p style="margin:0;padding:0;font-size:14px;color:#666666"><br/>GuideMe
+                        </p>
+                    </td>
+                </tr>
+                <tr style="margin:0;padding:0">
+                    <td data-id="__react-email-column"
+                        style="margin:0;padding:20px;background-color:#f9fafb;color:#999999;font-size:12px">
+                        <p style="margin:0;padding:0">© GuideMe. All rights reserved.</p>
                     </td>
                 </tr>
                 </tbody>
             </table>
-<!--        </td>-->
-<!--    </tr>-->
-<!--    </tbody>-->
-<!--</table>-->
+        </td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>

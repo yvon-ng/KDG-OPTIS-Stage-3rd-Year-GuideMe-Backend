@@ -67,7 +67,7 @@ public class MeetingRequestService {
         Meeting meeting = meetingRequest.accept(attendees);
         meetingService.save(meeting);
 
-        //send email
+        // send emails 1 hour before meeting
         attendees.forEach(a -> emailService.sendEmailReminder(a.getUserId(), meeting));
 
         return meetingMapper.toResponseDto(meeting);
