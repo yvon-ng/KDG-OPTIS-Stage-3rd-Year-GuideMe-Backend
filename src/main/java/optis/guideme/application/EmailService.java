@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 
@@ -58,11 +59,19 @@ public class EmailService {
                                     .orElse("No attendees")
                     );
 
+            String scheduledAt = meeting.getStartDateTime()
+                    .minusMinutes(5)
+                    .atZone(ZoneId.of("Europe/Brussels"))
+                    .toInstant()
+                    .toString();
+
+
         CreateEmailOptions params = CreateEmailOptions.builder()
                 .from("onboarding@resend.dev") //TODO moet veranderd worden naar eigen DNS for dev only works with own email
                 .to(user.getEmail())
                 .subject("Reminder for meeting " + meeting.getDisplayName())
                 .html(html)
+                .scheduledAt(scheduledAt)
                 .build();
 
             resend.emails().send(params);
