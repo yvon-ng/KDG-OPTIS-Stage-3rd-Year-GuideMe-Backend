@@ -7,6 +7,7 @@ import optis.guideme.api.mapper.MeetingMapper;
 import optis.guideme.api.mapper.MeetingRequestMapper;
 import optis.guideme.domain.meeting.Attendee;
 import optis.guideme.domain.meeting.Meeting;
+import optis.guideme.domain.meeting.Reminder;
 import optis.guideme.domain.meetingRequest.DefaultReferenceCodeGenerator;
 import optis.guideme.domain.meetingRequest.MeetingRequest;
 import optis.guideme.domain.user.User;
@@ -31,6 +32,7 @@ public class MeetingRequestService {
     private final UserService userService;
     private final MeetingService meetingService;
     private final EmailService emailService;
+    private final ReminderService reminderService;
 
     public MeetingRequestDto createMeetingRequest(UUID userId, NewMeetingRequestDto newMeetingRequestDto) {
         MeetingRequest meetingRequest = mapper.toDomain(newMeetingRequestDto);
@@ -59,7 +61,7 @@ public class MeetingRequestService {
 
     public MeetingDto acceptRequest(UUID meetingRequestId) {
         MeetingRequest meetingRequest = meetingRequestRepository.findById(meetingRequestId).orElseThrow();
-        User requestedByUser = userService.getUserEntity(meetingRequest.getRequestedBy());
+        User requestedByUser = userService.get(meetingRequest.getRequestedBy());
         List<User> requestedForUsers = userService.getUsersEntitiesByIds(meetingRequest.getRequestFor());
         List<Attendee> attendees = new ArrayList<>();
         attendees.add(new Attendee(meetingRequest.getRequestedBy(), requestedByUser.getRole()));
@@ -69,6 +71,11 @@ public class MeetingRequestService {
 
         // send emails 1 hour before meeting
         attendees.forEach(a -> emailService.sendEmailReminder(a.getUserId(), meeting));
+
+        //TODO make reminders
+        List<Reminder> reminders = attendees.stream().map(a -> new Reminder(a.getUserId(), meeting)).toList();
+
+        reminderService.saveAll(reminders);
 
         return meetingMapper.toResponseDto(meeting);
     }

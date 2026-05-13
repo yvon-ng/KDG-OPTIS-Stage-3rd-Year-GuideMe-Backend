@@ -35,7 +35,7 @@ public class UserService {
     }
 
     public List<UserDto> getAllUsersExceptMe(UUID userId) {
-        return userRepository.findAllByUserIdNot(userId).stream().map(userMapper::toResponseDto).toList();
+        return userRepository.getAllByUserIdNot(userId).map(userMapper::toResponseDto).toList();
     }
 
     public List<User> getUsersEntitiesByIds(List<UUID> ids) {
@@ -47,24 +47,19 @@ public class UserService {
     }
 
     public List<UserDto> getAllUsers() {
-        List<User> users = userRepository.findAll();
-        return users.stream()
-                .map(userMapper::toResponseDto)
-                .toList();
+        return userRepository.findAll().stream().map(userMapper::toResponseDto).toList();
     }
 
-    public User getUserEntity(UUID userId) {
+    public User get(UUID userId) {
         return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found with id: " + userId));
     }
 
-
     public List<ClientScoreDto> getLatestClientScores(UUID userId, int limit) {
-        Consultant consultant = getUserEntity(userId).asConsultant();
-        return consultant.getLatestClientScores(limit).stream().map(clientScoreMapper::toResponseDto).toList();
+        return get(userId).asConsultant().getLatestClientScores(limit).stream().map(clientScoreMapper::toResponseDto).toList();
     }
 
     public void rateCurrentClient(UUID userId, NewClientScoreDto newClientScoreDto) {
-        Consultant consultant = getUserEntity(userId).asConsultant();
+        Consultant consultant = get(userId).asConsultant();
         ClientScore newClientScore = new ClientScore(consultant.getClientName(), clientScoreMapper.newClientScoreToDomain(newClientScoreDto), LocalDateTime.now());
         consultant.addClientScore(newClientScore);
     }

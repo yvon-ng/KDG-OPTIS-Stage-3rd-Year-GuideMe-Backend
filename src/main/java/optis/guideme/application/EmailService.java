@@ -31,7 +31,7 @@ public class EmailService {
     private final Logger logger = LoggerFactory.getLogger(EmailService.class);
 
     public void sendEmailReminder(UUID userId, Meeting meeting) {
-        User user = userService.getUserEntity(userId);
+        User user = userService.get(userId);
         List<UserDto> users = userService.getUsersByIds(meeting.getAttendees().stream().map(Attendee::getUserId).toList());
         String scheduledAt = meeting.getStartDateTime().atZone(ZoneId.of("Europe/Brussels")).minusHours(EMAIL_REMINDER_HOURS_BEFORE_MEETING).toInstant().toString();
 
