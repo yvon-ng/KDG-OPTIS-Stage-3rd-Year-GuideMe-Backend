@@ -146,4 +146,8 @@ public class MeetingService {
     public void save(Meeting meeting) {
         meetingRepository.save(meeting);
     }
+
+    public Meeting get(UUID meetingId){
+        return meetingRepository.findById(meetingId).orElseThrow();
+    }
 }

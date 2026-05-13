@@ -22,13 +22,13 @@ public class Reminder {
     @Id
     @GeneratedValue
     private UUID reminderId;
-    private UUID userId;
+    private UUID receiver;
     private UUID meetingId;
     private LocalDateTime scheduledAt;
     private boolean sent;
 
-    public Reminder(UUID userId, Meeting meeting) {
-        this.userId = userId;
+    public Reminder(UUID receiver, Meeting meeting) {
+        this.receiver = receiver;
         this.meetingId = meeting.getMeetingId();
         this.scheduledAt = meeting.getStartDateTime().minusHours(Reminder.EMAIL_REMINDER_HOURS_BEFORE_MEETING);
     }
