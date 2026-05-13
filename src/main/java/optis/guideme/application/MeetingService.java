@@ -56,8 +56,7 @@ public class MeetingService {
             return false;
         }
         if (quarter != null) {
-            int month = meeting.getStartDateTime().getMonthValue();
-            int meetingQuarter = ((month - 1) / 3) + 1;
+            int meetingQuarter = meeting.getQuarter().getValue();
             if (meetingQuarter != quarter) {
                 return false;
             }

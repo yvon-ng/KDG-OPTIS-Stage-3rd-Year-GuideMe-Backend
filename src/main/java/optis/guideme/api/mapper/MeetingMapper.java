@@ -3,7 +3,6 @@ package optis.guideme.api.mapper;
 import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewMeetingDto;
 import optis.guideme.api.dto.response.MeetingDto;
-import optis.guideme.application.UserService;
 import optis.guideme.domain.meeting.Attendee;
 import optis.guideme.domain.meeting.Meeting;
 import org.springframework.stereotype.Component;

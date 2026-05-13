@@ -40,7 +40,7 @@ public class Meeting {
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
         this.occurred = false;
-        this.attendees = new ArrayList<>();
+        this.attendees = attendees;
     }
 
     //constructor to create new Meeting after .accept() MeetingRequest

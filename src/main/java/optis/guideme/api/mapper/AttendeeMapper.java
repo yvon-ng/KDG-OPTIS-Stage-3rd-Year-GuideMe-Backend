@@ -5,7 +5,6 @@ import optis.guideme.api.dto.request.NewAttendeeDto;
 import optis.guideme.api.dto.response.AttendeeDto;
 import optis.guideme.application.UserService;
 import optis.guideme.domain.meeting.Attendee;
-import optis.guideme.domain.user.Role;
 import optis.guideme.domain.user.User;
 import org.springframework.stereotype.Component;
 
