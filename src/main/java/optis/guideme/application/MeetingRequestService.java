@@ -58,7 +58,7 @@ public class MeetingRequestService {
 
     public MeetingDto acceptRequest(UUID meetingRequestId) {
         MeetingRequest meetingRequest = meetingRequestRepository.findById(meetingRequestId).orElseThrow();
-        User requestedByUser = userService.getUserEntity(meetingRequest.getRequestedBy());
+        User requestedByUser = userService.get(meetingRequest.getRequestedBy());
         List<User> requestedForUsers = userService.getUsersEntitiesByIds(meetingRequest.getRequestFor());
         List<Attendee> attendees = new ArrayList<>();
         attendees.add(new Attendee(meetingRequest.getRequestedBy(), requestedByUser.getRole()));

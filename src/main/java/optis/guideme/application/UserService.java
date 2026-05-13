@@ -53,18 +53,18 @@ public class UserService {
                 .toList();
     }
 
-    public User getUserEntity(UUID userId) {
+    public User get(UUID userId) {
         return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found with id: " + userId));
     }
 
 
     public List<ClientScoreDto> getLatestClientScores(UUID userId, int limit) {
-        Consultant consultant = getUserEntity(userId).asConsultant();
+        Consultant consultant = get(userId).asConsultant();
         return consultant.getLatestClientScores(limit).stream().map(clientScoreMapper::toResponseDto).toList();
     }
 
     public void rateCurrentClient(UUID userId, NewClientScoreDto newClientScoreDto) {
-        Consultant consultant = getUserEntity(userId).asConsultant();
+        Consultant consultant = get(userId).asConsultant();
         ClientScore newClientScore = new ClientScore(consultant.getClientName(), clientScoreMapper.newClientScoreToDomain(newClientScoreDto), LocalDateTime.now());
         consultant.addClientScore(newClientScore);
     }
