@@ -2,7 +2,6 @@ package optis.guideme.api;
 
 import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.response.ReminderDto;
-import optis.guideme.api.dto.response.UserDto;
 import optis.guideme.api.mapper.CurrentUserProvider;
 import optis.guideme.application.ReminderService;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -6,6 +6,7 @@ import optis.guideme.api.dto.response.UserDto;
 import optis.guideme.api.mapper.ReminderMapper;
 import optis.guideme.domain.meeting.Reminder;
 import optis.guideme.repository.ReminderRepository;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,9 +19,17 @@ import java.util.UUID;
 public class ReminderService {
     private final ReminderRepository reminderRepository;
     private final ReminderMapper reminderMapper;
+    private final SimpMessagingTemplate messagingTemplate;
 
     public void saveAll(List<Reminder> reminders) {
         reminderRepository.saveAll(reminders);
+        reminders.forEach(reminder -> {
+            ReminderDto dto = reminderMapper.toResponseDto(reminder);
+            messagingTemplate.convertAndSendToUser(
+                    reminder.getReceiver().toString(),
+                    "/queue/reminders",
+                    dto);
+        });
     }
 
     public List<ReminderDto> getReminders(UUID userId) {

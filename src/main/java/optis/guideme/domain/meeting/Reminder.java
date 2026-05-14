@@ -18,6 +18,7 @@ import java.util.UUID;
 @Getter
 public class Reminder {
     public static final int EMAIL_REMINDER_HOURS_BEFORE_MEETING = 1;
+    public static final int TEST_EMAIL_REMINDER_MINUTES_BEFORE_MEETING = 2;
 
     @Id
     @GeneratedValue
@@ -30,7 +31,7 @@ public class Reminder {
     public Reminder(UUID receiver, Meeting meeting) {
         this.receiver = receiver;
         this.meetingId = meeting.getMeetingId();
-        this.scheduledAt = meeting.getStartDateTime().minusHours(Reminder.EMAIL_REMINDER_HOURS_BEFORE_MEETING);
+        this.scheduledAt = meeting.getStartDateTime().minusHours(Reminder.TEST_EMAIL_REMINDER_MINUTES_BEFORE_MEETING); //TODO CHANGE
     }
 
     public void markAsSent() {
