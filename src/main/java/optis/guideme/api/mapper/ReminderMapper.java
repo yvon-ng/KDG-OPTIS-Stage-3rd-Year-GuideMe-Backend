@@ -15,7 +15,8 @@ public class ReminderMapper {
         return new ReminderDto(
                 reminder.getReminderId(),
                 meetingService.get(reminder.getMeetingId()).getDisplayName(),
-                Reminder.EMAIL_REMINDER_HOURS_BEFORE_MEETING
+                Reminder.EMAIL_REMINDER_HOURS_BEFORE_MEETING,
+                "REMINDER"
         );
     }
 }
