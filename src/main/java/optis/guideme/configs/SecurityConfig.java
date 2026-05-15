@@ -28,7 +28,6 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/public/**").permitAll()
-                        .requestMatchers("/api/users/test").permitAll()
                         .requestMatchers("/socket/**").permitAll()
                         //methods voor manager schermen
                         .anyRequest().authenticated()

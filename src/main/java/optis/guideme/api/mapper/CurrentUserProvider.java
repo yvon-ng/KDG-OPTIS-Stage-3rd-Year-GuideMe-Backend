@@ -11,10 +11,9 @@ import java.util.UUID;
 public class CurrentUserProvider { //TODO static so no inject
 
     public Jwt getJwt() { //private
-        JwtAuthenticationToken authentication =
-                (JwtAuthenticationToken) SecurityContextHolder
-                        .getContext()
-                        .getAuthentication();
+        JwtAuthenticationToken authentication = (JwtAuthenticationToken) SecurityContextHolder
+                .getContext()
+                .getAuthentication();
 
         return authentication.getToken();
     }

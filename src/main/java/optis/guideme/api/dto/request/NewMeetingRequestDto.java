@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.UUID;
 
 
-public record NewMeetingRequestDto(@NotNull String name, @NotNull LocalDateTime startDateTime, @NotNull LocalDateTime endDateTime, @NotNull int recurrence, @NotNull List<UUID> requestFor, UUID previousRequestId) {
+public record NewMeetingRequestDto(@NotNull String name, @NotNull LocalDateTime startDateTime, @NotNull LocalDateTime endDateTime, int recurrence, @NotNull List<UUID> requestFor, UUID previousRequestId) {
 }
