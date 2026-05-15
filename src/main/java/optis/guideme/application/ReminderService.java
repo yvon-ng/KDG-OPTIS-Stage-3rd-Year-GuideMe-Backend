@@ -11,6 +11,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,21 +25,26 @@ public class ReminderService {
     private final Logger log = LoggerFactory.getLogger(ReminderService.class.getName());
 
     public void saveAll(List<Reminder> reminders) {
-        log.info("Saving {} reminders", reminders.size());
         reminderRepository.saveAll(reminders);
-        reminders.forEach(reminder -> {
-            log.info("Processing reminder for user: {}, receiver type: {}", reminder.getReceiver(), reminder.getReceiver().getClass());
-
-            ReminderDto dto = reminderMapper.toResponseDto(reminder);
-            messagingTemplate.convertAndSendToUser(
-                    reminder.getReceiver().toString(),
-                    "/queue/reminders",
-                    dto);
-            log.info("Reminder sent via WebSocket");
-        });
     }
 
-    public List<ReminderDto> getReminders(UUID userId) {
-        return reminderRepository.getAllByReceiver(userId).map(reminderMapper::toResponseDto).toList();
+    public List<ReminderDto> getSentReminders(UUID userId) {
+        return reminderRepository.getAllByReceiverAndSentIsTrue(userId).map(reminderMapper::toResponseDto).toList();
+    }
+
+    public void sendReminder(Reminder reminder) {
+        log.info("Sending reminder for user: {}", reminder.getReceiver());
+        ReminderDto dto = reminderMapper.toResponseDto(reminder);
+        messagingTemplate.convertAndSendToUser(
+                reminder.getReceiver().toString(),
+                "/queue/reminders",
+                dto);
+        reminder.markAsSent();
+        reminderRepository.save(reminder);
+    }
+
+    public List<Reminder> getRemindersToSend() {
+        LocalDateTime twoMinFromNow = LocalDateTime.now().plusHours(Reminder.TEST_EMAIL_REMINDER_MINUTES_BEFORE_MEETING);
+        return reminderRepository.findRemindersToSend(twoMinFromNow).toList();
     }
 }
