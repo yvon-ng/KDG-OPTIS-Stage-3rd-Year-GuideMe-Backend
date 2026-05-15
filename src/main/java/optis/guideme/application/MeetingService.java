@@ -47,6 +47,7 @@ public class MeetingService {
         attendees.add(new Attendee(userId, currentUser.getRole()));
         meeting.validateMinimumRoles(attendees);
         meeting.assignAttendees(attendees);
+        meeting.assignReferenceCode(defaultReferenceCodeGenerator.generateReferenceCodeFromMeeting(meeting));
         meetingRepository.save(meeting);
 
         // send emails 1 hour before meeting

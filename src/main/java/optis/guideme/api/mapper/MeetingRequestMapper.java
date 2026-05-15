@@ -6,17 +6,21 @@ import optis.guideme.api.dto.response.MeetingRequestDto;
 import optis.guideme.domain.meetingRequest.MeetingRequest;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
 @RequiredArgsConstructor
 @Component
 public class MeetingRequestMapper {
-
     public MeetingRequest toDomain(NewMeetingRequestDto newMeetingRequestDto) {
+        LocalDateTime localStartDateTime = LocalDateTime.ofInstant(newMeetingRequestDto.startDateTime(), ZoneId.of("Europe/Brussels"));
+        LocalDateTime localEndDateTime = LocalDateTime.ofInstant(newMeetingRequestDto.endDateTime(), ZoneId.of("Europe/Brussels"));
         return new MeetingRequest(
-                newMeetingRequestDto.endDateTime(),
+                localEndDateTime,
                 newMeetingRequestDto.name(),
                 newMeetingRequestDto.recurrence(),
                 newMeetingRequestDto.requestFor(),
-                newMeetingRequestDto.startDateTime()
+                localStartDateTime
         );
     }
 
