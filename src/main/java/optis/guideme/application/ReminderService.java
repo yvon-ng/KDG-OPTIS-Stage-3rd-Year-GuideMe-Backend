@@ -29,7 +29,7 @@ public class ReminderService {
     }
 
     public List<ReminderDto> getSentReminders(UUID userId) {
-        return reminderRepository.getAllByReceiverAndSentIsTrue(userId).map(reminderMapper::toResponseDto).toList();
+        return reminderRepository.findAllByReceiverAndSentIsTrue(userId).map(reminderMapper::toResponseDto).toList();
     }
 
     public void sendReminder(Reminder reminder) {

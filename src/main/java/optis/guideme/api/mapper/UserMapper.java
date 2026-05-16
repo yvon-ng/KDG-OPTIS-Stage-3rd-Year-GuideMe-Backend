@@ -39,7 +39,8 @@ public class UserMapper {
                 user.getEmail(),
                 clientName,
                 startDateAtClient,
-                user.getAvatar()
+                user.getAvatar(),
+                user.getRole()
         );
     }
 }

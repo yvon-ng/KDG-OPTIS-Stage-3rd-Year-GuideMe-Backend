@@ -30,15 +30,15 @@ public class NoteService {
     }
 
     public List<NotePreviewDto> getAllNotes(UUID userId) {
-        return noteRepository.getAllByOwner(userId).map(noteMapper::toNotesResponseDto).toList();
+        return noteRepository.findAllByOwner(userId).map(noteMapper::toNotesResponseDto).toList();
     }
 
     public List<NotePreviewDto> getAllPrivateNotes(UUID userId) {
-        return noteRepository.getAllByOwnerAndVisibility(userId, Visibility.PRIVATE).map(noteMapper::toNotesResponseDto).toList();
+        return noteRepository.findAllByOwnerAndVisibility(userId, Visibility.PRIVATE).map(noteMapper::toNotesResponseDto).toList();
     }
 
     public List<NotePreviewDto> getAllMeetingNotes(UUID userId) {
-        return noteRepository.getAllByOwnerAndMeetingIdIsNotNull(userId).map(noteMapper::toNotesResponseDto).toList();
+        return noteRepository.findAllByOwnerAndMeetingIdIsNotNull(userId).map(noteMapper::toNotesResponseDto).toList();
     }
 
     public NoteDto get(UUID noteId) {

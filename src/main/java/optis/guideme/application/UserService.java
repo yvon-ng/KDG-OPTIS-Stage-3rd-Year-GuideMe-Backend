@@ -25,8 +25,8 @@ public class UserService {
     private final UserMapper userMapper;
     private final ClientScoreMapper clientScoreMapper;
 
-    public UserDto getUser(UUID userId) {
-        return userMapper.toResponseDto(userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found with id: " + userId)));
+    public UserDto get(UUID userId) {
+        return userMapper.toResponseDto(getUser(userId));
     }
 
     public Optional<User> addUser(UUID userId, String email, Role role) {
@@ -35,31 +35,31 @@ public class UserService {
     }
 
     public List<UserDto> getAllUsersExceptMe(UUID userId) {
-        return userRepository.getAllByUserIdNot(userId).map(userMapper::toResponseDto).toList();
+        return userRepository.findAllByUserIdNot(userId).map(userMapper::toResponseDto).toList();
     }
 
-    public List<User> getUsersEntitiesByIds(List<UUID> ids) {
+    public List<User> getUsersByIds(List<UUID> ids) {
         return userRepository.findAllById(ids);
     }
 
-    public List<UserDto> getUsersByIds(List<UUID> ids) {
+    public List<UserDto> getByIds(List<UUID> ids) {
         return userRepository.findAllById(ids).stream().map(userMapper::toResponseDto).toList();
     }
 
     public List<UserDto> getAllUsers() {
-        return userRepository.findAll().stream().map(userMapper::toResponseDto).toList();
+        return userRepository.getAll().map(userMapper::toResponseDto).toList();
     }
 
-    public User get(UUID userId) {
+    public User getUser(UUID userId) {
         return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found with id: " + userId));
     }
 
     public List<ClientScoreDto> getLatestClientScores(UUID userId, int limit) {
-        return get(userId).asConsultant().getLatestClientScores(limit).stream().map(clientScoreMapper::toResponseDto).toList();
+        return getUser(userId).asConsultant().getLatestClientScores(limit).stream().map(clientScoreMapper::toResponseDto).toList();
     }
 
     public void rateCurrentClient(UUID userId, NewClientScoreDto newClientScoreDto) {
-        Consultant consultant = get(userId).asConsultant();
+        Consultant consultant = getUser(userId).asConsultant();
         ClientScore newClientScore = new ClientScore(consultant.getClientName(), clientScoreMapper.newClientScoreToDomain(newClientScoreDto), LocalDateTime.now());
         consultant.addClientScore(newClientScore);
     }

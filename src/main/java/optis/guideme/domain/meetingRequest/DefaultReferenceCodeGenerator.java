@@ -32,7 +32,7 @@ public class DefaultReferenceCodeGenerator { // !!!!!!!!TODO use in service and 
 
     private String buildCode(LocalDateTime startDateTime, List<User> users) {
 
-        // get all "attendees" or "requestedBy and requestedFor" first names, turn it into PascalCase if they have no firstname then take "Unknown"
+        // getUser all "attendees" or "requestedBy and requestedFor" first names, turn it into PascalCase if they have no firstname then take "Unknown"
         String names = users.stream()
                 .map(User::getFirstName)
                 .map(name -> {
@@ -42,11 +42,11 @@ public class DefaultReferenceCodeGenerator { // !!!!!!!!TODO use in service and 
                 })
                 .reduce("", String::concat);
 
-        // get Q ...
+        // getUser Q ...
         int month = startDateTime.getMonthValue();
         int quarter = (month - 1) / 3 + 1;
 
-        // get last 2 digits of year
+        // getUser last 2 digits of year
         int year = startDateTime.getYear() % 100;
 
         // generate unique_code

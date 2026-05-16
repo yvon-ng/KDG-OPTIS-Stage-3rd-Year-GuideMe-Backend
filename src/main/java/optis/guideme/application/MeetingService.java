@@ -39,11 +39,11 @@ public class MeetingService {
 
         List<Attendee> attendees = new ArrayList<>(newMeetingDto.attendees().stream().map(
                 a -> {
-                    User user = userService.get(a.userId());
+                    User user = userService.getUser(a.userId());
                     return new Attendee(a.userId(), user.getRole());
                 }).toList());
 
-        User currentUser = userService.get(userId);
+        User currentUser = userService.getUser(userId);
         attendees.add(new Attendee(userId, currentUser.getRole()));
         meeting.validateMinimumRoles(attendees);
         meeting.assignAttendees(attendees);

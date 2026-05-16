@@ -37,33 +37,28 @@ public class MeetingRequestService {
     public MeetingRequestDto createMeetingRequest(UUID userId, NewMeetingRequestDto newMeetingRequestDto) {
         MeetingRequest meetingRequest = mapper.toDomain(newMeetingRequestDto);
         meetingRequest.assignRequestedBy(userId);
-        User requestedBy = userService.get(userId);
-        List<User> requestFor = userService.getUsersEntitiesByIds(newMeetingRequestDto.requestFor());
+        User requestedBy = userService.getUser(userId);
+        List<User> requestFor = userService.getUsersByIds(newMeetingRequestDto.requestFor());
         meetingRequest.assignReferenceCode(defaultReferenceCodeGenerator.generateReferenceCode(meetingRequest, requestedBy, requestFor));
         return mapper.toResponseDto(meetingRequestRepository.save(meetingRequest));
     }
 
     public List<MeetingRequestDto> getAllMeetingRequests(){
-        return meetingRequestRepository.findAll().stream().map(
-                mapper::toResponseDto
-        ).toList();
+        return meetingRequestRepository.findAll().stream().map(mapper::toResponseDto).toList();
     }
 
     public List<MeetingRequestDto> getIncomingMeetingRequests(UUID userId) {
-        return meetingRequestRepository.getIncomingMeetingRequests(userId).stream().map(
-                mapper::toResponseDto
-        ).toList();
+        return meetingRequestRepository.findIncomingMeetingRequests(userId).map(mapper::toResponseDto).toList();
     }
 
     public List<MeetingRequestDto> getOutgoingMeetingRequests(UUID userId) {
-        return meetingRequestRepository.getOutgoingMeetingRequests(userId).stream().map(
-        mapper::toResponseDto).toList();
+        return meetingRequestRepository.findOutgoingMeetingRequests(userId).map(mapper::toResponseDto).toList();
     }
 
     public MeetingDto acceptRequest(UUID meetingRequestId) {
         MeetingRequest meetingRequest = meetingRequestRepository.findById(meetingRequestId).orElseThrow();
-        User requestedByUser = userService.get(meetingRequest.getRequestedBy());
-        List<User> requestedForUsers = userService.getUsersEntitiesByIds(meetingRequest.getRequestFor());
+        User requestedByUser = userService.getUser(meetingRequest.getRequestedBy());
+        List<User> requestedForUsers = userService.getUsersByIds(meetingRequest.getRequestFor());
         List<Attendee> attendees = new ArrayList<>();
         attendees.add(new Attendee(meetingRequest.getRequestedBy(), requestedByUser.getRole()));
         attendees.addAll(requestedForUsers.stream().map(user -> new Attendee(user.getUserId(), user.getRole())).toList());

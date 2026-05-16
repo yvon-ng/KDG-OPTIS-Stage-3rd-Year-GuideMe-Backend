@@ -18,7 +18,7 @@ public class CurrentUserProvider { //TODO static so no inject
         return authentication.getToken();
     }
 
-    public UUID getUserId() { //get currentuserid
+    public UUID getUserId() { //getUser currentuserid
         return UUID.fromString(getJwt().getClaim("oid"));
     }
 }

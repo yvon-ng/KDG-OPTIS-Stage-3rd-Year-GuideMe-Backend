@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Repository
 public interface MeetingRequestRepository extends JpaRepository<@NonNull MeetingRequest, @NonNull UUID> {
@@ -22,7 +22,7 @@ public interface MeetingRequestRepository extends JpaRepository<@NonNull Meeting
             AND rf = :userId
             """
     )
-    List<MeetingRequest> getIncomingMeetingRequests(UUID userId);
+    Stream<MeetingRequest> findIncomingMeetingRequests(UUID userId);
 
     @Query(
             """
@@ -31,5 +31,5 @@ public interface MeetingRequestRepository extends JpaRepository<@NonNull Meeting
             AND mr.requestedBy = :userId
             """
     )
-    List<MeetingRequest> getOutgoingMeetingRequests(UUID userId);
+    Stream<MeetingRequest> findOutgoingMeetingRequests(UUID userId);
 }
