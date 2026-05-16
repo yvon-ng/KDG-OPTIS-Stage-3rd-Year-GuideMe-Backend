@@ -2,7 +2,6 @@ package optis.guideme.api.mapper;
 
 import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewUserDto;
-import optis.guideme.api.dto.response.ClientScoreDto;
 import optis.guideme.api.dto.response.UserDto;
 import optis.guideme.domain.factories.UserFactory;
 import optis.guideme.domain.user.Consultant;
@@ -10,7 +9,6 @@ import optis.guideme.domain.user.User;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Component
@@ -25,7 +23,6 @@ public class UserMapper {
     public UserDto toResponseDto(User user) {
         String clientName  = null; // null when not a consultant
         LocalDateTime startDateAtClient = null; // null when not a consultant
-        List<ClientScoreDto> clientScores = List.of();
 
         if (user instanceof Consultant consultant) {
             clientName  = consultant.getClientName();

@@ -30,7 +30,7 @@ public class UserService {
     }
 
     public Optional<User> addUser(UUID userId, String email, Role role) {
-        Invitation invitation = new Invitation(email, role);
+        Invitation invitation = new Invitation(userId, email, role);
         return Optional.empty();
     }
 
