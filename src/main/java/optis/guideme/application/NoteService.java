@@ -45,7 +45,7 @@ public class NoteService {
         return noteMapper.toNoteResponseDto(getNote(noteId));
     }
 
-    public NoteDto updateNote(UUID userId, UUID noteId, UpdateNoteDto updateNoteDto) {
+    public NoteDto updateNote(UUID userId, UUID noteId, UpdateNoteDto updateNoteDto) { // TODO how without setters
         Note note = getNote(noteId);
         note.update(userId, updateNoteDto);
         return noteMapper.toNoteResponseDto(noteRepository.save(note));
