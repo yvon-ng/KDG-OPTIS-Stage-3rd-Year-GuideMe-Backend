@@ -1,14 +1,11 @@
 package optis.guideme.api.mapper;
 
-import optis.guideme.api.dto.UpdateNoteDto;
 import optis.guideme.api.dto.request.NewNoteDto;
 import optis.guideme.api.dto.response.NoteDto;
 import optis.guideme.api.dto.response.NotePreviewDto;
 import optis.guideme.domain.note.Note;
 import optis.guideme.domain.note.Visibility;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 @Component
 public class NoteMapper {
