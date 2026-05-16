@@ -47,6 +47,19 @@ public class MeetingRequest {
         this.name = name;
     }
 
+    //constructor for counter request
+    public MeetingRequest(String name, String referenceCode, LocalDateTime startDateTime, LocalDateTime endDateTime, int recurrencePerYear, UUID requestedBy, List<UUID> requestFor, UUID previousRequestId) {
+        this.name = name;
+        this.referenceCode = referenceCode;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+        this.recurrencePerYear = recurrencePerYear;
+        this.status = Status.PENDING;
+        this.requestedBy = requestedBy;
+        this.requestFor = requestFor;
+        this.previousRequestId = previousRequestId;
+    }
+
     public void assignRequestedBy(UUID userId){
         this.requestedBy = userId;
     }
@@ -71,4 +84,12 @@ public class MeetingRequest {
         return (name != null && !name.isBlank()) ? name : referenceCode;
     }
 
+    public void decline() {
+        this.status = Status.DECLINED;
+    }
+
+    public MeetingRequest reschedule(LocalDateTime newStartDateTime, LocalDateTime newEndDateTime, int newRecurrencePerYear, UUID newRequestedBy, List<UUID> newRequestFor){
+        this.status = Status.COUNTER_REQUESTED;
+        return new MeetingRequest(this.name, this.referenceCode, newStartDateTime, newEndDateTime, newRecurrencePerYear, newRequestedBy, newRequestFor, this.meetingRequestId);
+    }
 }

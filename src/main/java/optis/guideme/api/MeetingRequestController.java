@@ -41,4 +41,9 @@ public class MeetingRequestController {
     public MeetingDto acceptMeetingRequest(@PathVariable UUID meetingRequestId) {
         return meetingRequestService.acceptRequest(meetingRequestId);
     }
+
+    @PostMapping("/decline/{meetingRequestId}")
+    public void declineMeetingRequest(@PathVariable UUID meetingRequestId) {
+        meetingRequestService.declineRequest(meetingRequestId);
+    }
 }

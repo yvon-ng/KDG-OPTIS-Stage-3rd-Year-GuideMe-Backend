@@ -33,4 +33,5 @@ public class MeetingRequestMapper {
                 meetingRequest.getPreviousRequestId()
         );
     }
+
 }

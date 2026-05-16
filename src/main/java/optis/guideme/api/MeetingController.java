@@ -49,5 +49,4 @@ public class MeetingController {
     public List<AttendeeDto> getMeetingAttendees(@PathVariable UUID meetingId) {
         return meetingService.getMeetingAttendees(currentUserProvider.getUserId(), meetingId);
     }
-
 }

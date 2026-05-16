@@ -20,6 +20,7 @@ import java.util.UUID;
 
 
 
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -31,11 +32,28 @@ public class MeetingRequestService {
     private final UserService userService;
     private final MeetingService meetingService;
 
-    public MeetingRequestDto createMeetingRequest(UUID userId, NewMeetingRequestDto newMeetingRequestDto) {
-        MeetingRequest meetingRequest = mapper.toDomain(newMeetingRequestDto);
+    private MeetingRequest get(UUID meetingRequestId){
+        return meetingRequestRepository.findById(meetingRequestId).orElseThrow();
+    }
+
+    public MeetingRequestDto createMeetingRequest(UUID userId, NewMeetingRequestDto dto) {
+        List<User> requestFor = userService.getUsersEntitiesByIds(dto.requestFor());
+
+        if (dto.previousRequestId() != null) {
+            MeetingRequest previous = get(dto.previousRequestId());
+            LocalDateTime newStart = LocalDateTime.parse(dto.startDateTime());
+            LocalDateTime newEnd = LocalDateTime.parse(dto.endDateTime());
+
+            MeetingRequest rescheduled = previous.reschedule(newStart, newEnd, dto.recurrencePerYear(), userId, dto.requestFor());
+
+            return mapper.toResponseDto(meetingRequestRepository.save(rescheduled));
+        }
+
+        MeetingRequest meetingRequest = mapper.toDomain(dto);
         meetingRequest.assignRequestedBy(userId);
-        List<User> requestFor = userService.getUsersEntitiesByIds(newMeetingRequestDto.requestFor());
-        meetingRequest.assignReferenceCode(defaultReferenceCodeGenerator.generateReferenceCode(meetingRequest, requestFor));
+        meetingRequest.assignReferenceCode(
+                defaultReferenceCodeGenerator.generateReferenceCode(meetingRequest, requestFor)
+        );
         return mapper.toResponseDto(meetingRequestRepository.save(meetingRequest));
     }
 
@@ -66,6 +84,10 @@ public class MeetingRequestService {
         Meeting meeting = meetingRequest.accept(attendees);
         meetingService.save(meeting);
         return meetingMapper.toResponseDto(meeting);
+    }
+
+    public void declineRequest(UUID meetingRequestId) {
+         get(meetingRequestId).decline();
     }
 }
 

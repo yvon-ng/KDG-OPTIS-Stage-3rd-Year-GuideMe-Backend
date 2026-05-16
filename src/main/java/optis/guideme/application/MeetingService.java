@@ -30,6 +30,10 @@ public class MeetingService {
     private final AttendeeMapper attendeeMapper;
     private final MeetingContextMapper meetingContextMapper;
 
+    private Meeting get(UUID meetingId){
+        return meetingRepository.findById(meetingId).orElseThrow();
+    }
+
     public MeetingDto createNewMeeting(UUID userId, NewMeetingDto newMeetingDto) {
         Meeting meeting = meetingMapper.toDomain(userId, newMeetingDto);
 
@@ -45,7 +49,7 @@ public class MeetingService {
     }
 
     public List<MeetingDto> getAllMeetingsByUser(UUID userId, Integer quarter, Integer year, List<UUID> personIds) {
-        try (Stream<Meeting> meetingStream = meetingRepository.getAllByAttendeesUserId(userId)) {
+        try (Stream<Meeting> meetingStream = meetingRepository.findAllByAttendeesUserId(userId)) {
             return meetingStream.filter(meeting -> matchesFilters(meeting, year, quarter, personIds)).map(meetingMapper::toResponseDto).toList();
         }
     }
@@ -68,7 +72,7 @@ public class MeetingService {
     }
 
     public List<AttendeeDto> getMeetingAttendees(UUID userId, UUID meetingId) {
-        Meeting meeting = meetingRepository.get(meetingId);
+        Meeting meeting = get(meetingId);
         boolean isParticipant = meeting.getAttendees().stream().anyMatch(a -> a.getUserId().equals(userId));
         if (!isParticipant) {
             throw new ForbiddenException("you're not part of this meeting");
@@ -77,8 +81,8 @@ public class MeetingService {
     }
 
     public MeetingContextDto getNextAndLastMeeting(UUID userId) {
-        MeetingDto nextMeeting = meetingRepository.getFirstByAttendees_UserIdAndStartDateTimeAfterOrderByStartDateTimeAsc(userId, LocalDateTime.now()).map(meetingMapper::toResponseDto).orElse(null);
-        MeetingDto latestMeeting = meetingRepository.getFirstByAttendees_UserIdAndStartDateTimeBeforeOrderByStartDateTimeDesc(userId, LocalDateTime.now()).map(meetingMapper::toResponseDto).orElse(null);
+        MeetingDto nextMeeting = meetingRepository.findFirstByAttendees_UserIdAndStartDateTimeAfterOrderByStartDateTimeAsc(userId, LocalDateTime.now()).map(meetingMapper::toResponseDto).orElse(null);
+        MeetingDto latestMeeting = meetingRepository.findFirstByAttendees_UserIdAndStartDateTimeBeforeOrderByStartDateTimeDesc(userId, LocalDateTime.now()).map(meetingMapper::toResponseDto).orElse(null);
         return meetingContextMapper.toContextDto(nextMeeting, latestMeeting);
     }
 
