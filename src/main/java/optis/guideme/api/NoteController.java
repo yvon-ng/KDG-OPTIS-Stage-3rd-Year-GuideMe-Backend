@@ -46,7 +46,7 @@ public class NoteController {
     }
 
     @PutMapping("{noteId}")
-    public NoteDto updateNote(@PathVariable UUID noteId, @RequestBody UpdateNoteDto updateNoteDto){
+    public NoteDto updateNote(@PathVariable UUID noteId, @RequestBody @Valid UpdateNoteDto updateNoteDto){
         return noteService.updateNote(currentUserProvider.getUserId(), noteId, updateNoteDto);
     }
 }
