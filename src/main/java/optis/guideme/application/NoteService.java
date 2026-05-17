@@ -30,24 +30,28 @@ public class NoteService {
     }
 
     public List<NotePreviewDto> getAllNotes(UUID userId) {
-        return noteRepository.findAllByOwner(userId).stream().map(noteMapper::toNotesResponseDto).toList();
+        return noteRepository.findAllByOwnerOrderByCreationTimeDesc(userId).map(noteMapper::toNotesResponseDto).toList();
     }
 
     public List<NotePreviewDto> getAllPrivateNotes(UUID userId) {
-        return noteRepository.getAllByOwnerAndVisibility(userId, Visibility.PRIVATE).stream().map(noteMapper::toNotesResponseDto).toList();
+        return noteRepository.findAllByOwnerAndVisibilityOrderByCreationTimeDesc(userId, Visibility.PRIVATE).map(noteMapper::toNotesResponseDto).toList();
     }
 
     public List<NotePreviewDto> getAllMeetingNotes(UUID userId) {
-        return noteRepository.getAllByOwnerAndMeetingIdIsNotNull(userId).stream().map(noteMapper::toNotesResponseDto).toList();
+        return noteRepository.findAllByOwnerAndMeetingIdIsNotNullOrderByCreationTimeDesc(userId).map(noteMapper::toNotesResponseDto).toList();
     }
 
-    public NoteDto getNote(UUID noteId) {
-        return noteMapper.toNoteResponseDto(noteRepository.findNoteByNoteId(noteId));
+    public NoteDto get(UUID noteId) {
+        return noteMapper.toNoteResponseDto(getNote(noteId));
     }
 
-    public NoteDto updateNote(UUID userId, UUID noteId, UpdateNoteDto updateNoteDto) {
-        Note note = noteRepository.findById(noteId).orElseThrow(() -> new NotFoundException("Note not found"));
+    public NoteDto updateNote(UUID userId, UUID noteId, UpdateNoteDto updateNoteDto) { // TODO how without setters
+        Note note = getNote(noteId);
         note.update(userId, updateNoteDto);
         return noteMapper.toNoteResponseDto(noteRepository.save(note));
+    }
+
+    private Note getNote(UUID noteId){
+        return noteRepository.findById(noteId).orElseThrow(() -> new NotFoundException("Note Not Found with Id: " + noteId));
     }
 }

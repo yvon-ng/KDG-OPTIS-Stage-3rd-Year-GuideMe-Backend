@@ -27,7 +27,6 @@ public class MeetingRequest {
     private int recurrencePerYear;
     @Enumerated(EnumType.STRING)
     private Status status;
-    @Column(name = "requested_by")
     private UUID requestedBy;
 
     @ElementCollection
@@ -37,6 +36,7 @@ public class MeetingRequest {
     private UUID previousRequestId;
     private boolean isAllowed = false;
 
+    // only for fresh (not counter request) new meeting requests
     public MeetingRequest(LocalDateTime endDateTime, String name, int recurrencePerYear, List<UUID> requestFor, LocalDateTime startDateTime) {
         this.endDateTime = endDateTime;
         this.status = Status.PENDING;

@@ -42,7 +42,7 @@ public class NoteController {
 
     @GetMapping("{noteId}")
     public NoteDto getNote(@PathVariable UUID noteId){
-        return noteService.getNote(noteId);
+        return noteService.get(noteId);
     }
 
     @PutMapping("{noteId}")

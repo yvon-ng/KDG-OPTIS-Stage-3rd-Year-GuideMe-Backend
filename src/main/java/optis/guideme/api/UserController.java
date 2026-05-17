@@ -24,7 +24,7 @@ public class UserController {
 
     @GetMapping("me")
     public UserDto me(){
-        return userService.getUser(currentUserProvider.getUserId());
+        return userService.get(currentUserProvider.getUserId());
     }
 
     @GetMapping("all")
@@ -48,12 +48,12 @@ public class UserController {
 
     @GetMapping("{id}")
     public UserDto getUser(@PathVariable UUID id){
-       return userService.getUser(id);
+       return userService.get(id);
     }
 
     @PostMapping("attendees")
     public List<UserDto> getUsersByIds(@RequestBody List<UUID> ids) {
-        return userService.getUsersByIds(ids);
+        return userService.getByIds(ids);
     }
 
     @GetMapping("client-scores/recent")

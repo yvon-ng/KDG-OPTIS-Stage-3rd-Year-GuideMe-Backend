@@ -24,14 +24,14 @@ public class Meeting {
     private UUID meetingId;
     private String name; //should be same as meetingrequest
     private String referenceCode; //should be same as meetingrequest
-    private LocalDateTime startDateTime;
+    private LocalDateTime startDateTime; //should be same as meetingrequest
     @ElementCollection
     @CollectionTable(
             name = "attendees",
             joinColumns = @JoinColumn(name = "meeting_id")
     ) // atleast two; 1 manager 1 consultant !
     private List<Attendee> attendees = new ArrayList<>();
-    private LocalDateTime endDateTime;
+    private LocalDateTime endDateTime; //should be same as meetingrequest
     private boolean occurred;
 
 

@@ -7,6 +7,7 @@ import optis.guideme.api.mapper.MeetingMapper;
 import optis.guideme.api.mapper.MeetingRequestMapper;
 import optis.guideme.domain.meeting.Attendee;
 import optis.guideme.domain.meeting.Meeting;
+import optis.guideme.domain.meeting.Reminder;
 import optis.guideme.domain.meetingRequest.DefaultReferenceCodeGenerator;
 import optis.guideme.domain.meetingRequest.MeetingRequest;
 import optis.guideme.domain.user.User;
@@ -32,6 +33,8 @@ public class MeetingRequestService {
     private final DefaultReferenceCodeGenerator defaultReferenceCodeGenerator;
     private final UserService userService;
     private final MeetingService meetingService;
+    private final EmailService emailService;
+    private final ReminderService reminderService;
 
     private MeetingRequest get(UUID meetingRequestId){
         return meetingRequestRepository.findById(meetingRequestId).orElseThrow();
@@ -44,7 +47,8 @@ public class MeetingRequestService {
             MeetingRequest previous = get(dto.previousRequestId());
             LocalDateTime newStart = dto.startDateTime();
             LocalDateTime newEnd = dto.endDateTime();
-
+            User requestedBy = userService.getUser(userId);
+            List<User> requestFor = userService.getUsersByIds(newMeetingRequestDto.requestFor());
             MeetingRequest rescheduled = previous.reschedule(newStart, newEnd, dto.recurrence(), userId, dto.requestFor());
 
             return mapper.toResponseDto(meetingRequestRepository.save(rescheduled));
@@ -59,31 +63,35 @@ public class MeetingRequestService {
     }
 
     public List<MeetingRequestDto> getAllMeetingRequests(){
-        return meetingRequestRepository.findAll().stream().map(
-                mapper::toResponseDto
-        ).toList();
+        return meetingRequestRepository.findAll().stream().map(mapper::toResponseDto).toList();
     }
 
     public List<MeetingRequestDto> getIncomingMeetingRequests(UUID userId) {
-        return meetingRequestRepository.getIncomingMeetingRequests(userId).stream().map(
-                mapper::toResponseDto
-        ).toList();
+        return meetingRequestRepository.findIncomingMeetingRequests(userId).map(mapper::toResponseDto).toList();
     }
 
     public List<MeetingRequestDto> getOutgoingMeetingRequests(UUID userId) {
-        return meetingRequestRepository.getOutgoingMeetingRequests(userId).stream().map(
-        mapper::toResponseDto).toList();
+        return meetingRequestRepository.findOutgoingMeetingRequests(userId).map(mapper::toResponseDto).toList();
     }
 
     public MeetingDto acceptRequest(UUID meetingRequestId) {
         MeetingRequest meetingRequest = meetingRequestRepository.findById(meetingRequestId).orElseThrow();
-        User requestedByUser = userService.get(meetingRequest.getRequestedBy());
-        List<User> requestedForUsers = userService.getUsersEntitiesByIds(meetingRequest.getRequestFor());
+        User requestedByUser = userService.getUser(meetingRequest.getRequestedBy());
+        List<User> requestedForUsers = userService.getUsersByIds(meetingRequest.getRequestFor());
         List<Attendee> attendees = new ArrayList<>();
         attendees.add(new Attendee(meetingRequest.getRequestedBy(), requestedByUser.getRole()));
         attendees.addAll(requestedForUsers.stream().map(user -> new Attendee(user.getUserId(), user.getRole())).toList());
         Meeting meeting = meetingRequest.accept(attendees);
         meetingService.save(meeting);
+
+        // send accepted emails immediately
+        attendees.forEach(a -> emailService.sendAcceptedEmail(a.getUserId(), meeting));
+
+        // send emails and reminders 1 hour before meeting
+        attendees.forEach(a -> emailService.sendEmailReminder(a.getUserId(), meeting));
+        List<Reminder> reminders = attendees.stream().map(a -> new Reminder(a.getUserId(), meeting)).toList();
+
+        reminderService.saveAll(reminders);
         return meetingMapper.toResponseDto(meeting);
     }
 

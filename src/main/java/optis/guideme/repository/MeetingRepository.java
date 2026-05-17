@@ -18,5 +18,7 @@ public interface MeetingRepository extends JpaRepository<@NonNull Meeting, @NonN
 
     Stream<Meeting> findAllByAttendeesUserId(UUID userId);
 
-//    Meeting get(UUID meetingId);
+    Meeting findMeetingByMeetingId(UUID meetingId);
+
+    Stream<Meeting> findAllByOrderByStartDateTimeDesc();
 }

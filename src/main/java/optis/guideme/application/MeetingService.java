@@ -29,6 +29,7 @@ public class MeetingService {
     private final DefaultReferenceCodeGenerator defaultReferenceCodeGenerator;
     private final AttendeeMapper attendeeMapper;
     private final MeetingContextMapper meetingContextMapper;
+    private final EmailService emailService;
 
     private Meeting get(UUID meetingId){
         return meetingRepository.findById(meetingId).orElseThrow();
@@ -42,10 +43,16 @@ public class MeetingService {
         meeting.assignReferenceCode(defaultReferenceCodeGenerator.generateReferenceCodeFromMeeting(meeting));
 
         return meetingMapper.toResponseDto(meetingRepository.save(meeting));
+        meetingRepository.save(meeting);
+
+        // send emails 1 hour before meeting
+        attendees.forEach(a -> emailService.sendEmailReminder(a.getUserId(), meeting));
+
+        return meetingMapper.toResponseDto(meeting);
     }
 
     public List<MeetingDto> getAllMeetings() {
-        return meetingRepository.findAll().stream().map(meetingMapper::toResponseDto).toList();
+        return meetingRepository.findAllByOrderByStartDateTimeDesc().map(meetingMapper::toResponseDto).toList();
     }
 
     public List<MeetingDto> getAllMeetingsByUser(UUID userId, Integer quarter, Integer year, List<UUID> personIds) {
