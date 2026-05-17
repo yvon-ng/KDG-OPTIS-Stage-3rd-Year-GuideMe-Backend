@@ -20,8 +20,8 @@ public class GoalController {
     private final CurrentUserProvider currentUserProvider;
 
     @GetMapping
-    public List<GoalDto> getMyGoals(){
-        return goalService.getAllGoalsByUser(currentUserProvider.getUserId());
+    public List<GoalDto> getMyUncompletedGoals(){
+        return goalService.getAllUncompletedGoalsByUser(currentUserProvider.getUserId());
     }
 
     @PostMapping

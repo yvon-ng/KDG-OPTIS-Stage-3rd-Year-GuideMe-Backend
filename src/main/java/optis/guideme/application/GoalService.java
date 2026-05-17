@@ -22,8 +22,8 @@ public class GoalService {
     private final GoalRepository goalRepository;
     private final GoalMapper goalMapper;
 
-    public List<GoalDto> getAllGoalsByUser(UUID userId) {
-        return goalRepository.findAllByUserIdOrderByCreationDateDesc(userId).map(goalMapper::toResponseDto).toList();
+    public List<GoalDto> getAllUncompletedGoalsByUser(UUID userId) {
+        return goalRepository.findAllByUserIdAndAchievementDateIsNullOrderByCreationDateDesc(userId).map(goalMapper::toResponseDto).toList();
     }
 
     public GoalDto createNewGoal(UUID userId, NewGoalDto newGoalDto) {

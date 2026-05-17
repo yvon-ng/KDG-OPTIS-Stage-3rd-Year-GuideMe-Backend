@@ -10,7 +10,9 @@ import java.util.stream.Stream;
 
 @Repository
 public interface GoalRepository extends JpaRepository<@NonNull Goal, @NonNull UUID> {
-    Stream<Goal> findAllByUserIdOrderByCreationDateDesc(UUID userId);
+//    Stream<Goal> findAllByUserIdOrderByCreationDateDesc(UUID userId);
 
     Stream<Goal> findAllByUserIdAndAchievementDateIsNotNullOrderByCreationDateDesc(UUID userId);
+
+    Stream<Goal> findAllByUserIdAndAchievementDateIsNullOrderByCreationDateDesc(UUID userId);
 }
