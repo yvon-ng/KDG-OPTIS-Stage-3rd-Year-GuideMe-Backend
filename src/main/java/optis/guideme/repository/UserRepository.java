@@ -11,6 +11,4 @@ import java.util.stream.Stream;
 @Repository
 public interface UserRepository extends JpaRepository<@NonNull User, @NonNull UUID> {
     Stream<User> findAllByUserIdNot(UUID userId);
-
-    Stream<User> getAll();
 }

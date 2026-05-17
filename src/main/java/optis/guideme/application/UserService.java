@@ -47,7 +47,7 @@ public class UserService {
     }
 
     public List<UserDto> getAllUsers() {
-        return userRepository.getAll().map(userMapper::toResponseDto).toList();
+        return userRepository.findAll().stream().map(userMapper::toResponseDto).toList();
     }
 
     public User getUser(UUID userId) {
