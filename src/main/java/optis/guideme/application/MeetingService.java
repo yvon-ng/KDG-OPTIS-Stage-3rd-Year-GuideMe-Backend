@@ -32,22 +32,28 @@ public class MeetingService {
     private final AttendeeMapper attendeeMapper;
     private final UserService userService;
     private final MeetingContextMapper meetingContextMapper;
+    private final EmailService emailService;
 
     public MeetingDto createNewMeeting(UUID userId, NewMeetingDto newMeetingDto) {
         Meeting meeting = meetingMapper.toDomain(newMeetingDto);
 
         List<Attendee> attendees = new ArrayList<>(newMeetingDto.attendees().stream().map(
                 a -> {
-                    User user = userService.getUserEntity(a.userId());
+                    User user = userService.getUser(a.userId());
                     return new Attendee(a.userId(), user.getRole());
                 }).toList());
 
-        User currentUser = userService.getUserEntity(userId);
+        User currentUser = userService.getUser(userId);
         attendees.add(new Attendee(userId, currentUser.getRole()));
         meeting.validateMinimumRoles(attendees);
         meeting.assignAttendees(attendees);
         meeting.assignReferenceCode(defaultReferenceCodeGenerator.generateReferenceCodeFromMeeting(meeting));
-        return meetingMapper.toResponseDto(meetingRepository.save(meeting));
+        meetingRepository.save(meeting);
+
+        // send emails 1 hour before meeting
+        attendees.forEach(a -> emailService.sendEmailReminder(a.getUserId(), meeting));
+
+        return meetingMapper.toResponseDto(meeting);
     }
 
     public List<MeetingDto> getAllMeetings() {
@@ -140,5 +146,9 @@ public class MeetingService {
 
     public void save(Meeting meeting) {
         meetingRepository.save(meeting);
+    }
+
+    public Meeting get(UUID meetingId){
+        return meetingRepository.findById(meetingId).orElseThrow();
     }
 }

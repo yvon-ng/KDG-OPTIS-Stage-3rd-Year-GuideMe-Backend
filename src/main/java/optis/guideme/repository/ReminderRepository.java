@@ -1,0 +1,18 @@
+package optis.guideme.repository;
+
+import lombok.NonNull;
+import optis.guideme.domain.meeting.Reminder;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
+import java.util.stream.Stream;
+
+@Repository
+public interface ReminderRepository extends JpaRepository<@NonNull Reminder, @NonNull UUID> {
+    @Query("SELECT r FROM Reminder r WHERE r.scheduledAt >= CURRENT_TIMESTAMP AND r.scheduledAt < CURRENT_TIMESTAMP + 1 MINUTE AND r.sent = false")
+    Stream<Reminder> findRemindersToSend(LocalDateTime oneHourBeforeMeeting);
+    Stream<Reminder> findAllByReceiverAndSentIsTrue(UUID userId);
+}
