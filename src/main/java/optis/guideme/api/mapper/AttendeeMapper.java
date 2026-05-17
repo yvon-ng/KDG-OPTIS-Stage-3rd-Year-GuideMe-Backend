@@ -15,12 +15,12 @@ import java.util.UUID;
 public class AttendeeMapper {
     private final UserService userService;
     public Attendee toDomain(UUID userId) {
-        User user = userService.get(userId);
+        User user = userService.getUser(userId);
         return new Attendee(userId, user.getRole());
     }
 
     public Attendee toDomain(NewAttendeeDto newAttendeeDto) {
-        return new Attendee(newAttendeeDto.userId(), userService.get(newAttendeeDto.userId()).getRole());
+        return new Attendee(newAttendeeDto.userId(), userService.getUser(newAttendeeDto.userId()).getRole());
     }
 
     public AttendeeDto toResponseDto(Attendee attendee) {

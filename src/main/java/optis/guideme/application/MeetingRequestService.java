@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -40,25 +41,22 @@ public class MeetingRequestService {
         return meetingRequestRepository.findById(meetingRequestId).orElseThrow();
     }
 
-    public MeetingRequestDto createMeetingRequest(UUID userId, NewMeetingRequestDto dto) {
-        List<User> requestFor = userService.getUsersEntitiesByIds(dto.requestFor());
+    public MeetingRequestDto createMeetingRequest(UUID userId, NewMeetingRequestDto newMeetingRequestDto) {
+        List<User> requestFor = userService.getUsersByIds(newMeetingRequestDto.requestFor());
 
-        if (dto.previousRequestId() != null) {
-            MeetingRequest previous = get(dto.previousRequestId());
-            LocalDateTime newStart = dto.startDateTime();
-            LocalDateTime newEnd = dto.endDateTime();
-            User requestedBy = userService.getUser(userId);
-            List<User> requestFor = userService.getUsersByIds(newMeetingRequestDto.requestFor());
-            MeetingRequest rescheduled = previous.reschedule(newStart, newEnd, dto.recurrence(), userId, dto.requestFor());
+        if (newMeetingRequestDto.previousRequestId() != null) {
+            MeetingRequest previous = get(newMeetingRequestDto.previousRequestId());
+            LocalDateTime newStart = LocalDateTime.ofInstant(newMeetingRequestDto.startDateTime(), ZoneId.systemDefault());
+            LocalDateTime newEnd = LocalDateTime.ofInstant(newMeetingRequestDto.endDateTime(), ZoneId.systemDefault());
+            MeetingRequest rescheduled = previous.reschedule(newStart, newEnd, newMeetingRequestDto.recurrence(), userId, newMeetingRequestDto.requestFor());
 
             return mapper.toResponseDto(meetingRequestRepository.save(rescheduled));
         }
+        User requestedBy = userService.getUser(userId);
 
-        MeetingRequest meetingRequest = mapper.toDomain(dto);
+        MeetingRequest meetingRequest = mapper.toDomain(newMeetingRequestDto);
         meetingRequest.assignRequestedBy(userId);
-        meetingRequest.assignReferenceCode(
-                defaultReferenceCodeGenerator.generateReferenceCode(meetingRequest, requestFor)
-        );
+        meetingRequest.assignReferenceCode(defaultReferenceCodeGenerator.generateReferenceCode(meetingRequest, requestedBy, requestFor));
         return mapper.toResponseDto(meetingRequestRepository.save(meetingRequest));
     }
 

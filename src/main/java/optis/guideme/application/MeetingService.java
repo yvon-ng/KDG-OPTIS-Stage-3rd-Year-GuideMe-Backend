@@ -31,7 +31,7 @@ public class MeetingService {
     private final MeetingContextMapper meetingContextMapper;
     private final EmailService emailService;
 
-    private Meeting get(UUID meetingId){
+    public Meeting getMeeting(UUID meetingId){
         return meetingRepository.findById(meetingId).orElseThrow();
     }
 
@@ -42,13 +42,10 @@ public class MeetingService {
         meeting.assignAttendees(meeting.getAttendees());
         meeting.assignReferenceCode(defaultReferenceCodeGenerator.generateReferenceCodeFromMeeting(meeting));
 
-        return meetingMapper.toResponseDto(meetingRepository.save(meeting));
-        meetingRepository.save(meeting);
-
         // send emails 1 hour before meeting
-        attendees.forEach(a -> emailService.sendEmailReminder(a.getUserId(), meeting));
+        meeting.getAttendees().forEach(a -> emailService.sendEmailReminder(a.getUserId(), meeting));
 
-        return meetingMapper.toResponseDto(meeting);
+        return meetingMapper.toResponseDto(meetingRepository.save(meeting));
     }
 
     public List<MeetingDto> getAllMeetings() {
@@ -79,7 +76,7 @@ public class MeetingService {
     }
 
     public List<AttendeeDto> getMeetingAttendees(UUID userId, UUID meetingId) {
-        Meeting meeting = get(meetingId);
+        Meeting meeting = getMeeting(meetingId);
         boolean isParticipant = meeting.getAttendees().stream().anyMatch(a -> a.getUserId().equals(userId));
         if (!isParticipant) {
             throw new ForbiddenException("you're not part of this meeting");
