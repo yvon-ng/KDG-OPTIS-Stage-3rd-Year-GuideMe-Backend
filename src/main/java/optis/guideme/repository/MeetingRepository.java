@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Repository
 public interface MeetingRepository extends JpaRepository<@NonNull Meeting, @NonNull UUID> {
@@ -19,4 +20,6 @@ public interface MeetingRepository extends JpaRepository<@NonNull Meeting, @NonN
     List<Meeting> findAllByAttendeesUserId(UUID userId);
 
     Meeting findMeetingByMeetingId(UUID meetingId);
+
+    Stream<Meeting> findAllByOrderByStartDateTimeDesc();
 }

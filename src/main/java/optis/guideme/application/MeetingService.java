@@ -57,7 +57,7 @@ public class MeetingService {
     }
 
     public List<MeetingDto> getAllMeetings() {
-        return meetingRepository.findAll().stream().map(meetingMapper::toResponseDto).toList();
+        return meetingRepository.findAllByOrderByStartDateTimeDesc().map(meetingMapper::toResponseDto).toList();
     }
 
     public List<MeetingDto> getAllMeetingsByUser(UUID userId,

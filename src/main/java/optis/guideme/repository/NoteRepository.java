@@ -10,12 +10,10 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 @Repository
-public interface NoteRepository extends JpaRepository<@NonNull Note,@NonNull UUID> {
-    Stream<Note> findAllByOwnerAndVisibility(UUID owner, Visibility visibility);
+public interface NoteRepository extends JpaRepository<@NonNull Note, @NonNull UUID> {
+    Stream<Note> findAllByOwnerOrderByCreationTimeDesc(UUID userId);
 
-    Stream<Note> findAllByOwnerAndMeetingIdIsNotNull(UUID owner);
+    Stream<Note> findAllByOwnerAndVisibilityOrderByCreationTimeDesc(UUID userId, Visibility visibility);
 
-    Stream<Note> findAllByOwner(UUID userId);
-
-//    Note findNoteByNoteId(UUID noteId);
+    Stream<Note> findAllByOwnerAndMeetingIdIsNotNullOrderByCreationTimeDesc(UUID userId);
 }
