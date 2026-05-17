@@ -26,41 +26,57 @@ import static optis.guideme.domain.meeting.Reminder.EMAIL_REMINDER_HOURS_BEFORE_
 @Transactional
 @RequiredArgsConstructor
 public class EmailService {
+    private static final String FROM_EMAIL = "onboarding@resend.dev"; //TODO moet veranderd worden naar eigen DNS for dev only works with own email
+
     private final UserService userService;
     private final Resend resend;
     private final Logger logger = LoggerFactory.getLogger(EmailService.class);
 
+
     public void sendEmailReminder(UUID userId, Meeting meeting) {
         User user = userService.getUser(userId);
-        List<UserDto> users = userService.getByIds(meeting.getAttendees().stream().map(Attendee::getUserId).toList());
-        String scheduledAt = meeting.getStartDateTime().atZone(ZoneId.of("Europe/Brussels")).minusHours(EMAIL_REMINDER_HOURS_BEFORE_MEETING).toInstant().toString();
+        String scheduledAt = meeting.getStartDateTime()
+                .atZone(ZoneId.of("Europe/Brussels"))
+                .minusHours(EMAIL_REMINDER_HOURS_BEFORE_MEETING)
+                .toInstant()
+                .toString();
+        sendEmail(user, meeting, "templates/emails/meeting-reminder.html", "Reminder for Meeting " + meeting.getDisplayName(), scheduledAt);
+    }
 
+    public void sendAcceptedEmail(UUID userId, Meeting meeting) {
+        User user = userService.getUser(userId);
+        sendEmail(user, meeting, "templates/emails/meeting-request-accepted.html", "Meeting Request Accepted for " + meeting.getDisplayName(), null);
+    }
+
+    private void sendEmail(User user, Meeting meeting, String templatePath, String subject, String scheduledAt) {
         try {
-            ClassPathResource resource = new ClassPathResource("templates/emails/meeting-reminder.html");
-            String html = new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
-            html = html
-                    .replace("{{UserName}}", user.getFirstName())
-                    .replace("{{MeetingDisplayName}}", meeting.getDisplayName())
-                    .replace("{{HoursBeforeStart}}", String.valueOf(EMAIL_REMINDER_HOURS_BEFORE_MEETING))
-                    .replace("{{MeetingTime}}", meeting.getStartDateTime().toLocalTime().withNano(0).toString())
-                    .replace("{{MeetingDate}}", meeting.getStartDateTime().toLocalDate().toString())
-                    .replace("{{MeetingAttendees}}",
-                            users.stream()
-                                    .map(u -> u.firstName() + " " + u.lastName())
-                                    .reduce((a, b) -> a + ", " + b)
-                                    .orElse("No attendees")
-                    );
-            CreateEmailOptions params = CreateEmailOptions.builder()
-                    .from("onboarding@resend.dev") //TODO moet veranderd worden naar eigen DNS for dev only works with own email
+            String html = buildMeetingTemplate(user, meeting, templatePath);
+            CreateEmailOptions.Builder builder = CreateEmailOptions.builder()
+                    .from(FROM_EMAIL)
                     .to(user.getEmail())
-                    .subject("Reminder for meeting " + meeting.getDisplayName())
-                    .html(html)
-                    .scheduledAt(scheduledAt)
-                    .build();
-
-            resend.emails().send(params);
+                    .subject(subject)
+                    .html(html);
+            if (scheduledAt != null) builder.scheduledAt(scheduledAt);
+            resend.emails().send(builder.build());
         } catch (ResendException | IOException exception) {
-            logger.warn("Failed to create a Scheduled Email to {} {} Scheduled At {} for Meeting {}: \n {}", user.getFirstName(), user.getLastName(), scheduledAt, meeting.getDisplayName(), exception.getMessage());
+            logger.warn("Failed to send email to {} {} for meeting {}: {}", user.getFirstName(), user.getLastName(), meeting.getDisplayName(), exception.getMessage());
         }
+    }
+
+    private String buildMeetingTemplate(User user, Meeting meeting, String templatePath) throws IOException {
+        List<UserDto> users = userService.getByIds(meeting.getAttendees().stream().map(Attendee::getUserId).toList());
+        ClassPathResource resource = new ClassPathResource(templatePath);
+        String html = new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        return html
+                .replace("{{UserName}}", user.getFirstName())
+                .replace("{{MeetingDisplayName}}", meeting.getDisplayName())
+                .replace("{{HoursBeforeStart}}", String.valueOf(EMAIL_REMINDER_HOURS_BEFORE_MEETING))
+                .replace("{{MeetingTime}}", meeting.getStartDateTime().toLocalTime().withNano(0).toString())
+                .replace("{{MeetingDate}}", meeting.getStartDateTime().toLocalDate().toString())
+                .replace("{{MeetingAttendees}}", buildAttendees(users));
+    }
+
+    private String buildAttendees(List<UserDto> users) {
+        return users.stream().map(u -> u.firstName() + " " + u.lastName()).reduce((a, b) -> a + ", " + b).orElse("No attendees");
     }
 }
