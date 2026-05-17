@@ -14,6 +14,7 @@ import optis.guideme.repository.MeetingRequestRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -41,10 +42,10 @@ public class MeetingRequestService {
 
         if (dto.previousRequestId() != null) {
             MeetingRequest previous = get(dto.previousRequestId());
-            LocalDateTime newStart = LocalDateTime.parse(dto.startDateTime());
-            LocalDateTime newEnd = LocalDateTime.parse(dto.endDateTime());
+            LocalDateTime newStart = dto.startDateTime();
+            LocalDateTime newEnd = dto.endDateTime();
 
-            MeetingRequest rescheduled = previous.reschedule(newStart, newEnd, dto.recurrencePerYear(), userId, dto.requestFor());
+            MeetingRequest rescheduled = previous.reschedule(newStart, newEnd, dto.recurrence(), userId, dto.requestFor());
 
             return mapper.toResponseDto(meetingRequestRepository.save(rescheduled));
         }
