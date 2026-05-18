@@ -12,6 +12,7 @@ import optis.guideme.repository.GoalRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,11 +39,11 @@ public class GoalService {
         return goalMapper.toResponseDto(goalRepository.save(goal));
     }
 
-    public GoalDto updateGoal(UUID userId, UUID goalId, UpdateGoalDto updateGoalDto) {
+    public GoalDto updateGoal(UUID userId, UUID goalId, UpdateGoalDto updateGoalDto) { //TODO update like this (ddd) or update on entity
         Goal goal = getGoal(userId, goalId);
         goal.changeTitle(updateGoalDto.title());
         goal.changeDescription(updateGoalDto.description());
-        goal.changeDueDate(updateGoalDto.dueDate());
+        goal.changeDueDate(updateGoalDto.dueDate().atZone(ZoneId.systemDefault()).toLocalDate());
         return goalMapper.toResponseDto(goalRepository.save(goal));
     }
 

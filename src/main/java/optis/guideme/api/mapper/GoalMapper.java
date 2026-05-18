@@ -5,13 +5,15 @@ import optis.guideme.api.dto.response.GoalDto;
 import optis.guideme.domain.Goal;
 import org.springframework.stereotype.Component;
 
+import java.time.ZoneId;
+
 @Component
 public class GoalMapper {
     public Goal toDomain(NewGoalDto newGoalDto) {
         return new Goal(
                 newGoalDto.title(),
                 newGoalDto.description(),
-                newGoalDto.dueDate()
+                newGoalDto.dueDate().atZone(ZoneId.systemDefault()).toLocalDate()
         );
     }
 
