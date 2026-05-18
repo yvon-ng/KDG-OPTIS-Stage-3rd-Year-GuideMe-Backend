@@ -35,12 +35,12 @@ public class Meeting {
     private boolean occurred;
 
 
-    public Meeting(String name, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    public Meeting(String name, LocalDateTime startDateTime, LocalDateTime endDateTime, List<Attendee> attendees) {
         this.name = name;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
         this.occurred = false;
-        this.attendees = new ArrayList<>();
+        this.attendees = attendees;
     }
 
     //constructor to create new Meeting after .accept() MeetingRequest

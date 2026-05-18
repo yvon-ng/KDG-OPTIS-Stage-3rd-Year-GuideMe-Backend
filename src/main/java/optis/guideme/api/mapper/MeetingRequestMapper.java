@@ -34,7 +34,8 @@ public class MeetingRequestMapper {
                 meetingRequest.getRecurrencePerYear(),
                 meetingRequest.getRequestFor(),
                 meetingRequest.getPreviousRequestId(),
-                meetingRequest.getPreviousRequestId()
+                meetingRequest.getRequestedBy()
         );
     }
+
 }

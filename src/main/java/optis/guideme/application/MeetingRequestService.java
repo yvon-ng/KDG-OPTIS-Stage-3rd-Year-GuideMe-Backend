@@ -15,9 +15,12 @@ import optis.guideme.repository.MeetingRequestRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
 
 
 
@@ -34,11 +37,25 @@ public class MeetingRequestService {
     private final EmailService emailService;
     private final ReminderService reminderService;
 
+    private MeetingRequest get(UUID meetingRequestId){
+        return meetingRequestRepository.findById(meetingRequestId).orElseThrow();
+    }
+
     public MeetingRequestDto createMeetingRequest(UUID userId, NewMeetingRequestDto newMeetingRequestDto) {
+        List<User> requestFor = userService.getUsersByIds(newMeetingRequestDto.requestFor());
+
+        if (newMeetingRequestDto.previousRequestId() != null) {
+            MeetingRequest previous = get(newMeetingRequestDto.previousRequestId());
+            LocalDateTime newStart = LocalDateTime.ofInstant(newMeetingRequestDto.startDateTime(), ZoneId.systemDefault());
+            LocalDateTime newEnd = LocalDateTime.ofInstant(newMeetingRequestDto.endDateTime(), ZoneId.systemDefault());
+            MeetingRequest rescheduled = previous.reschedule(newStart, newEnd, newMeetingRequestDto.recurrence(), userId, newMeetingRequestDto.requestFor());
+
+            return mapper.toResponseDto(meetingRequestRepository.save(rescheduled));
+        }
+        User requestedBy = userService.getUser(userId);
+
         MeetingRequest meetingRequest = mapper.toDomain(newMeetingRequestDto);
         meetingRequest.assignRequestedBy(userId);
-        User requestedBy = userService.getUser(userId);
-        List<User> requestFor = userService.getUsersByIds(newMeetingRequestDto.requestFor());
         meetingRequest.assignReferenceCode(defaultReferenceCodeGenerator.generateReferenceCode(meetingRequest, requestedBy, requestFor));
         return mapper.toResponseDto(meetingRequestRepository.save(meetingRequest));
     }
@@ -74,6 +91,10 @@ public class MeetingRequestService {
 
         reminderService.saveAll(reminders);
         return meetingMapper.toResponseDto(meeting);
+    }
+
+    public void declineRequest(UUID meetingRequestId) {
+         get(meetingRequestId).decline();
     }
 }
 
