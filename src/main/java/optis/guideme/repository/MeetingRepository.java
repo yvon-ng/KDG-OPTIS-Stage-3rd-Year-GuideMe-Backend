@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -17,7 +16,7 @@ public interface MeetingRepository extends JpaRepository<@NonNull Meeting, @NonN
     //before + asc -> latest meeting
     Optional<Meeting> findFirstByAttendees_UserIdAndStartDateTimeBeforeOrderByStartDateTimeDesc(UUID userId, LocalDateTime now);
 
-    List<Meeting> findAllByAttendeesUserId(UUID userId);
+    Stream<Meeting> findAllByAttendeesUserId(UUID userId);
 
     Meeting findMeetingByMeetingId(UUID meetingId);
 

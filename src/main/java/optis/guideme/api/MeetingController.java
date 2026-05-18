@@ -35,19 +35,12 @@ public class MeetingController {
     }
 
     @GetMapping("my-meetings")
-    public List<MeetingDto> getMyMeetings(
-                                          @RequestParam(required = false) Integer quarter,
-                                          @RequestParam(required = false) Integer year,
-                                          @RequestParam(required = false) List<UUID> personIds) {
-        return meetingService.getAllMeetingsByUser(currentUserProvider.getUserId(),
-                                                    quarter,
-                                                    year,
-                                                    personIds);
+    public List<MeetingDto> getMyMeetings(@RequestParam(required = false) Integer quarter, @RequestParam(required = false) Integer year, @RequestParam(required = false) List<UUID> personIds) {
+        return meetingService.getAllMeetingsByUser(currentUserProvider.getUserId(), quarter, year, personIds);
     }
 
     @GetMapping("attendees/{meetingId}")
     public List<AttendeeDto> getMeetingAttendees(@PathVariable UUID meetingId) {
         return meetingService.getMeetingAttendees(currentUserProvider.getUserId(), meetingId);
     }
-
 }
