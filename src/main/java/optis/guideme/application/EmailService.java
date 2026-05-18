@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static optis.guideme.domain.meeting.Reminder.EMAIL_REMINDER_HOURS_BEFORE_MEETING;
-import static optis.guideme.domain.meeting.Reminder.TEST_EMAIL_REMINDER_MINUTES_BEFORE_MEETING;
 
 @Service
 @Transactional
