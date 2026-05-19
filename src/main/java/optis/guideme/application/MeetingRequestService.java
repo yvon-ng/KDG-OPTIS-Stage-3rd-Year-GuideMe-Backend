@@ -77,7 +77,7 @@ public class MeetingRequestService {
         Meeting meeting = meetingRequest.accept(attendees);
         meetingService.save(meeting); //save first so meetingId gets generated
 
-        // send accepted emails immediately
+        // send accepted emails immediately todo and notifications
         attendees.forEach(a -> emailService.sendAcceptedEmail(a.getUserId(), meeting));
 
         // send emails and reminders 1 hour before meeting
