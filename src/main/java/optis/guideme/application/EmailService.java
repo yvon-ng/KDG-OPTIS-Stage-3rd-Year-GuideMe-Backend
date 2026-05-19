@@ -36,8 +36,8 @@ public class EmailService {
     public void sendEmailReminder(UUID userId, Meeting meeting) {
         User user = userService.getUser(userId);
         String scheduledAt = meeting.getStartDateTime()
-                .atZone(ZoneId.of("Europe/Brussels"))
-                .minusHours(EMAIL_REMINDER_HOURS_BEFORE_MEETING)
+                .atZone(ZoneId.systemDefault())
+                .minusHours(EMAIL_REMINDER_HOURS_BEFORE_MEETING) // TODO check if correct
                 .toInstant()
                 .toString();
         sendEmail(user, meeting, "templates/emails/meeting-reminder.html", "Reminder for Meeting " + meeting.getDisplayName(), scheduledAt);

@@ -129,3 +129,14 @@ VALUES ('80000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-0000000
        ('80000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000002'),
        ('80000000-0000-0000-0000-000000000003', '00000000-0000-0000-0000-000000000003'),
        ('80000000-0000-0000-0000-000000000004', '4a94af3d-350a-4425-9a31-ba071e695a14');
+
+--insert goals
+INSERT INTO goals(goal_id, user_id, title, description, creation_date, due_date, achievement_date)
+VALUES ('c1a11111-1111-1111-1111-111111111111', '00000000-0000-0000-0000-000000000002','Finish onboarding module', 'Complete the full onboarding training', '2026-05-01', '2026-05-10', '2026-05-08'),
+       ('c1a22222-2222-2222-2222-222222222222', '4a94af3d-350a-4425-9a31-ba071e695a14','Improve Angular skills', 'Practice signals and standalone components', '2026-05-02', '2026-06-01', NULL),
+       ('c1a33333-3333-3333-3333-333333333333', '4a94af3d-350a-4425-9a31-ba071e695a14','Deploy first project', 'Deploy GuideMe to production environment', '2026-04-15', '2026-05-15', '2026-05-14'),
+       ('c1a44444-4444-4444-4444-444444444444', '00000000-0000-0000-0000-000000000003','Write clean architecture code', 'Refactor services into clean layered structure', '2026-05-05', '2026-06-05', NULL),
+       ('c1a55555-5555-5555-5555-555555555555', '5965a3ec-531c-4a2e-a443-4d7049a15549','Finish meeting module', 'Complete scheduling and email notifications', '2026-05-10', '2026-05-20', '2026-05-16'),
+       ('c1a66666-6666-6666-6666-666666666666', '5965a3ec-531c-4a2e-a443-4d7049a15549','Prepare slides', 'Create presentation slides for end demo', '2026-05-12', '2026-06-01', NULL),
+       ('c1a77777-7777-7777-7777-777777777777', '00000000-0000-0000-0000-000000000002','Read system design book', 'Study distributed systems fundamentals', '2026-05-03', '2026-06-15', NULL),
+       ('c1a77777-8888-8888-8888-888888888888', '4a94af3d-350a-4425-9a31-ba071e695a14','Books to read', 'Atomic Habits, Deep Work, The Alchemist', '2026-05-12', '2026-05-20', NULL);
