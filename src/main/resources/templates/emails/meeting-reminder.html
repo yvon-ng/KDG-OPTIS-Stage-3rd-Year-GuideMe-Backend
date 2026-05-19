@@ -2,69 +2,233 @@
 <head>
     <meta content="width=device-width" name="viewport"/>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
-    <meta name="x-apple-disable-message-reformatting"/>
     <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
-    <meta name="x-apple-disable-message-reformatting"/>
-    <meta content="telephone=no,address=no,email=no,date=no,url=no" name="format-detection"/>
     <title>Meeting Reminder Email</title>
 </head>
-<body style="background-color:#ffffff; max-width:600px; margin: 0; padding: 0;">
-<table role="presentation" style="background-color:#f4f4f7">
+
+<body style="
+    margin:0;
+    padding:40px 0;
+    background-color:#f5f7fb;
+    font-family:Arial, Helvetica, sans-serif;
+    color:#1e293b;
+">
+
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
     <tbody>
     <tr>
-        <td data-id="__react-email-column" style="margin:0 auto;">
-            <table role="presentation" style="margin: 0;padding: 0;background-color:#ffffff;border-radius:12px">
+        <td align="center">
+
+            <!-- Main Card -->
+            <table role="presentation"
+                   width="600"
+                   cellspacing="0"
+                   cellpadding="0"
+                   style="
+                        width:600px;
+                        max-width:600px;
+                        background-color:#ffffff;
+                        border-radius:24px;
+                        overflow:hidden;
+                        border:1px solid #e2e8f0;
+                   ">
+
                 <tbody>
-                <tr style="margin:0;padding:0">
-                    <td data-id="__react-email-column"
-                        style="margin:0;padding:30px 20px;background-color:#3CB7AE;color:#ffffff">
-                        <h1 style="margin:0;padding:0;font-size:28px">Upcoming Meeting Reminder</h1>
+
+                <!-- Header -->
+                <tr>
+                    <td style="
+                        background-color:#031b2d;
+                        padding:32px 36px;
+                    ">
+
+                        <table width="100%">
+                            <tr>
+                                <td align="left">
+                                    <p style="
+                                        margin:0;
+                                        font-size:14px;
+                                        letter-spacing:0.5px;
+                                        color:#94a3b8;
+                                        font-weight:600;
+                                    ">
+                                        GuideMe
+                                    </p>
+
+                                    <h1 style="
+                                        margin:10px 0 0 0;
+                                        font-size:30px;
+                                        line-height:1.2;
+                                        color:#ffffff;
+                                        font-weight:700;
+                                    ">
+                                        Upcoming Meeting
+                                    </h1>
+                                </td>
+                            </tr>
+                        </table>
+
                     </td>
                 </tr>
-                <tr style="margin:0;padding:0">
-                    <td data-id="__react-email-column"
-                        style="margin:0;padding:40px 30px;color:#333333">
-                        <p style="padding:0;font-size:16px;margin: 0;">
-                            Hello<!-- --> {{UserName}}<!-- --> ,
+
+                <!-- Body -->
+                <tr>
+                    <td style="padding:40px 36px;">
+
+                        <p style="
+                            margin:0 0 18px 0;
+                            font-size:16px;
+                            line-height:1.7;
+                            color:#334155;
+                        ">
+                            Hello <strong>{{UserName}}</strong>,
                         </p>
-                        <p style="margin:0;padding:0;font-size:16px;line-height:1.6">
-                            This is a friendly reminder that your meeting will begin in
-                            <strong><!-- -->{{HoursBeforeStart}}<!-- --></strong> hour.
+
+                        <p style="
+                            margin:0 0 30px 0;
+                            font-size:16px;
+                            line-height:1.8;
+                            color:#475569;
+                        ">
+                            This is a reminder that your meeting is scheduled to begin in
+                            <strong style="color:#031b2d;">
+                                {{HoursBeforeStart}} hour
+                            </strong>.
                         </p>
+
+                        <!-- Meeting Card -->
                         <table role="presentation"
-                               style="margin: 30px 0;padding: 0;background-color:#f9fafb;border-radius:12px; width: 100%">
+                               width="100%"
+                               cellspacing="0"
+                               cellpadding="0"
+                               style="
+                                    border-collapse:collapse;
+                                    background-color:#f8fafc;
+                                    border:1px solid #e2e8f0;
+                               ">
+
                             <tbody>
-                            <tr style="margin:0;padding:0;">
-                                <td data-id="__react-email-column"
-                                    style="margin:0;padding:20px">
-                                    <p style="margin:0 0 10px 0;padding:0;font-size:15px"><strong>Meeting:</strong>
-                                        <!-- -->{{MeetingDisplayName}}</p>
-                                    <p style="margin:0 0 10px 0;padding:0;font-size:15px"><strong>Time:</strong><!-- -->
-                                        {{MeetingTime}}</p>
-                                    <p style="margin:0 0 10px 0;padding:0;font-size:15px"><strong>Date:</strong><!-- -->
-                                        {{MeetingDate}}<!-- --></p>
-                                    <p style="margin:0 0 10px 0;padding:0;font-size:15px"><strong>Attendees:</strong>
-                                        <!-- -->{{MeetingAttendees}}</p>
+                            <tr>
+                                <td style="padding:28px;">
+
+                                    <p style="
+                                        margin:0 0 18px 0;
+                                        font-size:22px;
+                                        font-weight:700;
+                                        color:#0f172a;
+                                    ">
+                                        {{MeetingDisplayName}}
+                                    </p>
+
+                                    <table width="100%" cellspacing="0" cellpadding="0">
+
+                                        <tr>
+                                            <td style="
+                                                padding:0 0 14px 0;
+                                                font-size:14px;
+                                                color:#64748b;
+                                                width:120px;
+                                            ">
+                                                Date
+                                            </td>
+
+                                            <td style="
+                                                padding:0 0 14px 0;
+                                                font-size:15px;
+                                                color:#1e293b;
+                                                font-weight:600;
+                                            ">
+                                                {{MeetingDate}}
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="
+                                                padding:0 0 14px 0;
+                                                font-size:14px;
+                                                color:#64748b;
+                                            ">
+                                                Time
+                                            </td>
+
+                                            <td style="
+                                                padding:0 0 14px 0;
+                                                font-size:15px;
+                                                color:#1e293b;
+                                                font-weight:600;
+                                            ">
+                                                {{MeetingTime}}
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="
+                                                padding:0;
+                                                font-size:14px;
+                                                color:#64748b;
+                                                vertical-align:top;
+                                            ">
+                                                Participants
+                                            </td>
+
+                                            <td style="
+                                                padding:0;
+                                                font-size:15px;
+                                                color:#1e293b;
+                                                font-weight:600;
+                                                line-height:1.7;
+                                            ">
+                                                {{MeetingAttendees}}
+                                            </td>
+                                        </tr>
+
+                                    </table>
+
                                 </td>
                             </tr>
                             </tbody>
                         </table>
-                        <p style="margin:35px 0 0 0; font-size:15px; color:#666666;"> Best regards,<br/>
-                            <strong>GuideMe</strong>
+
+                        <p style="
+                            margin:32px 0 0 0;
+                            font-size:15px;
+                            line-height:1.7;
+                            color:#64748b;
+                        ">
+                            Please make sure you are prepared and available before the meeting starts.
                         </p>
+
                     </td>
                 </tr>
-                <tr style="margin:0;padding:0">
-                    <td data-id="__react-email-column"
-                        style="margin:0;padding:20px;background-color:#f9fafb;color:#999999;font-size:12px">
-                        <p style="margin:0;padding:0">© GuideMe. All rights reserved.</p>
+
+                <!-- Footer -->
+                <tr>
+                    <td style="
+                        padding:24px 36px;
+                        background-color:#f8fafc;
+                        border-top:1px solid #e2e8f0;
+                    ">
+
+                        <p style="
+                            margin:0;
+                            font-size:13px;
+                            color:#94a3b8;
+                            text-align:center;
+                            line-height:1.6;
+                        ">
+                            © GuideMe · Sync Meeting Management
+                        </p>
+
                     </td>
                 </tr>
+
                 </tbody>
             </table>
+
         </td>
     </tr>
     </tbody>
 </table>
+
 </body>
 </html>

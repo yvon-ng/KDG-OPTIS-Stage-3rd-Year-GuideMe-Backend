@@ -2,84 +2,152 @@
 <head>
     <meta content="width=device-width" name="viewport"/>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
-    <meta name="x-apple-disable-message-reformatting"/>
     <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
-    <meta content="telephone=no,address=no,email=no,date=no,url=no" name="format-detection"/>
     <title>Meeting Request Accepted</title>
 </head>
 
-<body style="background-color:#ffffff; max-width:600px; margin:0; padding:0;">
-<table role="presentation" style="background-color:#f4f4f7; width:100%;">
+<body style="
+    margin:0;
+    padding:40px 0;
+    background-color:#f5f7fb;
+    font-family:Arial, Helvetica, sans-serif;
+    color:#1e293b;
+">
+
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
     <tbody>
     <tr>
-        <td data-id="__react-email-column" style="margin:0 auto;">
+        <td align="center">
 
+            <!-- Card -->
             <table role="presentation"
-                   style="margin:0; padding:0; background-color:#ffffff; border-radius:12px; width:100%;">
-                <tbody>
+                   width="600"
+                   cellspacing="0"
+                   cellpadding="0"
+                   style="
+                        width:600px;
+                        max-width:600px;
+                        background-color:#ffffff;
+                        border-radius:24px;
+                        overflow:hidden;
+                        border:1px solid #e2e8f0;
+                   ">
 
                 <!-- Header -->
                 <tr>
-                    <td data-id="__react-email-column"
-                        style="padding:30px 20px; background-color:#3CB7AE; color:#ffffff;">
-                        <h1 style="margin:0; padding:0; font-size:28px;">
-                            Meeting Request Accepted
+                    <td style="
+                        background-color:#031b2d;
+                        padding:32px 36px;
+                    ">
+                        <p style="
+                            margin:0;
+                            font-size:14px;
+                            color:#94a3b8;
+                            font-weight:600;
+                            letter-spacing:0.5px;
+                        ">
+                            GuideMe
+                        </p>
+
+                        <h1 style="
+                            margin:10px 0 0 0;
+                            font-size:30px;
+                            color:#ffffff;
+                            font-weight:700;
+                        ">
+                            Meeting Accepted
                         </h1>
                     </td>
                 </tr>
 
-                <!-- Content -->
+                <!-- Body -->
                 <tr>
-                    <td data-id="__react-email-column"
-                        style="padding:40px 30px; color:#333333;">
+                    <td style="padding:40px 36px;">
 
-                        <p style="padding:0; font-size:16px; margin:0 0 20px 0;">
-                            Hello {{UserName}},
+                        <p style="
+                            margin:0 0 18px 0;
+                            font-size:16px;
+                            color:#334155;
+                        ">
+                            Hello <strong>{{UserName}}</strong>,
                         </p>
 
-                        <p style="margin:0; padding:0; font-size:16px; line-height:1.6;">
+                        <p style="
+                            margin:0 0 30px 0;
+                            font-size:16px;
+                            line-height:1.7;
+                            color:#475569;
+                        ">
                             Great news! Your meeting request has been
-                            <strong style="color: #16a34a">accepted</strong>.
+                            <strong style="color:#16a34a;">accepted</strong>.
                         </p>
 
+                        <!-- Meeting Card -->
                         <table role="presentation"
-                               style="margin:30px 0; padding:0; background-color:#f9fafb; border-radius:12px; width:100%;">
+                               width="100%"
+                               cellspacing="0"
+                               cellpadding="0"
+                               style="
+                                    background-color:#f8fafc;
+                                    border:1px solid #e2e8f0;
+                                    border-radius:18px;
+                               ">
                             <tbody>
                             <tr>
-                                <td data-id="__react-email-column"
-                                    style="padding:20px;">
+                                <td style="padding:28px;">
 
-                                    <p style="margin:0 0 10px 0; padding:0; font-size:15px;">
-                                        <strong>Meeting Request:</strong>
+                                    <p style="
+                                        margin:0 0 18px 0;
+                                        font-size:22px;
+                                        font-weight:700;
+                                        color:#0f172a;
+                                    ">
                                         {{MeetingDisplayName}}
                                     </p>
 
-                                    <p style="margin:0 0 10px 0; padding:0; font-size:15px;">
-                                        <strong>Date:</strong>
-                                        {{MeetingDate}}
-                                    </p>
+                                    <table width="100%" cellspacing="0" cellpadding="0">
 
-                                    <p style="margin:0 0 10px 0; padding:0; font-size:15px;">
-                                        <strong>Time:</strong>
-                                        {{MeetingTime}}
-                                    </p>
+                                        <tr>
+                                            <td style="padding:0 0 12px 0; color:#64748b; font-size:14px;">
+                                                Date
+                                            </td>
+                                            <td style="padding:0 0 12px 0; font-weight:600; color:#1e293b;">
+                                                {{MeetingDate}}
+                                            </td>
+                                        </tr>
 
-                                    <p style="margin:0; padding:0; font-size:15px;">
-                                        <strong>Attendees:</strong>
-                                        {{MeetingAttendees}}
-                                    </p>
+                                        <tr>
+                                            <td style="padding:0 0 12px 0; color:#64748b; font-size:14px;">
+                                                Time
+                                            </td>
+                                            <td style="padding:0 0 12px 0; font-weight:600; color:#1e293b;">
+                                                {{MeetingTime}}
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="padding:0; color:#64748b; font-size:14px; vertical-align:top;">
+                                                Attendees
+                                            </td>
+                                            <td style="padding:0; font-weight:600; color:#1e293b; line-height:1.6;">
+                                                {{MeetingAttendees}}
+                                            </td>
+                                        </tr>
+
+                                    </table>
 
                                 </td>
                             </tr>
                             </tbody>
                         </table>
 
-                        <p style="margin:0; padding:0; font-size:16px; line-height:1.6;">
+                        <p style="
+                            margin:32px 0 0 0;
+                            font-size:15px;
+                            color:#64748b;
+                            line-height:1.6;
+                        ">
                             Please make sure to join the meeting on time.
-                        </p>
-
-                        <p style="margin:35px 0 0 0; font-size:15px; color:#666666;"> Best regards,<br/>
-                            <strong>GuideMe</strong>
                         </p>
 
                     </td>
@@ -87,20 +155,28 @@
 
                 <!-- Footer -->
                 <tr>
-                    <td data-id="__react-email-column"
-                        style="padding:20px; background-color:#f9fafb; color:#999999; font-size:12px;">
-                        <p style="margin:0; padding:0;">
-                            © GuideMe. All rights reserved.
+                    <td style="
+                        padding:24px 36px;
+                        background-color:#f8fafc;
+                        border-top:1px solid #e2e8f0;
+                    ">
+                        <p style="
+                            margin:0;
+                            text-align:center;
+                            font-size:13px;
+                            color:#94a3b8;
+                        ">
+                            © GuideMe · Sync Meeting Management
                         </p>
                     </td>
                 </tr>
 
-                </tbody>
             </table>
 
         </td>
     </tr>
     </tbody>
 </table>
+
 </body>
 </html>
