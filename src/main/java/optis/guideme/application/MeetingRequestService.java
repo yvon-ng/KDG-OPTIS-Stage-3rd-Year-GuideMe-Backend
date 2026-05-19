@@ -75,6 +75,7 @@ public class MeetingRequestService {
         MeetingRequest meetingRequest = getMeetingRequest(meetingRequestId);
         List<Attendee> attendees = mapParticipantsToAttendees(meetingRequest);
         Meeting meeting = meetingRequest.accept(attendees);
+        meetingService.save(meeting); //save first so meetingId gets generated
 
         // send accepted emails immediately
         attendees.forEach(a -> emailService.sendAcceptedEmail(a.getUserId(), meeting));
@@ -82,8 +83,8 @@ public class MeetingRequestService {
         // send emails and reminders 1 hour before meeting
         attendees.forEach(a -> emailService.sendEmailReminder(a.getUserId(), meeting));
         List<Reminder> reminders = attendees.stream().map(a -> new Reminder(a.getUserId(), meeting)).toList();
+
         reminderService.saveAll(reminders);
-        meetingService.save(meeting);
         return meetingMapper.toResponseDto(meeting);
     }
 

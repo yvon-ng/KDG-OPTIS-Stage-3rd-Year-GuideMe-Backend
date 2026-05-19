@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -33,6 +34,8 @@ import static optis.guideme.domain.meeting.Reminder.TEST_EMAIL_REMINDER_MINUTES_
 public class EmailService {
     private static final String FROM_EMAIL = "onboarding@resend.dev"; //TODO moet veranderd worden naar eigen DNS for dev only works with own email
     private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("EEEE dd MMM yyyy");
+    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
     private final UserService userService;
     private final UserMapper userMapper;
@@ -82,8 +85,8 @@ public class EmailService {
                     .replace("{{UserName}}", user.getFirstName())
                     .replace("{{MeetingDisplayName}}", displayName)
                     .replace("{{HoursBeforeStart}}", String.valueOf(EMAIL_REMINDER_HOURS_BEFORE_MEETING))
-                    .replace("{{MeetingTime}}", startDateTime.toLocalTime().withNano(0).toString())
-                    .replace("{{MeetingDate}}", startDateTime.toLocalDate().toString())
+                    .replace("{{MeetingTime}}", startDateTime.format(TIME_FORMATTER))
+                    .replace("{{MeetingDate}}", startDateTime.format(DATE_FORMATTER))
                     .replace("{{MeetingAttendees}}", buildAttendees(attendees));
         } catch (IOException exception) {
             throw new RuntimeException("Failed to build email template", exception);
