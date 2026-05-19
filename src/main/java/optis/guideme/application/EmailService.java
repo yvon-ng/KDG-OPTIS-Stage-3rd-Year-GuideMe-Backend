@@ -1,56 +1,68 @@
 package optis.guideme.application;
 
-import optis.guideme.api.dto.response.UserDto;
-import optis.guideme.domain.meeting.Attendee;
-import org.springframework.core.io.ClassPathResource;
 import com.resend.Resend;
 import com.resend.core.exception.ResendException;
 import com.resend.services.emails.model.CreateEmailOptions;
 import lombok.RequiredArgsConstructor;
+import optis.guideme.api.dto.response.UserDto;
+import optis.guideme.api.mapper.UserMapper;
+import optis.guideme.domain.meeting.Attendee;
 import optis.guideme.domain.meeting.Meeting;
+import optis.guideme.domain.meetingRequest.MeetingRequest;
 import optis.guideme.domain.user.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import static optis.guideme.domain.meeting.Reminder.EMAIL_REMINDER_HOURS_BEFORE_MEETING;
+import static optis.guideme.domain.meeting.Reminder.TEST_EMAIL_REMINDER_MINUTES_BEFORE_MEETING;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class EmailService {
     private static final String FROM_EMAIL = "onboarding@resend.dev"; //TODO moet veranderd worden naar eigen DNS for dev only works with own email
+    private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
 
     private final UserService userService;
+    private final UserMapper userMapper;
     private final Resend resend;
-    private final Logger logger = LoggerFactory.getLogger(EmailService.class);
-
 
     public void sendEmailReminder(UUID userId, Meeting meeting) {
         User user = userService.getUser(userId);
         String scheduledAt = meeting.getStartDateTime()
                 .atZone(ZoneId.systemDefault())
-                .minusHours(EMAIL_REMINDER_HOURS_BEFORE_MEETING) // TODO check if correct
+                .minusMinutes(TEST_EMAIL_REMINDER_MINUTES_BEFORE_MEETING) // TODO check if correct
                 .toInstant()
                 .toString();
-        sendEmail(user, meeting, "templates/emails/meeting-reminder.html", "Reminder for Meeting " + meeting.getDisplayName(), scheduledAt);
+        String html = buildMeetingTemplate(user, meeting.getDisplayName(), meeting.getStartDateTime(), getMeetingAttendees(meeting), "templates/emails/meeting-reminder.html");
+        sendEmail(user, meeting.getDisplayName(), "Reminder for Meeting " + meeting.getDisplayName(), html, scheduledAt);
     }
 
     public void sendAcceptedEmail(UUID userId, Meeting meeting) {
         User user = userService.getUser(userId);
-        sendEmail(user, meeting, "templates/emails/meeting-request-accepted.html", "Meeting Request Accepted for " + meeting.getDisplayName(), null);
+        String html = buildMeetingTemplate(user, meeting.getDisplayName(), meeting.getStartDateTime(), getMeetingAttendees(meeting), "templates/emails/meeting-request-accepted.html");
+        sendEmail(user, meeting.getDisplayName(), "Meeting Request Accepted for " + meeting.getDisplayName(), html, null);
     }
 
-    private void sendEmail(User user, Meeting meeting, String templatePath, String subject, String scheduledAt) {
+    public void sendDeclinedEmail(UUID userId, MeetingRequest meetingRequest) {
+        User user = userService.getUser(userId);
+        String html = buildMeetingTemplate(user, meetingRequest.getDisplayName(), meetingRequest.getStartDateTime(), getMeetingRequestAttendees(meetingRequest), "templates/emails/meeting-request-declined.html");
+        sendEmail(user, meetingRequest.getDisplayName(), "Meeting Request Declined for " + meetingRequest.getDisplayName(), html, null);
+    }
+
+    private void sendEmail(User user, String meetingName, String subject, String html, String scheduledAt) {
         try {
-            String html = buildMeetingTemplate(user, meeting, templatePath);
             CreateEmailOptions.Builder builder = CreateEmailOptions.builder()
                     .from(FROM_EMAIL)
                     .to(user.getEmail())
@@ -58,22 +70,42 @@ public class EmailService {
                     .html(html);
             if (scheduledAt != null) builder.scheduledAt(scheduledAt);
             resend.emails().send(builder.build());
-        } catch (ResendException | IOException exception) {
-            logger.warn("Failed to send email to {} {} for meeting {}: {}", user.getFirstName(), user.getLastName(), meeting.getDisplayName(), exception.getMessage());
+        } catch (ResendException exception) {
+            logger.warn("Failed to send email to {} {} for meeting {}: {}", user.getFirstName(), user.getLastName(), meetingName, exception.getMessage());
         }
     }
 
-    private String buildMeetingTemplate(User user, Meeting meeting, String templatePath) throws IOException {
-        List<UserDto> users = userService.getByIds(meeting.getAttendees().stream().map(Attendee::getUserId).toList());
+    private String buildMeetingTemplate(User user, String displayName, LocalDateTime startDateTime, List<UserDto> attendees, String templatePath) {
+        try {
+            String html = loadTemplate(templatePath);
+            return html
+                    .replace("{{UserName}}", user.getFirstName())
+                    .replace("{{MeetingDisplayName}}", displayName)
+                    .replace("{{HoursBeforeStart}}", String.valueOf(EMAIL_REMINDER_HOURS_BEFORE_MEETING))
+                    .replace("{{MeetingTime}}", startDateTime.toLocalTime().withNano(0).toString())
+                    .replace("{{MeetingDate}}", startDateTime.toLocalDate().toString())
+                    .replace("{{MeetingAttendees}}", buildAttendees(attendees));
+        } catch (IOException exception) {
+            throw new RuntimeException("Failed to build email template", exception);
+        }
+    }
+
+    private String loadTemplate(String templatePath) throws IOException {
         ClassPathResource resource = new ClassPathResource(templatePath);
-        String html = new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
-        return html
-                .replace("{{UserName}}", user.getFirstName())
-                .replace("{{MeetingDisplayName}}", meeting.getDisplayName())
-                .replace("{{HoursBeforeStart}}", String.valueOf(EMAIL_REMINDER_HOURS_BEFORE_MEETING))
-                .replace("{{MeetingTime}}", meeting.getStartDateTime().toLocalTime().withNano(0).toString())
-                .replace("{{MeetingDate}}", meeting.getStartDateTime().toLocalDate().toString())
-                .replace("{{MeetingAttendees}}", buildAttendees(users));
+        return new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+    }
+
+    private List<UserDto> getMeetingAttendees(Meeting meeting) {
+        return userService.getByIds(meeting.getAttendees().stream().map(Attendee::getUserId).toList());
+    }
+
+    private List<UserDto> getMeetingRequestAttendees(MeetingRequest meetingRequest) {
+        List<UserDto> users = new ArrayList<>();
+        User requestedByUser = userService.getUser(meetingRequest.getRequestedBy());
+        List<User> requestedForUsers = userService.getUsersByIds(meetingRequest.getRequestFor());
+        users.add(userMapper.toResponseDto(requestedByUser));
+        users.addAll(requestedForUsers.stream().map(userMapper::toResponseDto).toList());
+        return users;
     }
 
     private String buildAttendees(List<UserDto> users) {
