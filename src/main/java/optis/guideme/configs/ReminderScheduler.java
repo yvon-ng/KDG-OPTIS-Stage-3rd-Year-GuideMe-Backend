@@ -21,7 +21,6 @@ public class ReminderScheduler {
     // Run every minute to check for reminders that need to be sent
     @Scheduled(fixedRate = 60000) // 60 seconds
     public void sendDueReminders() {
-
         // Find reminders where scheduledAt is within the next minute
         List<Reminder> dueReminders = reminderService.getRemindersToSend();
 

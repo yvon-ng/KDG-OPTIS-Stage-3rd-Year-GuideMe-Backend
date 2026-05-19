@@ -23,7 +23,17 @@ public class Notification {
     private UUID receiver;
     private String title;
     private String description;
+    private NotificationType notificationType;
     private boolean read;
     private boolean sent;
     private LocalDateTime sentAt;
+
+    public Notification(UUID receiver, String title, String description, NotificationType notificationType) {
+        this.receiver = receiver;
+        this.title = title;
+        this.description = description;
+        this.read = false;
+        this.sent = false;
+        this.notificationType = notificationType;
+    }
 }

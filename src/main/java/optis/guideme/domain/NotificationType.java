@@ -1,5 +1,5 @@
 package optis.guideme.domain;
 
 public enum NotificationType {
-    REMINDER, NOTIFICATION
+    REMINDER, MEETING_ACCEPTED, MEETING_DECLINED, MEETING_RESCHEDULED
 }
