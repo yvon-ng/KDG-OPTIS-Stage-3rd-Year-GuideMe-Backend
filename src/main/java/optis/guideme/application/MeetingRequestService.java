@@ -95,7 +95,8 @@ public class MeetingRequestService {
         meetingRequest.decline();
         List<Attendee> attendees = mapParticipantsToAttendees(meetingRequest);
 
-        // send declined emails immediately TODO send notification
+        // send decliend notification and declined emails immediately
+        notificationService.sendDeclinedMeetingRequestNotification(meetingRequest.getRequestedBy(), meetingRequest);
         attendees.forEach(a -> emailService.sendDeclinedEmail(a.getUserId(), meetingRequest));
     }
 
