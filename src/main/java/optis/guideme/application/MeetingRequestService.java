@@ -1,4 +1,5 @@
 package optis.guideme.application;
+
 import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewMeetingRequestDto;
 import optis.guideme.api.dto.response.MeetingDto;
@@ -22,8 +23,6 @@ import java.util.List;
 import java.util.UUID;
 
 
-
-
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -37,7 +36,7 @@ public class MeetingRequestService {
     private final EmailService emailService;
     private final ReminderService reminderService;
 
-    private MeetingRequest get(UUID meetingRequestId){
+    private MeetingRequest getMeetingRequest(UUID meetingRequestId) {
         return meetingRequestRepository.findById(meetingRequestId).orElseThrow();
     }
 
@@ -45,7 +44,7 @@ public class MeetingRequestService {
         List<User> requestFor = userService.getUsersByIds(newMeetingRequestDto.requestFor());
 
         if (newMeetingRequestDto.previousRequestId() != null) {
-            MeetingRequest previous = get(newMeetingRequestDto.previousRequestId());
+            MeetingRequest previous = getMeetingRequest(newMeetingRequestDto.previousRequestId());
             LocalDateTime newStart = LocalDateTime.ofInstant(newMeetingRequestDto.startDateTime(), ZoneId.systemDefault());
             LocalDateTime newEnd = LocalDateTime.ofInstant(newMeetingRequestDto.endDateTime(), ZoneId.systemDefault());
             MeetingRequest rescheduled = previous.reschedule(newStart, newEnd, newMeetingRequestDto.recurrence(), userId, newMeetingRequestDto.requestFor());
@@ -60,7 +59,7 @@ public class MeetingRequestService {
         return mapper.toResponseDto(meetingRequestRepository.save(meetingRequest));
     }
 
-    public List<MeetingRequestDto> getAllMeetingRequests(){
+    public List<MeetingRequestDto> getAllMeetingRequests() {
         return meetingRequestRepository.findAll().stream().map(mapper::toResponseDto).toList();
     }
 
@@ -73,14 +72,10 @@ public class MeetingRequestService {
     }
 
     public MeetingDto acceptRequest(UUID meetingRequestId) {
-        MeetingRequest meetingRequest = meetingRequestRepository.findById(meetingRequestId).orElseThrow();
-        User requestedByUser = userService.getUser(meetingRequest.getRequestedBy());
-        List<User> requestedForUsers = userService.getUsersByIds(meetingRequest.getRequestFor());
-        List<Attendee> attendees = new ArrayList<>();
-        attendees.add(new Attendee(meetingRequest.getRequestedBy(), requestedByUser.getRole()));
-        attendees.addAll(requestedForUsers.stream().map(user -> new Attendee(user.getUserId(), user.getRole())).toList());
+        MeetingRequest meetingRequest = getMeetingRequest(meetingRequestId);
+        List<Attendee> attendees = mapParticipantsToAttendees(meetingRequest);
         Meeting meeting = meetingRequest.accept(attendees);
-        meetingService.save(meeting);
+        meetingService.save(meeting); //save first so meetingId gets generated
 
         // send accepted emails immediately
         attendees.forEach(a -> emailService.sendAcceptedEmail(a.getUserId(), meeting));
@@ -94,7 +89,21 @@ public class MeetingRequestService {
     }
 
     public void declineRequest(UUID meetingRequestId) {
-         get(meetingRequestId).decline();
+        MeetingRequest meetingRequest = getMeetingRequest(meetingRequestId);
+        meetingRequest.decline();
+        List<Attendee> attendees = mapParticipantsToAttendees(meetingRequest);
+
+        // send declined emails immediately
+        attendees.forEach(a -> emailService.sendDeclinedEmail(a.getUserId(), meetingRequest));
+    }
+
+    public List<Attendee> mapParticipantsToAttendees(MeetingRequest meetingRequest){
+        User requestedByUser = userService.getUser(meetingRequest.getRequestedBy());
+        List<User> requestedForUsers = userService.getUsersByIds(meetingRequest.getRequestFor());
+        List<Attendee> attendees = new ArrayList<>();
+        attendees.add(new Attendee(meetingRequest.getRequestedBy(), requestedByUser.getRole()));
+        attendees.addAll(requestedForUsers.stream().map(user -> new Attendee(user.getUserId(), user.getRole())).toList());
+        return attendees;
     }
 }
 
