@@ -43,4 +43,9 @@ public class MeetingController {
     public List<AttendeeDto> getMeetingAttendees(@PathVariable UUID meetingId) {
         return meetingService.getMeetingAttendees(currentUserProvider.getUserId(), meetingId);
     }
+
+    @GetMapping("/{meetingId}")
+    public MeetingDto getMeeting(@PathVariable UUID meetingId) {
+        return meetingService.get(currentUserProvider.getUserId(), meetingId);
+    }
 }

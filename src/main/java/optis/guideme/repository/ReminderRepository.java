@@ -12,7 +12,12 @@ import java.util.stream.Stream;
 
 @Repository
 public interface ReminderRepository extends JpaRepository<@NonNull Reminder, @NonNull UUID> {
-    @Query("SELECT r FROM Reminder r WHERE r.scheduledAt >= CURRENT_TIMESTAMP AND r.scheduledAt < CURRENT_TIMESTAMP + 1 MINUTE AND r.sent = false")
-    Stream<Reminder> findRemindersToSend(LocalDateTime oneHourBeforeMeeting);
-    Stream<Reminder> findAllByReceiverAndSentIsTrue(UUID userId);
+    @Query("""
+            SELECT r FROM Reminder r
+            WHERE r.scheduledAt BETWEEN :start AND :end
+            AND r.sentAt IS NULL
+            """)
+    Stream<Reminder> findRemindersToSend(LocalDateTime start, LocalDateTime end);
+
+    Stream<Reminder> findAllByReceiverAndSentAtIsNotNull(UUID userId);
 }

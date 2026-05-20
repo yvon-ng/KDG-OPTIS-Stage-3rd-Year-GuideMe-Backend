@@ -26,17 +26,16 @@ public class Reminder {
     private UUID receiver;
     private UUID meetingId;
     private LocalDateTime scheduledAt;
-    private boolean sent;
+    private LocalDateTime sentAt;
 
     public Reminder(UUID receiver, Meeting meeting) {
         this.receiver = receiver;
         this.meetingId = meeting.getMeetingId();
-        this.scheduledAt = meeting.getStartDateTime().minusHours(Reminder.EMAIL_REMINDER_HOURS_BEFORE_MEETING); //TODO if want to test reminders change to .minusMinutes(Reminder.TEST_EMAIL_REMINDER_MINUTES_BEFORE_MEETING)
-        this.sent = false;
+        this.scheduledAt = meeting.getStartDateTime().minusMinutes(Reminder.TEST_EMAIL_REMINDER_MINUTES_BEFORE_MEETING); //TODO if want to test reminders change to .minusMinutes(Reminder.TEST_EMAIL_REMINDER_MINUTES_BEFORE_MEETING)
     }
 
     public void markAsSent() {
-        this.sent = true;
+        this.sentAt = LocalDateTime.now();
     }
 
 }

@@ -9,7 +9,9 @@ import optis.guideme.api.mapper.AttendeeMapper;
 import optis.guideme.api.mapper.MeetingMapper;
 import optis.guideme.api.mapper.MeetingContextMapper;
 import optis.guideme.domain.exception.ForbiddenException;
+import optis.guideme.domain.exception.NotFoundException;
 import optis.guideme.domain.meeting.Meeting;
+import optis.guideme.domain.meeting.Reminder;
 import optis.guideme.domain.meetingRequest.DefaultReferenceCodeGenerator;
 import optis.guideme.repository.MeetingRepository;
 import org.springframework.stereotype.Service;
@@ -30,22 +32,26 @@ public class MeetingService {
     private final AttendeeMapper attendeeMapper;
     private final MeetingContextMapper meetingContextMapper;
     private final EmailService emailService;
+    private final ReminderService reminderService;
 
-    public Meeting getMeeting(UUID meetingId){
-        return meetingRepository.findById(meetingId).orElseThrow();
+    private Meeting getMeeting(UUID meetingId){
+        return meetingRepository.findById(meetingId).orElseThrow(() -> new NotFoundException("Meeting Not Found with Id: " + meetingId));
     }
 
     public MeetingDto createNewMeeting(UUID userId, NewMeetingDto newMeetingDto) {
         Meeting meeting = meetingMapper.toDomain(userId, newMeetingDto);
 
         meeting.validateMinimumRoles(meeting.getAttendees());
-        meeting.assignAttendees(meeting.getAttendees());
+        meeting.assignAttendees(meeting.getAttendees()); // can be removed? TODO
         meeting.assignReferenceCode(defaultReferenceCodeGenerator.generateReferenceCodeFromMeeting(meeting));
 
         // send emails 1 hour before meeting
         meeting.getAttendees().forEach(a -> emailService.sendEmailReminder(a.getUserId(), meeting));
+        meetingRepository.save(meeting); //meeting must be saved first so meetingId can be generated and used in reminders
+        List<Reminder> reminders = meeting.getAttendees().stream().map(a -> new Reminder(a.getUserId(), meeting)).toList();
 
-        return meetingMapper.toResponseDto(meetingRepository.save(meeting));
+        reminderService.saveAll(reminders);
+        return meetingMapper.toResponseDto(meeting);
     }
 
     public List<MeetingDto> getAllMeetings() {
@@ -92,5 +98,11 @@ public class MeetingService {
 
     public void save(Meeting meeting) {
         meetingRepository.save(meeting);
+    }
+
+    public MeetingDto get(UUID userId, UUID meetingId) {
+        Meeting meeting = getMeeting(meetingId);
+        if (meeting.getAttendees().stream().noneMatch(a -> a.getUserId().equals(userId))) throw new ForbiddenException("You're not part of this meeting");
+        return meetingMapper.toResponseDto(meeting);
     }
 }

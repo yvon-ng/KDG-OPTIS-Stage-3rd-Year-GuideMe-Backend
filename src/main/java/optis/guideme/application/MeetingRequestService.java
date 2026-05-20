@@ -35,6 +35,7 @@ public class MeetingRequestService {
     private final MeetingService meetingService;
     private final EmailService emailService;
     private final ReminderService reminderService;
+    private final NotificationService notificationService;
 
     private MeetingRequest getMeetingRequest(UUID meetingRequestId) {
         return meetingRequestRepository.findById(meetingRequestId).orElseThrow();
@@ -77,7 +78,8 @@ public class MeetingRequestService {
         Meeting meeting = meetingRequest.accept(attendees);
         meetingService.save(meeting); //save first so meetingId gets generated
 
-        // send accepted emails immediately
+        // send notification to requestedBy and accepted emails immediately
+        notificationService.sendAcceptedMeetingRequestNotification(meetingRequest.getRequestedBy(), meeting);
         attendees.forEach(a -> emailService.sendAcceptedEmail(a.getUserId(), meeting));
 
         // send emails and reminders 1 hour before meeting
@@ -93,7 +95,8 @@ public class MeetingRequestService {
         meetingRequest.decline();
         List<Attendee> attendees = mapParticipantsToAttendees(meetingRequest);
 
-        // send declined emails immediately
+        // send decliend notification and declined emails immediately
+        notificationService.sendDeclinedMeetingRequestNotification(meetingRequest.getRequestedBy(), meetingRequest);
         attendees.forEach(a -> emailService.sendDeclinedEmail(a.getUserId(), meetingRequest));
     }
 
