@@ -1,6 +1,9 @@
 package optis.guideme.api;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import optis.guideme.api.dto.UpdateUserDto;
+import optis.guideme.api.dto.request.NewClientDto;
 import optis.guideme.api.dto.request.NewClientScoreDto;
 import optis.guideme.api.dto.response.ClientScoreDto;
 import optis.guideme.api.dto.response.UserDto;
@@ -25,6 +28,16 @@ public class UserController {
     @GetMapping("me")
     public UserDto me(){
         return userService.get(currentUserProvider.getUserId());
+    }
+
+    @PutMapping("me")
+    public UserDto updateUserDetails(@RequestBody @Valid UpdateUserDto updateUserDto){
+        return userService.updateUserDetails(currentUserProvider.getUserId(), updateUserDto);
+    }
+
+    @PostMapping("me")
+    public void addNewClient(@RequestBody @Valid NewClientDto newClientDto){
+        userService.addNewClient(currentUserProvider.getUserId(), newClientDto);
     }
 
     @GetMapping("all")
