@@ -78,7 +78,7 @@ public class UserService {
     public void addNewClient(UUID userId, NewClientDto newClientDto) {
         Consultant consultant = getUser(userId).asConsultant();
         consultant.asConsultant().changeClient(newClientDto.clientName(), newClientDto.startDateAtClient().atZone(ZoneId.systemDefault()).toLocalDateTime());
-        ClientScore newClientScore = new ClientScore(newClientDto.clientName(), Score.TEN, newClientDto.startDateAtClient().atZone(ZoneId.systemDefault()).toLocalDateTime());
+        ClientScore newClientScore = new ClientScore(newClientDto.clientName(), Score.TEN, LocalDateTime.now());
         consultant.addClientScore(newClientScore);
     }
 }
