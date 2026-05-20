@@ -6,7 +6,6 @@ import optis.guideme.api.dto.UpdateUserDto;
 import optis.guideme.api.dto.request.NewClientDto;
 import optis.guideme.api.dto.request.NewClientScoreDto;
 import optis.guideme.api.dto.response.ClientScoreDto;
-import optis.guideme.api.dto.response.GoalDto;
 import optis.guideme.api.dto.response.UserDto;
 import optis.guideme.api.mapper.CurrentUserProvider;
 import optis.guideme.application.UserService;

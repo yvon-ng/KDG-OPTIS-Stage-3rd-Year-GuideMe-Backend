@@ -1,7 +1,6 @@
 package optis.guideme.api.mapper;
 
 import lombok.RequiredArgsConstructor;
-import optis.guideme.api.dto.UpdateUserDto;
 import optis.guideme.api.dto.request.NewUserDto;
 import optis.guideme.api.dto.response.UserDto;
 import optis.guideme.domain.factories.UserFactory;
