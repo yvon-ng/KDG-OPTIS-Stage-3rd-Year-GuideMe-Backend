@@ -47,10 +47,11 @@ public class MeetingService {
 
         // send emails 1 hour before meeting
         meeting.getAttendees().forEach(a -> emailService.sendEmailReminder(a.getUserId(), meeting));
+        meetingRepository.save(meeting); //meeting must be saved first so meetingId can be generated and used in reminders
         List<Reminder> reminders = meeting.getAttendees().stream().map(a -> new Reminder(a.getUserId(), meeting)).toList();
 
         reminderService.saveAll(reminders);
-        return meetingMapper.toResponseDto(meetingRepository.save(meeting));
+        return meetingMapper.toResponseDto(meeting);
     }
 
     public List<MeetingDto> getAllMeetings() {
