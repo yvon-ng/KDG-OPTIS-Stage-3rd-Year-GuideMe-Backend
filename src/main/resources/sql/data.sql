@@ -5,9 +5,9 @@ VALUES ('00000000-0000-0000-0000-000000000001', 'Keshia', 'Niemegeerts', 'keshia
        ('00000000-0000-0000-0000-000000000002', 'Kristof', 'De Bock', 'kristof@test.com', 'CONSULTANT', null, null, ''),
        ('00000000-0000-0000-0000-000000000003', 'Hannelie', 'Somers', 'hannelie@test.com', 'CONSULTANT', null, null,
         ''),
-       ('4a94af3d-350a-4425-9a31-ba071e695a14', 'Shaden', 'Ng', 'ngshade@cronos.be', 'CONSULTANT', 'FujiFilm',
+       ('4a94af3d-350a-4425-9a31-ba071e695a14', 'Shaden', 'Ng', 'Shaden.Ng@optis.be', 'CONSULTANT', 'FujiFilm',
         date(now()), 'https://cdn-icons-png.flaticon.com/512/5491/5491976.png'),
-       ('5965a3ec-531c-4a2e-a443-4d7049a15549', 'Abir', 'Belhadj', 'belhaab@cronos.be', 'MANAGER', null, null,
+       ('5965a3ec-531c-4a2e-a443-4d7049a15549', 'Abir', 'Belhadj', 'Abir.Belhadj@optis.be', 'MANAGER', null, null,
         'https://cdn-icons-png.flaticon.com/512/4352/4352141.png');
 
 INSERT INTO meetings(meeting_id, name, reference_code, start_date_time, end_date_time, occurred)

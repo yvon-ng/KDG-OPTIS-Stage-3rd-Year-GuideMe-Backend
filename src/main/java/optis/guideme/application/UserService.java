@@ -1,6 +1,8 @@
 package optis.guideme.application;
 
 import lombok.RequiredArgsConstructor;
+import optis.guideme.api.dto.UpdateUserDto;
+import optis.guideme.api.dto.request.NewClientDto;
 import optis.guideme.api.dto.request.NewClientScoreDto;
 import optis.guideme.api.dto.response.ClientScoreDto;
 import optis.guideme.api.dto.response.UserDto;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -61,6 +64,21 @@ public class UserService {
     public void rateCurrentClient(UUID userId, NewClientScoreDto newClientScoreDto) {
         Consultant consultant = getUser(userId).asConsultant();
         ClientScore newClientScore = new ClientScore(consultant.getClientName(), clientScoreMapper.newClientScoreToDomain(newClientScoreDto), LocalDateTime.now());
+        consultant.addClientScore(newClientScore);
+    }
+
+    public UserDto updateUserDetails(UUID userId, UpdateUserDto updateUserDto) {
+        User user = getUser(userId);
+        user.changeFirstName(updateUserDto.firstName());
+        user.changeLastName(updateUserDto.lastName());
+        user.changeAvatar(updateUserDto.avatar());
+        return userMapper.toResponseDto(userRepository.save(user));
+    }
+
+    public void addNewClient(UUID userId, NewClientDto newClientDto) {
+        Consultant consultant = getUser(userId).asConsultant();
+        consultant.asConsultant().changeClient(newClientDto.clientName(), newClientDto.startDateAtClient().atZone(ZoneId.systemDefault()).toLocalDateTime());
+        ClientScore newClientScore = new ClientScore(newClientDto.clientName(), Score.TEN, newClientDto.startDateAtClient().atZone(ZoneId.systemDefault()).toLocalDateTime());
         consultant.addClientScore(newClientScore);
     }
 }

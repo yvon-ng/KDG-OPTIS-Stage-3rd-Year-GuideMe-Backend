@@ -33,4 +33,15 @@ public abstract class User {
     public Consultant asConsultant() {
         throw new ForbiddenException("User is not a consultant, Must be a consultant to give a client a score");
     }
+
+    public void changeFirstName(String firstName){
+        this.firstName = firstName;
+    }
+
+    public void changeLastName(String lastName){
+        this.lastName = lastName;
+    }
+    public void changeAvatar(String avatar){
+        this.avatar = avatar;
+    }
 }
