@@ -81,4 +81,12 @@ public class UserService {
         ClientScore newClientScore = new ClientScore(newClientDto.clientName(), Score.TEN, LocalDateTime.now());
         consultant.addClientScore(newClientScore);
     }
+
+    public List<UserDto> getAllManagersExceptMe(UUID userId) {
+        return userRepository.findManagersByUserIdNot(userId).map(userMapper::toResponseDto).toList();
+    }
+
+    public List<UserDto> getAllConsultantsExceptMe(UUID userId) {
+        return userRepository.findConsultantsByUserIdNot(userId).map(userMapper::toResponseDto).toList();
+    }
 }

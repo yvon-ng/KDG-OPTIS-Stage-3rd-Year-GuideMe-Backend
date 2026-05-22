@@ -26,22 +26,22 @@ public class UserController {
     private final CurrentUserProvider currentUserProvider;
 
     @GetMapping("me")
-    public UserDto me(){
+    public UserDto me() {
         return userService.get(currentUserProvider.getUserId());
     }
 
     @PutMapping("me")
-    public UserDto updateUserDetails(@RequestBody @Valid UpdateUserDto updateUserDto){
+    public UserDto updateUserDetails(@RequestBody @Valid UpdateUserDto updateUserDto) {
         return userService.updateUserDetails(currentUserProvider.getUserId(), updateUserDto);
     }
 
     @PostMapping("me")
-    public void addNewClient(@RequestBody @Valid NewClientDto newClientDto){
+    public void addNewClient(@RequestBody @Valid NewClientDto newClientDto) {
         userService.addNewClient(currentUserProvider.getUserId(), newClientDto);
     }
 
     @GetMapping("all")
-    public List<UserDto> all(){
+    public List<UserDto> all() {
         return userService.getAllUsers();
     }
 
@@ -55,13 +55,13 @@ public class UserController {
 //    }
 
     @GetMapping("others")
-    public List<UserDto> getAllUsersExceptMe(){
+    public List<UserDto> getAllUsersExceptMe() {
         return userService.getAllUsersExceptMe(currentUserProvider.getUserId());
     }
 
     @GetMapping("{id}")
-    public UserDto getUser(@PathVariable UUID id){
-       return userService.get(id);
+    public UserDto getUser(@PathVariable UUID id) {
+        return userService.get(id);
     }
 
     @PostMapping("attendees")
@@ -72,6 +72,11 @@ public class UserController {
     @GetMapping("client-scores/recent")
     public List<ClientScoreDto> getLatestClientScores(@RequestParam(defaultValue = "2") int limit) {
         return userService.getLatestClientScores(currentUserProvider.getUserId(), limit);
+    }
+
+    @GetMapping("client-scores/recent/{userId}")
+    public List<ClientScoreDto> getUserLatestClientScores(@PathVariable UUID userId, @RequestParam(defaultValue = "2") int limit) {
+        return userService.getLatestClientScores(userId, limit);
     }
 
     @PostMapping("client-scores/new")
