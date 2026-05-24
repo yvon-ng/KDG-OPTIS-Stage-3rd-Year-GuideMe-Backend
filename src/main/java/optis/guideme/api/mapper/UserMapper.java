@@ -3,6 +3,7 @@ package optis.guideme.api.mapper;
 import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewUserDto;
 import optis.guideme.api.dto.response.UserDto;
+import optis.guideme.application.S3PresignService;
 import optis.guideme.domain.factories.UserFactory;
 import optis.guideme.domain.user.Consultant;
 import optis.guideme.domain.user.User;
@@ -13,6 +14,8 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @Component
 public class UserMapper {
+    public static final String S3_BASE_URL = "https://stg-guide-me.s3.eu-west-1.amazonaws.com/";
+    private final S3PresignService s3PresignService;
     private final UserFactory userFactory;
 
     public User toDomain(NewUserDto newUserDto) {
@@ -43,8 +46,12 @@ public class UserMapper {
                 user.getEmail(),
                 clientName,
                 startDateAtClient,
-                user.getAvatar(),
+                s3PresignService.generateGetUrl(user.getAvatar()),
                 user.getRole()
         );
+    }
+
+    private String mapToS3Url(String avatarDbValue){
+       return String.format("%s%s", S3_BASE_URL, avatarDbValue);
     }
 }
