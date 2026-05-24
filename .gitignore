@@ -87,3 +87,4 @@ out/
 .vscode/
 /.env
 /infra/postgresql/
+/GuideMeBackend.pem
