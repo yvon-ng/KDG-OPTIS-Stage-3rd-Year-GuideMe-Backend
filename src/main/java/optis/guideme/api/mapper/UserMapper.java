@@ -20,6 +20,13 @@ public class UserMapper {
         return null; //TODO
     }
 
+//    public User toDomain(UpdateUserDto updateUserDto) {
+//
+//        return new User(
+//
+//        );
+//    }
+
     public UserDto toResponseDto(User user) {
         String clientName  = null; // null when not a consultant
         LocalDateTime startDateAtClient = null; // null when not a consultant
