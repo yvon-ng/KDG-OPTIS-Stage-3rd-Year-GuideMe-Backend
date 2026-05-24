@@ -69,8 +69,8 @@ public class UserService {
 
     public UserDto updateUserDetails(UUID userId, UpdateUserDto updateUserDto) {
         User user = getUser(userId);
-        user.changeFirstName(updateUserDto.firstName());
-        user.changeLastName(updateUserDto.lastName());
+        if (!updateUserDto.firstName().isEmpty()) user.changeFirstName(updateUserDto.firstName());
+        if (!updateUserDto.lastName().isEmpty()) user.changeLastName(updateUserDto.lastName());
         if (!updateUserDto.avatar().isEmpty()) user.changeAvatar(updateUserDto.avatar());
         return userMapper.toResponseDto(userRepository.save(user));
     }
