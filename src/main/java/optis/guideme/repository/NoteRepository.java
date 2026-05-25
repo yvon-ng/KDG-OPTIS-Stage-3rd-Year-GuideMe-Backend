@@ -16,4 +16,7 @@ public interface NoteRepository extends JpaRepository<@NonNull Note, @NonNull UU
     Stream<Note> findAllByOwnerAndVisibilityOrderByCreationTimeDesc(UUID userId, Visibility visibility);
 
     Stream<Note> findAllByOwnerAndMeetingIdIsNotNullOrderByCreationTimeDesc(UUID userId);
+
+    // in repository
+    Stream<Note> findAllByOwnerAndSharedUsersContaining(UUID owner, UUID sharedUser);
 }
