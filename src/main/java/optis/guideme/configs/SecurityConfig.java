@@ -32,8 +32,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/public/**").permitAll()
                         .requestMatchers("/socket/**").permitAll()
-                        //methods voor manager schermen
                         .requestMatchers("/api/**").hasRole("optis_guideme_user")
+                        .requestMatchers("/api/managers/**").hasRole("optis_guideme_manager")
                         .anyRequest().denyAll()                )
                 .oauth2ResourceServer(oauth -> oauth
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
