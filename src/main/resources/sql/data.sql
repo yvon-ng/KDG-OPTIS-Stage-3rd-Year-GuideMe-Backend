@@ -2,11 +2,11 @@
 
 INSERT INTO users(user_id, first_name, last_name, email, role, client_name, start_date_at_client, avatar)
 VALUES ('00000000-0000-0000-0000-000000000001', 'Keshia', 'Niemegeerts', 'keshia@test.com', 'MANAGER', null, null,
-        'profile-images/00000000-0000-0000-0000-000000000001/Keshia-1.svg'),
+        'profile-images/00000000-0000-0000-0000-000000000001/Keshia-1.png'),
        ('00000000-0000-0000-0000-000000000002', 'Kristof', 'De Bock', 'kristof@test.com', 'CONSULTANT', 'Toyota', '2019-09-09T12:55:00',
-        'profile-images/00000000-0000-0000-0000-000000000002/Kristof-1.svg'),
+        'profile-images/00000000-0000-0000-0000-000000000002/Kristof-1.png'),
        ('00000000-0000-0000-0000-000000000003', 'Hannelie', 'Somers', 'hannelie@test.com', 'CONSULTANT', 'TOMORROWLAND', '2025-05-31T08:00:00',
-        'profile-images/00000000-0000-0000-0000-000000000003/Hannelie-1.svg'),
+        'profile-images/00000000-0000-0000-0000-000000000003/Hannelie-1.png'),
        ('4a94af3d-350a-4425-9a31-ba071e695a14', 'Shaden', 'Ng', 'Shaden.Ng@optis.be', 'CONSULTANT', 'FujiFilm',
         date(now()), 'profile-images/4a94af3d-350a-4425-9a31-ba071e695a14/5491976.png'),
        ('5965a3ec-531c-4a2e-a443-4d7049a15549', 'Abir', 'Belhadj', 'Abir.Belhadj@optis.be', 'MANAGER', null, null,
