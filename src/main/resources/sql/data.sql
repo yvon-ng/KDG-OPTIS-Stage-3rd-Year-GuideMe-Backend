@@ -2,8 +2,8 @@
 
 INSERT INTO users(user_id, first_name, last_name, email, role, client_name, start_date_at_client, avatar)
 VALUES ('00000000-0000-0000-0000-000000000001', 'Keshia', 'Niemegeerts', 'keshia@test.com', 'MANAGER', null, null, ''),
-       ('00000000-0000-0000-0000-000000000002', 'Kristof', 'De Bock', 'kristof@test.com', 'CONSULTANT', null, null, ''),
-       ('00000000-0000-0000-0000-000000000003', 'Hannelie', 'Somers', 'hannelie@test.com', 'CONSULTANT', null, null,
+       ('00000000-0000-0000-0000-000000000002', 'Kristof', 'De Bock', 'kristof@test.com', 'CONSULTANT', 'Toyota', '2019-09-09T12:55:00', ''),
+       ('00000000-0000-0000-0000-000000000003', 'Hannelie', 'Somers', 'hannelie@test.com', 'CONSULTANT', 'TOMORROWLAND', '2025-05-31T08:00:00',
         ''),
        ('4a94af3d-350a-4425-9a31-ba071e695a14', 'Shaden', 'Ng', 'Shaden.Ng@optis.be', 'CONSULTANT', 'FujiFilm',
         date(now()), 'https://cdn-icons-png.flaticon.com/512/5491/5491976.png'),
@@ -37,7 +37,11 @@ VALUES (null, '00000000-0000-0000-0000-000000000010', '00000000-0000-0000-0000-0
 --insert client score
 INSERT INTO consultant_client_scores(consultant_user_id, client_name, score, date_time)
 VALUES ('4a94af3d-350a-4425-9a31-ba071e695a14', 'FujiFilm', 'SEVEN', '2026-02-10T10:00:00'),
-       ('4a94af3d-350a-4425-9a31-ba071e695a14', 'FujiFilm', 'TEN', '2026-04-15T10:00:00');
+       ('4a94af3d-350a-4425-9a31-ba071e695a14', 'FujiFilm', 'TEN', '2026-04-15T10:00:00'),
+       ('00000000-0000-0000-0000-000000000003', 'FlowFactor', 'FIVE', '2024-11-20T11:00:00'),
+       ('00000000-0000-0000-0000-000000000003', 'FlowFactor', 'FOUR', '2025-02-27T16:20:00'),
+       ('00000000-0000-0000-0000-000000000003', 'TOMORROWLAND', 'SEVEN', '2025-06-01T10:45:00'),
+       ('00000000-0000-0000-0000-000000000002', 'Toyota', 'EIGHT', '2024-09-14T13:55:00');
 
 --insert notes
 INSERT INTO notes(note_id, title, owner, visibility, meeting_id, description, creation_time)
@@ -132,11 +136,19 @@ VALUES ('80000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-0000000
 
 --insert goals
 INSERT INTO goals(goal_id, user_id, title, description, creation_date, due_date, achievement_date)
-VALUES ('c1a11111-1111-1111-1111-111111111111', '00000000-0000-0000-0000-000000000002','Finish onboarding module', 'Complete the full onboarding training', '2026-05-01', '2026-05-10', '2026-05-08'),
-       ('c1a22222-2222-2222-2222-222222222222', '4a94af3d-350a-4425-9a31-ba071e695a14','Improve Angular skills', 'Practice signals and standalone components', '2026-05-02', '2026-06-01', NULL),
-       ('c1a33333-3333-3333-3333-333333333333', '4a94af3d-350a-4425-9a31-ba071e695a14','Deploy first project', 'Deploy GuideMe to production environment', '2026-04-15', '2026-05-15', '2026-05-14'),
-       ('c1a44444-4444-4444-4444-444444444444', '00000000-0000-0000-0000-000000000003','Write clean architecture code', 'Refactor services into clean layered structure', '2026-05-05', '2026-06-05', NULL),
-       ('c1a55555-5555-5555-5555-555555555555', '5965a3ec-531c-4a2e-a443-4d7049a15549','Finish meeting module', 'Complete scheduling and email notifications', '2026-05-10', '2026-05-20', '2026-05-16'),
-       ('c1a66666-6666-6666-6666-666666666666', '5965a3ec-531c-4a2e-a443-4d7049a15549','Prepare slides', 'Create presentation slides for end demo', '2026-05-12', '2026-06-01', NULL),
-       ('c1a77777-7777-7777-7777-777777777777', '00000000-0000-0000-0000-000000000002','Read system design book', 'Study distributed systems fundamentals', '2026-05-03', '2026-06-15', NULL),
-       ('c1a77777-8888-8888-8888-888888888888', '4a94af3d-350a-4425-9a31-ba071e695a14','Books to read', 'Atomic Habits, Deep Work, The Alchemist', '2026-05-12', '2026-05-20', NULL);
+VALUES ('c1a11111-1111-1111-1111-111111111111', '00000000-0000-0000-0000-000000000002', 'Finish onboarding module',
+        'Complete the full onboarding training', '2026-05-01', '2026-05-10', '2026-05-08'),
+       ('c1a22222-2222-2222-2222-222222222222', '4a94af3d-350a-4425-9a31-ba071e695a14', 'Improve Angular skills',
+        'Practice signals and standalone components', '2026-05-02', '2026-06-01', NULL),
+       ('c1a33333-3333-3333-3333-333333333333', '4a94af3d-350a-4425-9a31-ba071e695a14', 'Deploy first project',
+        'Deploy GuideMe to production environment', '2026-04-15', '2026-05-15', '2026-05-14'),
+       ('c1a44444-4444-4444-4444-444444444444', '00000000-0000-0000-0000-000000000003', 'Write clean architecture code',
+        'Refactor services into clean layered structure', '2026-05-05', '2026-06-05', NULL),
+       ('c1a55555-5555-5555-5555-555555555555', '5965a3ec-531c-4a2e-a443-4d7049a15549', 'Finish meeting module',
+        'Complete scheduling and email notifications', '2026-05-10', '2026-05-20', '2026-05-16'),
+       ('c1a66666-6666-6666-6666-666666666666', '5965a3ec-531c-4a2e-a443-4d7049a15549', 'Prepare slides',
+        'Create presentation slides for end demo', '2026-05-12', '2026-06-01', NULL),
+       ('c1a77777-7777-7777-7777-777777777777', '00000000-0000-0000-0000-000000000002', 'Read system design book',
+        'Study distributed systems fundamentals', '2026-05-03', '2026-06-15', NULL),
+       ('c1a77777-8888-8888-8888-888888888888', '4a94af3d-350a-4425-9a31-ba071e695a14', 'Books to read',
+        'Atomic Habits, Deep Work, The Alchemist', '2026-05-12', '2026-05-20', NULL);
