@@ -49,4 +49,10 @@ public class NoteController {
     public NoteDto updateNote(@PathVariable UUID noteId, @RequestBody @Valid UpdateNoteDto updateNoteDto){
         return noteService.updateNote(currentUserProvider.getUserId(), noteId, updateNoteDto);
     }
+
+    @GetMapping("sharedWith/{ownerId}")
+    public List<NoteDto> getNotesSharedWithCurrentUser(@PathVariable UUID ownerId) {
+        UUID currentUserId = currentUserProvider.getUserId();
+        return noteService.getNotesSharedWithUser(ownerId, currentUserId);
+    }
 }

@@ -54,4 +54,10 @@ public class NoteService {
     private Note getNote(UUID noteId){
         return noteRepository.findById(noteId).orElseThrow(() -> new NotFoundException("Note Not Found with Id: " + noteId));
     }
+
+    public List<NoteDto> getNotesSharedWithUser(UUID ownerId, UUID currentUserId) {
+        return noteRepository.findAllByOwnerAndSharedUsersContaining(ownerId, currentUserId)
+                .map(noteMapper::toNoteResponseDto)
+                .toList();
+    }
 }
