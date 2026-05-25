@@ -3,9 +3,9 @@
 INSERT INTO users(user_id, first_name, last_name, email, role, client_name, start_date_at_client, avatar)
 VALUES ('00000000-0000-0000-0000-000000000001', 'Keshia', 'Niemegeerts', 'keshia@test.com', 'MANAGER', null, null,
         'profile-images/00000000-0000-0000-0000-000000000001/Keshia-1.svg'),
-       ('00000000-0000-0000-0000-000000000002', 'Kristof', 'De Bock', 'kristof@test.com', 'CONSULTANT', null, null,
+       ('00000000-0000-0000-0000-000000000002', 'Kristof', 'De Bock', 'kristof@test.com', 'CONSULTANT', 'Toyota', '2019-09-09T12:55:00',
         'profile-images/00000000-0000-0000-0000-000000000002/Kristof-1.svg'),
-       ('00000000-0000-0000-0000-000000000003', 'Hannelie', 'Somers', 'hannelie@test.com', 'CONSULTANT', null, null,
+       ('00000000-0000-0000-0000-000000000003', 'Hannelie', 'Somers', 'hannelie@test.com', 'CONSULTANT', 'TOMORROWLAND', '2025-05-31T08:00:00',
         'profile-images/00000000-0000-0000-0000-000000000003/Hannelie-1.svg'),
        ('4a94af3d-350a-4425-9a31-ba071e695a14', 'Shaden', 'Ng', 'Shaden.Ng@optis.be', 'CONSULTANT', 'FujiFilm',
         date(now()), 'profile-images/4a94af3d-350a-4425-9a31-ba071e695a14/5491976.png'),
@@ -39,7 +39,11 @@ VALUES (null, '00000000-0000-0000-0000-000000000010', '00000000-0000-0000-0000-0
 --insert client score
 INSERT INTO consultant_client_scores(consultant_user_id, client_name, score, date_time)
 VALUES ('4a94af3d-350a-4425-9a31-ba071e695a14', 'FujiFilm', 'SEVEN', '2026-02-10T10:00:00'),
-       ('4a94af3d-350a-4425-9a31-ba071e695a14', 'FujiFilm', 'TEN', '2026-04-15T10:00:00');
+       ('4a94af3d-350a-4425-9a31-ba071e695a14', 'FujiFilm', 'TEN', '2026-04-15T10:00:00'),
+       ('00000000-0000-0000-0000-000000000003', 'FlowFactor', 'FIVE', '2024-11-20T11:00:00'),
+       ('00000000-0000-0000-0000-000000000003', 'FlowFactor', 'FOUR', '2025-02-27T16:20:00'),
+       ('00000000-0000-0000-0000-000000000003', 'TOMORROWLAND', 'SEVEN', '2025-06-01T10:45:00'),
+       ('00000000-0000-0000-0000-000000000002', 'Toyota', 'EIGHT', '2024-09-14T13:55:00');
 
 --insert notes
 INSERT INTO notes(note_id, title, owner, visibility, meeting_id, description, creation_time)
