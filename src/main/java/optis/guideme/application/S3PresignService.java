@@ -37,6 +37,7 @@ public class S3PresignService {
     }
 
     public String generateGetUrl(String key) {
+        if(key == null) return null;
         GetObjectRequest getObjectRequest = GetObjectRequest.builder()
                 .bucket(bucket)
                 .key(key)

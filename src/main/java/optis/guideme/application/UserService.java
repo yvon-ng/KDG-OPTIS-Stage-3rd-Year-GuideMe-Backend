@@ -89,4 +89,14 @@ public class UserService {
     public List<UserDto> getAllConsultantsExceptMe(UUID userId) {
         return userRepository.findConsultantsByUserIdNot(userId).map(userMapper::toResponseDto).toList();
     }
+
+    public void getOrCreateUser(UUID oid, String email, Role role) {
+        User user = userRepository.findById(oid).orElse(null);
+        if (user == null) {
+            User newUser = (role == Role.MANAGER)
+                    ? new Manager(oid, email)
+                    : new Consultant(oid, email);
+            userRepository.save(newUser);
+        }
+    }
 }

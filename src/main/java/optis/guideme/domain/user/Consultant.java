@@ -32,15 +32,13 @@ public class Consultant extends User {
         super(userId, firstName, lastName, email, avatar);
     }
 
+    public Consultant(UUID userId, String email) {
+        super(userId, email);
+    }
+
     @Override
     public Consultant asConsultant() {
         return this;
-    }
-
-    public void assignToClient(String clientName, LocalDateTime startDateAtClient) {
-        if (this.clientName != null) throw new IllegalStateException("Already assigned to a client");
-        this.clientName = clientName;
-        this.startDateAtClient = startDateAtClient;
     }
 
     public void changeClient(String clientName, LocalDateTime startDateAtClient) {
