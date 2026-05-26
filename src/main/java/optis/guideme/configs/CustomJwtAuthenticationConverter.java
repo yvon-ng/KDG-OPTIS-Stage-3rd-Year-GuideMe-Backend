@@ -3,7 +3,6 @@ package optis.guideme.configs;
 import lombok.RequiredArgsConstructor;
 import optis.guideme.application.UserService;
 import optis.guideme.domain.user.Role;
-import optis.guideme.domain.user.User;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
