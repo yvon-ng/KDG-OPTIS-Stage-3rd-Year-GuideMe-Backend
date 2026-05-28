@@ -6,7 +6,7 @@ import optis.guideme.api.dto.UpdateNoteDto;
 import optis.guideme.api.dto.request.NewNoteDto;
 import optis.guideme.api.dto.response.NoteDto;
 import optis.guideme.api.dto.response.NotePreviewDto;
-import optis.guideme.api.mapper.CurrentUserProvider;
+import optis.guideme.configs.CurrentUserProvider;
 import optis.guideme.application.NoteService;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,26 +18,25 @@ import java.util.UUID;
 @RequestMapping("api/notes")
 public class NoteController {
     private final NoteService noteService;
-    private final CurrentUserProvider currentUserProvider;
 
     @PostMapping
     public NoteDto createNewNote(@RequestBody @Valid NewNoteDto newNoteDto){
-        return noteService.createNewNote(currentUserProvider.getUserId(), newNoteDto);
+        return noteService.createNewNote(CurrentUserProvider.getUserId(), newNoteDto);
     }
 
     @GetMapping
     public List<NotePreviewDto> getMyNotes(){
-        return noteService.getAllNotes(currentUserProvider.getUserId());
+        return noteService.getAllNotes(CurrentUserProvider.getUserId());
     }
 
     @GetMapping("private")
     public List<NotePreviewDto> getMyPrivateNotes(){
-        return noteService.getAllPrivateNotes(currentUserProvider.getUserId());
+        return noteService.getAllPrivateNotes(CurrentUserProvider.getUserId());
     }
 
     @GetMapping("meetings")
     public List<NotePreviewDto> getMyMeetingNotes(){
-        return noteService.getAllMeetingNotes(currentUserProvider.getUserId());
+        return noteService.getAllMeetingNotes(CurrentUserProvider.getUserId());
     }
 
     @GetMapping("{noteId}")
@@ -47,12 +46,12 @@ public class NoteController {
 
     @PutMapping("{noteId}")
     public NoteDto updateNote(@PathVariable UUID noteId, @RequestBody @Valid UpdateNoteDto updateNoteDto){
-        return noteService.updateNote(currentUserProvider.getUserId(), noteId, updateNoteDto);
+        return noteService.updateNote(CurrentUserProvider.getUserId(), noteId, updateNoteDto);
     }
 
     @GetMapping("sharedWith/{ownerId}")
     public List<NoteDto> getNotesSharedWithCurrentUser(@PathVariable UUID ownerId) {
-        UUID currentUserId = currentUserProvider.getUserId();
+        UUID currentUserId = CurrentUserProvider.getUserId();
         return noteService.getNotesSharedWithUser(ownerId, currentUserId);
     }
 }

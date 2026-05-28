@@ -90,7 +90,6 @@ public class MeetingRequestService {
 
         // REMOVE old
         MeetingRequestEvent removed = new MeetingRequestEvent(MeetingRequestEventType.REMOVED, meetingRequestMapper.toResponseDto(previous));
-        MeetingRequestEvent resc = new MeetingRequestEvent(MeetingRequestEventType.RESCHEDULED, meetingRequestMapper.toResponseDto(previous));
 
         // CREATE new
         MeetingRequestEvent created = new MeetingRequestEvent(MeetingRequestEventType.CREATED, meetingRequestDto);
@@ -102,7 +101,7 @@ public class MeetingRequestService {
         });
 
         // outgoing
-        sendWebsocketMessage(rescheduled.getRequestedBy(), "/queue/outgoing-meeting-requests", resc);
+        sendWebsocketMessage(previous.getRequestedBy(), "/queue/outgoing-meeting-requests", removed);
         sendWebsocketMessage(rescheduled.getRequestedBy(), "/queue/outgoing-meeting-requests", created);
 
         return meetingRequestDto;
