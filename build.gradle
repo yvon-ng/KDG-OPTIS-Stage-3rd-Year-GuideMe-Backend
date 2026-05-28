@@ -50,6 +50,8 @@ dependencies {
     implementation ('org.springframework.boot:spring-boot-starter-websocket'){
         exclude group: 'org.springframework.boot', module: 'spring-boot-jackson'
     }
+    implementation 'software.amazon.awssdk:s3:2.44.12'
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-secrets-manager:4.0.2'
 }
 
 tasks.named('test') {

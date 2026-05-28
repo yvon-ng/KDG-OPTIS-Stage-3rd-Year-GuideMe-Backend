@@ -10,13 +10,16 @@ import java.util.UUID;
 @Component
 public class CurrentUserProvider { //TODO static so no inject
 
-    public Jwt getJwt() { //private
-        JwtAuthenticationToken authentication = (JwtAuthenticationToken) SecurityContextHolder
-                .getContext()
-                .getAuthentication();
+    public Jwt getJwt() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        return authentication.getToken();
+        if (!(authentication instanceof JwtAuthenticationToken jwtAuth)) {
+            throw new IllegalStateException("No JWT authentication found");
+        }
+
+        return jwtAuth.getToken();
     }
+
 
     public UUID getUserId() { //getUser currentuserid
         return UUID.fromString(getJwt().getClaim("oid"));
