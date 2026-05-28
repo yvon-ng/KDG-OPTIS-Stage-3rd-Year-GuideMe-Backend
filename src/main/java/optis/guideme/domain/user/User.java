@@ -23,6 +23,14 @@ public abstract class User {
     private String email;
     private String avatar;
 
+    // for when a user first logs in
+    public User(UUID userId, String email) {
+        this.userId = userId;
+        this.firstName = "";
+        this.lastName = "";
+        this.email = email;
+    }
+
 //    private List<Goal> goals;
 //    private List<Reminder> reminders;
 

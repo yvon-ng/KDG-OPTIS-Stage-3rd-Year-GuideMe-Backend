@@ -69,9 +69,9 @@ public class UserService {
 
     public UserDto updateUserDetails(UUID userId, UpdateUserDto updateUserDto) {
         User user = getUser(userId);
-        user.changeFirstName(updateUserDto.firstName());
-        user.changeLastName(updateUserDto.lastName());
-        user.changeAvatar(updateUserDto.avatar());
+        if (!updateUserDto.firstName().isEmpty()) user.changeFirstName(updateUserDto.firstName());
+        if (!updateUserDto.lastName().isEmpty()) user.changeLastName(updateUserDto.lastName());
+        if (!updateUserDto.avatar().isEmpty()) user.changeAvatar(updateUserDto.avatar());
         return userMapper.toResponseDto(userRepository.save(user));
     }
 
@@ -88,5 +88,15 @@ public class UserService {
 
     public List<UserDto> getAllConsultantsExceptMe(UUID userId) {
         return userRepository.findConsultantsByUserIdNot(userId).map(userMapper::toResponseDto).toList();
+    }
+
+    public void getOrCreateUser(UUID oid, String email, Role role) {
+        User user = userRepository.findById(oid).orElse(null);
+        if (user == null) {
+            User newUser = (role == Role.MANAGER)
+                    ? new Manager(oid, email)
+                    : new Consultant(oid, email);
+            userRepository.save(newUser);
+        }
     }
 }
