@@ -30,14 +30,14 @@ public class UserController {
         return userService.get(currentUserProvider.getUserId());
     }
 
-    @PutMapping("me")
-    public UserDto updateUserDetails(@RequestBody @Valid UpdateUserDto updateUserDto) {
-        return userService.updateUserDetails(currentUserProvider.getUserId(), updateUserDto);
+    @PutMapping("{userId}")
+    public UserDto updateUserDetails(@PathVariable UUID userId, @RequestBody @Valid UpdateUserDto updateUserDto) {
+        return userService.updateUserDetails(userId, updateUserDto);
     }
 
-    @PostMapping("me")
-    public void addNewClient(@RequestBody @Valid NewClientDto newClientDto) {
-        userService.addNewClient(currentUserProvider.getUserId(), newClientDto);
+    @PostMapping("{userId}")
+    public void addNewClient(@PathVariable UUID userId, @RequestBody @Valid NewClientDto newClientDto) {
+        userService.addNewClient(userId, newClientDto);
     }
 
     @GetMapping("all")

@@ -12,7 +12,6 @@ import java.util.stream.Stream;
 @Repository
 public interface MeetingRequestRepository extends JpaRepository<@NonNull MeetingRequest, @NonNull UUID> {
 //    boolean existsByReferenceCode(String code);
-//    MeetingRequest save(MeetingRequest meetingRequest);
 
     @Query(
             """
