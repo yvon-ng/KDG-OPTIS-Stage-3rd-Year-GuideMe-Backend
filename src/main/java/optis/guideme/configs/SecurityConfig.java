@@ -31,7 +31,7 @@ public class SecurityConfig {
                         .requestMatchers("/public/**").permitAll()
                         .requestMatchers("/socket/**").permitAll()
                         .requestMatchers("/api/managers/**").hasAnyRole("optis_guideme_manager")
-                        .requestMatchers("/api/**").hasAnyRole("optis_guideme_user")
+                        .requestMatchers("/api/**").hasAnyRole("optis_guideme_user", "optis_guideme_manager")
                         .anyRequest().denyAll()                )
                 .oauth2ResourceServer(oauth -> oauth
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(converter))

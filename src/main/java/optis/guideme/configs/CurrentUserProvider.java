@@ -23,7 +23,7 @@ public final class CurrentUserProvider {
     }
 
 
-    public static UUID getUserId() { //getUser currentuserid
+    public static UUID getUserId() { // get current userid
         return UUID.fromString(getJwt().getClaim("oid"));
     }
 }

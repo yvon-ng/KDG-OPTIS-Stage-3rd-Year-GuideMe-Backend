@@ -36,4 +36,15 @@ public class Notification {
         this.sent = false;
         this.notificationType = notificationType;
     }
+
+    // so far only used for FILL_IN_PROFILE notification
+    public Notification(UUID receiver, String title, String description, NotificationType notificationType, boolean read, boolean sent, LocalDateTime sentAt) {
+        this.receiver = receiver;
+        this.title = title;
+        this.description = description;
+        this.notificationType = notificationType;
+        this.read = read;
+        this.sent = sent;
+        this.sentAt = sentAt;
+    }
 }

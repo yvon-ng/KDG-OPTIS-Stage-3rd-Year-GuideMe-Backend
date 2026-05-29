@@ -6,7 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Repository
 public interface NotificationRepository extends JpaRepository<@NonNull Notification, @NonNull UUID> {
+    Stream<Notification> findAllByReceiverAndSentAtIsNotNull(UUID userId);
 }
