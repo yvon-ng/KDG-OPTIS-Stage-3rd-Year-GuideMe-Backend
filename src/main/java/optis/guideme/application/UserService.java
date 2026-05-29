@@ -58,7 +58,12 @@ public class UserService {
     }
 
     public List<ClientScoreDto> getLatestClientScores(UUID userId, int limit) {
-        return getUser(userId).asConsultant().getLatestClientScores(limit).stream().map(clientScoreMapper::toResponseDto).toList();
+        Consultant consultant = getUser(userId).asConsultant();
+        String currentClient = consultant.getClientName();
+        return consultant.getLatestClientScores(limit).stream()
+                .filter(s -> s.getClientName().equals(currentClient))
+                .map(clientScoreMapper::toResponseDto)
+                .toList();
     }
 
     public void rateCurrentClient(UUID userId, NewClientScoreDto newClientScoreDto) {
@@ -78,7 +83,7 @@ public class UserService {
     public void addNewClient(UUID userId, NewClientDto newClientDto) {
         Consultant consultant = getUser(userId).asConsultant();
         consultant.asConsultant().changeClient(newClientDto.clientName(), newClientDto.startDateAtClient().atZone(ZoneId.systemDefault()).toLocalDateTime());
-        ClientScore newClientScore = new ClientScore(newClientDto.clientName(), Score.TEN, LocalDateTime.now());
+        ClientScore newClientScore = new ClientScore(newClientDto.clientName(), Score.NULL, LocalDateTime.now());
         consultant.addClientScore(newClientScore);
     }
 
