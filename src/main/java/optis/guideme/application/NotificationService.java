@@ -2,7 +2,6 @@ package optis.guideme.application;
 
 import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.response.NotificationDto;
-import optis.guideme.api.dto.response.ReminderDto;
 import optis.guideme.api.mapper.NotificationMapper;
 import optis.guideme.domain.Notification;
 import optis.guideme.domain.NotificationType;
