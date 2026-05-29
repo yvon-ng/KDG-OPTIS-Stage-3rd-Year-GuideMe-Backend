@@ -33,11 +33,6 @@ public class UserService {
         return userMapper.toResponseDto(getUser(userId));
     }
 
-    public Optional<User> addUser(UUID userId, String email, Role role) {
-        Invitation invitation = new Invitation(userId, email, role);
-        return Optional.empty();
-    }
-
     public List<UserDto> getAllUsersExceptMe(UUID userId) {
         return userRepository.findAllByUserIdNot(userId).map(userMapper::toResponseDto).toList();
     }
