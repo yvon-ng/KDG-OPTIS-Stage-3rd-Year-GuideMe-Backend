@@ -3,7 +3,7 @@ package optis.guideme.api;
 import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewProfileImageDto;
 import optis.guideme.api.dto.response.ProfileImageUploadDto;
-import optis.guideme.api.mapper.CurrentUserProvider;
+import optis.guideme.configs.CurrentUserProvider;
 import optis.guideme.application.S3PresignService;
 import optis.guideme.domain.exception.ForbiddenException;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +20,6 @@ import java.util.UUID;
 public class ProfileImageController {
 
     private final S3PresignService service;
-    private final CurrentUserProvider currentUserProvider;
 
     private static final Map<String, String> EXTENSIONS = Map.of(
             "image/png", ".png",
@@ -37,7 +36,7 @@ public class ProfileImageController {
             throw new ForbiddenException("ERROR: Invalid file type: " + newProfileDto.contentType());
         }
 
-        String key = "profile-images/" + currentUserProvider.getUserId() + "/" + UUID.randomUUID() + extension;
+        String key = "profile-images/" + CurrentUserProvider.getUserId() + "/" + UUID.randomUUID() + extension;
         String url = service.generateUploadUrl(key);
 
         return new ProfileImageUploadDto(url, key);
