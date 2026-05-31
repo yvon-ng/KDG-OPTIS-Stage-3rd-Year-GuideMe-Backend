@@ -12,7 +12,7 @@ import java.util.UUID;
 public class Manager extends User {
     public void updateMeeting(){} // for adjusting a meetingId
     public Manager(UUID userId , String firstName, String lastName, String email, String avatar) {
-        super(userId, firstName, lastName, email, avatar);
+        super(userId, firstName, lastName, email, avatar, false);
     }
 
     public Manager(UUID userId, String email) {

@@ -29,7 +29,7 @@ public class Consultant extends User {
     private List<ClientScore> clientScores = new ArrayList<>();
 
     public Consultant(UUID userId, String firstName, String lastName, String email, String avatar) {
-        super(userId, firstName, lastName, email, avatar);
+        super(userId, firstName, lastName, email, avatar, false);
     }
 
     public Consultant(UUID userId, String email) {

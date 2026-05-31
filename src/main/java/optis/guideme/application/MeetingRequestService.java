@@ -104,6 +104,7 @@ public class MeetingRequestService {
         sendWebsocketMessage(previous.getRequestedBy(), "/queue/outgoing-meeting-requests", removed);
         sendWebsocketMessage(rescheduled.getRequestedBy(), "/queue/outgoing-meeting-requests", created);
 
+        notificationService.sendRescheduledMeetingRequestNotification(previous.getRequestedBy(), previous);
         return meetingRequestDto;
     }
 

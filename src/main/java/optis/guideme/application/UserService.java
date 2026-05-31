@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -27,14 +26,10 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final ClientScoreMapper clientScoreMapper;
+    private final NotificationService notificationService;
 
     public UserDto get(UUID userId) {
         return userMapper.toResponseDto(getUser(userId));
-    }
-
-    public Optional<User> addUser(UUID userId, String email, Role role) {
-        Invitation invitation = new Invitation(userId, email, role);
-        return Optional.empty();
     }
 
     public List<UserDto> getAllUsersExceptMe(UUID userId) {
@@ -91,12 +86,20 @@ public class UserService {
     }
 
     public void getOrCreateUser(UUID oid, String email, Role role) {
-        User user = userRepository.findById(oid).orElse(null);
-        if (user == null) {
-            User newUser = (role == Role.MANAGER)
-                    ? new Manager(oid, email)
-                    : new Consultant(oid, email);
-            userRepository.save(newUser);
+//        User user = userRepository.findById(oid).orElse(null);
+//        if (user == null) {
+//            User newUser = (role == Role.MANAGER)
+//                    ? new Manager(oid, email)
+//                    : new Consultant(oid, email);
+//            userRepository.save(newUser);
+//        }
+        // !!!now this doesnt use constructo!!!
+        userRepository.insertIfNotExists(oid, email, role.name(), User.DEFAULT_PROFILE_PICTURE_S3_KEY);
+        User user = getUser(oid);
+        //send notification
+        if (user.markProfileNotificationSent()) {
+            userRepository.save(user);
+            notificationService.sendFillInProfileNotification(oid);
         }
     }
 }

@@ -12,6 +12,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -28,11 +30,11 @@ public class NotificationService {
         String description = templateService.render("meeting.request.accepted.description", meeting.getDisplayName());
         Notification notification = new Notification(userId, title, description, NotificationType.MEETING_ACCEPTED);
         notificationRepository.save(notification); // save first so id gets generated
-        NotificationDto dto = notificationMapper.toResponseDto(notification);
+        NotificationDto notificationDto = notificationMapper.toResponseDto(notification);
         messagingTemplate.convertAndSendToUser(
                 userId.toString(),
                 "/queue/notifications",
-                dto
+                notificationDto
         );
     }
 
@@ -41,11 +43,41 @@ public class NotificationService {
         String description = templateService.render("meeting.request.declined.description", meetingRequest.getDisplayName());
         Notification notification = new Notification(requestedBy, title, description, NotificationType.MEETING_DECLINED);
         notificationRepository.save(notification); // save first so id gets generated
-        NotificationDto dto = notificationMapper.toResponseDto(notification);
+        NotificationDto notificationDto = notificationMapper.toResponseDto(notification);
         messagingTemplate.convertAndSendToUser(
                 requestedBy.toString(),
                 "/queue/notifications",
-                dto
+                notificationDto
         );
+    }
+
+    public void sendRescheduledMeetingRequestNotification(UUID requestedBy, MeetingRequest meetingRequest) {
+        String title = templateService.render("meeting.request.declined.title");
+        String description = templateService.render("meeting.request.rescheduled.description", meetingRequest.getDisplayName());
+        Notification notification = new Notification(requestedBy, title, description, NotificationType.MEETING_RESCHEDULED);
+        notificationRepository.save(notification); // save first so id gets generated
+        NotificationDto notificationDto = notificationMapper.toResponseDto(notification);
+        messagingTemplate.convertAndSendToUser(
+                requestedBy.toString(),
+                "/queue/notifications",
+                notificationDto
+        );
+    }
+
+    public void sendFillInProfileNotification(UUID requestedBy) {
+        String title = templateService.render("profile.fill.in.title");
+        String description = templateService.render("profile.fill.in.description");
+        Notification notification = new Notification(requestedBy, title, description,NotificationType.FILL_IN_PROFILE, false, true, LocalDateTime.now());
+        notificationRepository.save(notification); // save first so id gets generated
+        NotificationDto notificationDto = notificationMapper.toResponseDto(notification);
+        messagingTemplate.convertAndSendToUser(
+                requestedBy.toString(),
+                "/queue/notifications",
+                notificationDto
+        );
+    }
+
+    public List<NotificationDto> getSentNotifications(UUID userId) {
+        return notificationRepository.findAllByReceiverAndSentAtIsNotNull(userId).map(notificationMapper::toResponseDto).toList();
     }
 }
