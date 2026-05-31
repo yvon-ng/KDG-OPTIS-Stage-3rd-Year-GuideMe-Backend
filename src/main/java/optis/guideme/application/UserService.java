@@ -104,4 +104,10 @@ public class UserService {
             userRepository.save(newUser);
         }
     }
+
+    public List<User> getAllConsultants() {
+        return userRepository.findAll().stream()
+                .filter(u -> u.getRole() == Role.CONSULTANT)
+                .toList();
+    }
 }
