@@ -16,6 +16,8 @@ import java.util.UUID;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "role")
 public abstract class User {
+    public static final String DEFAULT_PROFILE_PICTURE_S3_KEY = "profile-images/default-user-profile.png";
+
     @Id
     private UUID userId;
     private String firstName;
@@ -23,16 +25,15 @@ public abstract class User {
     private String email;
     private String avatar;
 
+    //this is a temp fix for sending fill in notification (else it will on every request)
+    private boolean profileNotificationSent = false;
+
     // for when a user first logs in
     public User(UUID userId, String email) {
         this.userId = userId;
-        this.firstName = "";
-        this.lastName = "";
         this.email = email;
+        this.avatar = DEFAULT_PROFILE_PICTURE_S3_KEY;
     }
-
-//    private List<Goal> goals;
-//    private List<Reminder> reminders;
 
     public Role getRole(){
         return Role.valueOf(this.getClass().getAnnotation(DiscriminatorValue.class).value());
@@ -51,5 +52,11 @@ public abstract class User {
     }
     public void changeAvatar(String avatar){
         this.avatar = avatar;
+    }
+
+    public boolean markProfileNotificationSent() {
+        if (profileNotificationSent) return false;
+        this.profileNotificationSent = true;
+        return true;
     }
 }

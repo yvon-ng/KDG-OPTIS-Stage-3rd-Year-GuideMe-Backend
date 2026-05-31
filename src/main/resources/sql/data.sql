@@ -1,16 +1,16 @@
 --insert users
 
-INSERT INTO users(user_id, first_name, last_name, email, role, client_name, start_date_at_client, avatar)
+INSERT INTO users(user_id, first_name, last_name, email, role, client_name, start_date_at_client, avatar, profile_notification_sent)
 VALUES ('00000000-0000-0000-0000-000000000001', 'Keshia', 'Niemegeerts', 'keshia@test.com', 'MANAGER', null, null,
-        'profile-images/00000000-0000-0000-0000-000000000001/Keshia-1.png'),
+        'profile-images/00000000-0000-0000-0000-000000000001/Keshia-1.png', TRUE),
        ('00000000-0000-0000-0000-000000000002', 'Kristof', 'De Bock', 'kristof@test.com', 'CONSULTANT', 'Toyota', '2019-09-09T12:55:00',
-        'profile-images/00000000-0000-0000-0000-000000000002/Kristof-1.png'),
+        'profile-images/00000000-0000-0000-0000-000000000002/Kristof-1.png', TRUE),
        ('00000000-0000-0000-0000-000000000003', 'Hannelie', 'Somers', 'hannelie@test.com', 'CONSULTANT', 'TOMORROWLAND', '2025-05-31T08:00:00',
-        'profile-images/00000000-0000-0000-0000-000000000003/Hannelie-1.png'),
+        'profile-images/00000000-0000-0000-0000-000000000003/Hannelie-1.png', TRUE),
        ('4a94af3d-350a-4425-9a31-ba071e695a14', 'Shaden', 'Ng', 'Shaden.Ng@optis.be', 'CONSULTANT', 'FujiFilm',
-        date(now()), 'profile-images/4a94af3d-350a-4425-9a31-ba071e695a14/5491976.png'),
+        date(now()), 'profile-images/4a94af3d-350a-4425-9a31-ba071e695a14/5491976.png', TRUE),
        ('5965a3ec-531c-4a2e-a443-4d7049a15549', 'Abir', 'Belhadj', 'Abir.Belhadj@optis.be', 'MANAGER', null, null,
-        'profile-images/5965a3ec-531c-4a2e-a443-4d7049a15549/4352141.png');
+        'profile-images/5965a3ec-531c-4a2e-a443-4d7049a15549/4352141.png', TRUE);
 
 INSERT INTO meetings(meeting_id, name, reference_code, start_date_time, end_date_time, occurred)
 VALUES ('00000000-0000-0000-0000-000000000010', 'SYNC Q3', 'KJE-002', '2026-08-23T10:00:00', '2026-08-23T11:00:00',

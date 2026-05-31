@@ -1,16 +1,18 @@
-package optis.guideme.api.mapper;
+package optis.guideme.configs;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework. security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
-@Component
-public class CurrentUserProvider { //TODO static so no inject
+public final class CurrentUserProvider {
 
-    public Jwt getJwt() {
+    private CurrentUserProvider() {
+        // prevent instantiation
+    }
+
+    public static Jwt getJwt() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (!(authentication instanceof JwtAuthenticationToken jwtAuth)) {
@@ -21,7 +23,7 @@ public class CurrentUserProvider { //TODO static so no inject
     }
 
 
-    public UUID getUserId() { //getUser currentuserid
+    public static UUID getUserId() { // get current userid
         return UUID.fromString(getJwt().getClaim("oid"));
     }
 }

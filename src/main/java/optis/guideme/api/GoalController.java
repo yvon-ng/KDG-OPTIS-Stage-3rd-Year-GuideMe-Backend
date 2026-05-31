@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.UpdateGoalDto;
 import optis.guideme.api.dto.request.NewGoalDto;
 import optis.guideme.api.dto.response.GoalDto;
-import optis.guideme.api.mapper.CurrentUserProvider;
+import optis.guideme.configs.CurrentUserProvider;
 import optis.guideme.application.GoalService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,11 +17,10 @@ import java.util.UUID;
 @RequestMapping("api/goals")
 public class GoalController {
     private final GoalService goalService;
-    private final CurrentUserProvider currentUserProvider;
 
     @GetMapping("/me")
     public List<GoalDto> getMyUncompletedGoals() {
-        return goalService.getAllUncompletedGoalsByUser(currentUserProvider.getUserId());
+        return goalService.getAllUncompletedGoalsByUser(CurrentUserProvider.getUserId());
     }
 
     @GetMapping
@@ -36,22 +35,22 @@ public class GoalController {
 
     @PostMapping
     public GoalDto createNewGoal(@RequestBody @Valid NewGoalDto newGoalDto) {
-        return goalService.createNewGoal(currentUserProvider.getUserId(), newGoalDto);
+        return goalService.createNewGoal(CurrentUserProvider.getUserId(), newGoalDto);
     }
 
     @PutMapping("{goalId}/complete")
     public GoalDto completeGoal(@PathVariable UUID goalId) {
-        return goalService.completeGoal(currentUserProvider.getUserId(), goalId);
+        return goalService.completeGoal(CurrentUserProvider.getUserId(), goalId);
     }
 
     @PutMapping("{goalId}")
     public GoalDto updateGoal(@PathVariable UUID goalId, @RequestBody @Valid UpdateGoalDto updateGoalDto) {
-        return goalService.updateGoal(currentUserProvider.getUserId(), goalId, updateGoalDto);
+        return goalService.updateGoal(CurrentUserProvider.getUserId(), goalId, updateGoalDto);
     }
 
     @GetMapping("completed/me")
     public List<GoalDto> getMyCompletedGoals() {
-        return goalService.getAllCompletedGoalsByUser(currentUserProvider.getUserId());
+        return goalService.getAllCompletedGoalsByUser(CurrentUserProvider.getUserId());
     }
 
     @GetMapping("completed")

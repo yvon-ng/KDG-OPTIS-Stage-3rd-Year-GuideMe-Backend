@@ -7,7 +7,7 @@ import optis.guideme.api.dto.request.NewClientDto;
 import optis.guideme.api.dto.request.NewClientScoreDto;
 import optis.guideme.api.dto.response.ClientScoreDto;
 import optis.guideme.api.dto.response.UserDto;
-import optis.guideme.api.mapper.CurrentUserProvider;
+import optis.guideme.configs.CurrentUserProvider;
 import optis.guideme.application.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,21 +24,20 @@ import java.util.UUID;
 @RequestMapping("api/users")
 public class UserController {
     private final UserService userService;
-    private final CurrentUserProvider currentUserProvider;
 
     @GetMapping("me")
     public UserDto me() {
-        return userService.get(currentUserProvider.getUserId());
+        return userService.get(CurrentUserProvider.getUserId());
     }
 
-    @PutMapping("me")
-    public UserDto updateUserDetails(@RequestBody @Valid UpdateUserDto updateUserDto) {
-        return userService.updateUserDetails(currentUserProvider.getUserId(), updateUserDto);
+    @PutMapping("{userId}")
+    public UserDto updateUserDetails(@PathVariable UUID userId, @RequestBody @Valid UpdateUserDto updateUserDto) {
+        return userService.updateUserDetails(userId, updateUserDto);
     }
 
-    @PostMapping("me")
-    public void addNewClient(@RequestBody @Valid NewClientDto newClientDto) {
-        userService.addNewClient(currentUserProvider.getUserId(), newClientDto);
+    @PostMapping("{userId}")
+    public void addNewClient(@PathVariable UUID userId, @RequestBody @Valid NewClientDto newClientDto) {
+        userService.addNewClient(userId, newClientDto);
     }
 
     @GetMapping("all")
@@ -57,7 +56,7 @@ public class UserController {
 
     @GetMapping("others")
     public List<UserDto> getAllUsersExceptMe() {
-        return userService.getAllUsersExceptMe(currentUserProvider.getUserId());
+        return userService.getAllUsersExceptMe(CurrentUserProvider.getUserId());
     }
 
     @GetMapping("{id}")
@@ -72,7 +71,7 @@ public class UserController {
 
     @GetMapping("client-scores/recent")
     public List<ClientScoreDto> getLatestClientScores(@RequestParam(defaultValue = "2") int limit) {
-        return userService.getLatestClientScores(currentUserProvider.getUserId(), limit);
+        return userService.getLatestClientScores(CurrentUserProvider.getUserId(), limit);
     }
 
     @GetMapping("client-scores/recent/{userId}")
@@ -82,7 +81,7 @@ public class UserController {
 
     @PostMapping("client-scores/new")
     public void rateCurrentClient(@RequestBody NewClientScoreDto newClientScoreDto) {
-        userService.rateCurrentClient(currentUserProvider.getUserId(), newClientScoreDto);
+        userService.rateCurrentClient(CurrentUserProvider.getUserId(), newClientScoreDto);
     }
 
     @GetMapping("/client-scores/team")
