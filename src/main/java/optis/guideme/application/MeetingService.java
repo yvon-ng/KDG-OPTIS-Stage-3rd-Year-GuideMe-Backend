@@ -116,4 +116,10 @@ public class MeetingService {
                 c -> getAllMeetingsByUser(c.getUserId(), null, null ,null)
         ));
     }
+
+    public void markMeetingAsOccurred(UUID meetingId){
+        Meeting meeting = getMeeting(meetingId);
+        meeting.markAsOccurred();
+        meetingRepository.save(meeting);
+    }
 }

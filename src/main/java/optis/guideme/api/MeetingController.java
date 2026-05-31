@@ -53,4 +53,9 @@ public class MeetingController {
     public Map<UUID, List<MeetingDto>> getAllMeetingsPerConsultant() {
         return meetingService.getAllMeetingsPerConsultant();
     }
+
+    @PatchMapping("/{meetingId}/occurred")
+    public void markAsOccurred(@PathVariable UUID meetingId) {
+        meetingService.markMeetingAsOccurred(meetingId);
+    }
 }
