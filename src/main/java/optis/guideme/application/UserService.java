@@ -17,8 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -109,5 +111,14 @@ public class UserService {
         return userRepository.findAll().stream()
                 .filter(u -> u.getRole() == Role.CONSULTANT)
                 .toList();
+    }
+
+    public Map<UUID, ClientScoreDto> getLatestScorePerConsultant() {
+        return getAllConsultants().stream()
+                .filter(c -> !getLatestClientScores(c.getUserId(), 1).isEmpty())
+                .collect(Collectors.toMap(
+                        User::getUserId,
+                        c -> getLatestClientScores(c.getUserId(), 1).getFirst()
+                ));
     }
 }

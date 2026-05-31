@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -82,5 +83,10 @@ public class UserController {
     @PostMapping("client-scores/new")
     public void rateCurrentClient(@RequestBody NewClientScoreDto newClientScoreDto) {
         userService.rateCurrentClient(currentUserProvider.getUserId(), newClientScoreDto);
+    }
+
+    @GetMapping("/client-scores/team")
+    public Map<UUID, ClientScoreDto> getLatestScorePerConsultant() {
+        return userService.getLatestScorePerConsultant();
     }
 }
