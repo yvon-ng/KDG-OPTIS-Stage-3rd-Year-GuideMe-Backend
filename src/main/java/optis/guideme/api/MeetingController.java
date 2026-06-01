@@ -10,6 +10,7 @@ import optis.guideme.application.MeetingService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -46,5 +47,14 @@ public class MeetingController {
     @GetMapping("/{meetingId}")
     public MeetingDto getMeeting(@PathVariable UUID meetingId) {
         return meetingService.get(CurrentUserProvider.getUserId(), meetingId);
+    }
+    @GetMapping("/consultant-meetings")
+    public Map<UUID, List<MeetingDto>> getAllMeetingsPerConsultant() {
+        return meetingService.getAllMeetingsPerConsultant();
+    }
+
+    @PatchMapping("/{meetingId}/occurred")
+    public void markAsOccurred(@PathVariable UUID meetingId) {
+        meetingService.markMeetingAsOccurred(meetingId);
     }
 }

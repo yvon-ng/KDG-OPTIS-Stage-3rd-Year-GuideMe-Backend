@@ -45,7 +45,7 @@ public class EmailService {
         User user = userService.getUser(userId);
         String scheduledAt = meeting.getStartDateTime()
                 .atZone(ZoneId.systemDefault())
-                .minusHours(EMAIL_REMINDER_HOURS_BEFORE_MEETING)
+                .minusMinutes(TEST_EMAIL_REMINDER_MINUTES_BEFORE_MEETING)
                 .toInstant()
                 .toString();
         String html = buildMeetingTemplate(user, meeting.getDisplayName(), meeting.getStartDateTime(), getMeetingAttendees(meeting), "templates/emails/meeting-reminder.html");
