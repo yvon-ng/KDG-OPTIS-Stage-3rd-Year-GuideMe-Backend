@@ -41,7 +41,8 @@ public class NoteMapper {
                 note.getNoteId(),
                 note.getTitle(),
                 note.getVisibility(),
-                note.getCreationTime()
+                note.getCreationTime(),
+                note.getSharedUsers()
         );
     }
 }
