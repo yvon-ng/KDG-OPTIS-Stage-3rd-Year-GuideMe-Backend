@@ -84,8 +84,13 @@ public class UserController {
         userService.rateCurrentClient(CurrentUserProvider.getUserId(), newClientScoreDto);
     }
 
-    @GetMapping("/client-scores/team")
+    @GetMapping("client-scores/team")
     public Map<UUID, ClientScoreDto> getLatestScorePerConsultant() {
         return userService.getLatestScorePerConsultant();
+    }
+
+    @GetMapping("notes/shared-users")
+    public List<UserDto> getSharedUsers(){
+        return userService.getSharedUsers(CurrentUserProvider.getUserId());
     }
 }
