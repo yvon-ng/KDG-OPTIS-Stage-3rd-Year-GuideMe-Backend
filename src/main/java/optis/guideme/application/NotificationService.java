@@ -52,7 +52,7 @@ public class NotificationService {
     }
 
     public void sendRescheduledMeetingRequestNotification(UUID requestedBy, MeetingRequest meetingRequest) {
-        String title = templateService.render("meeting.request.declined.title");
+        String title = templateService.render("meeting.request.rescheduled.title");
         String description = templateService.render("meeting.request.rescheduled.description", meetingRequest.getDisplayName());
         Notification notification = new Notification(requestedBy, title, description, NotificationType.MEETING_RESCHEDULED);
         notificationRepository.save(notification); // save first so id gets generated
