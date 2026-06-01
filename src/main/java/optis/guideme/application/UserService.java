@@ -5,19 +5,23 @@ import optis.guideme.api.dto.UpdateUserDto;
 import optis.guideme.api.dto.request.NewClientDto;
 import optis.guideme.api.dto.request.NewClientScoreDto;
 import optis.guideme.api.dto.response.ClientScoreDto;
+import optis.guideme.api.dto.response.NoteDto;
+import optis.guideme.api.dto.response.NotePreviewDto;
 import optis.guideme.api.dto.response.UserDto;
 import optis.guideme.api.mapper.ClientScoreMapper;
 import optis.guideme.api.mapper.UserMapper;
 import optis.guideme.domain.exception.NotFoundException;
+import optis.guideme.domain.note.Note;
 import optis.guideme.domain.user.*;
+import optis.guideme.repository.NoteRepository;
 import optis.guideme.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -27,6 +31,8 @@ public class UserService {
     private final UserMapper userMapper;
     private final ClientScoreMapper clientScoreMapper;
     private final NotificationService notificationService;
+    private final NoteRepository noteRepository;
+    private final NoteService noteService;
 
     public UserDto get(UUID userId) {
         return userMapper.toResponseDto(getUser(userId));
@@ -53,7 +59,12 @@ public class UserService {
     }
 
     public List<ClientScoreDto> getLatestClientScores(UUID userId, int limit) {
-        return getUser(userId).asConsultant().getLatestClientScores(limit).stream().map(clientScoreMapper::toResponseDto).toList();
+        Consultant consultant = getUser(userId).asConsultant();
+        String currentClient = consultant.getClientName();
+        return consultant.getLatestClientScores(limit).stream()
+                .filter(s -> s.getClientName().equals(currentClient))
+                .map(clientScoreMapper::toResponseDto)
+                .toList();
     }
 
     public void rateCurrentClient(UUID userId, NewClientScoreDto newClientScoreDto) {
@@ -73,7 +84,7 @@ public class UserService {
     public void addNewClient(UUID userId, NewClientDto newClientDto) {
         Consultant consultant = getUser(userId).asConsultant();
         consultant.asConsultant().changeClient(newClientDto.clientName(), newClientDto.startDateAtClient().atZone(ZoneId.systemDefault()).toLocalDateTime());
-        ClientScore newClientScore = new ClientScore(newClientDto.clientName(), Score.TEN, LocalDateTime.now());
+        ClientScore newClientScore = new ClientScore(newClientDto.clientName(), Score.NULL, LocalDateTime.now());
         consultant.addClientScore(newClientScore);
     }
 
@@ -101,5 +112,33 @@ public class UserService {
             userRepository.save(user);
             notificationService.sendFillInProfileNotification(oid);
         }
+    }
+
+    public List<User> getAllConsultants() {
+        return userRepository.findAll().stream()
+                .filter(u -> u.getRole() == Role.CONSULTANT)
+                .toList();
+    }
+
+    public Map<UUID, ClientScoreDto> getLatestScorePerConsultant() {
+        return getAllConsultants().stream()
+                .filter(c -> !getLatestClientScores(c.getUserId(), 1).isEmpty())
+                .collect(Collectors.toMap(
+                        User::getUserId,
+                        c -> getLatestClientScores(c.getUserId(), 1).getFirst()
+                ));
+    }
+
+    public List<UserDto> getSharedUsers(UUID userId) {
+        List<UUID> noteIds = noteService.getAllNotes(userId).stream()
+                .map(NotePreviewDto::noteId)
+                .toList();
+
+        return noteRepository.findAllById(noteIds).stream()
+                .flatMap(note -> note.getSharedUsers().stream())
+                .distinct()
+                .flatMap(id -> userRepository.findById(id).stream())
+                .map(userMapper::toResponseDto)
+                .toList();
     }
 }

@@ -13,13 +13,16 @@ import optis.guideme.domain.exception.NotFoundException;
 import optis.guideme.domain.meeting.Meeting;
 import optis.guideme.domain.meeting.Reminder;
 import optis.guideme.domain.meetingRequest.DefaultReferenceCodeGenerator;
+import optis.guideme.domain.user.User;
 import optis.guideme.repository.MeetingRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -27,6 +30,7 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class MeetingService {
     private final MeetingRepository meetingRepository;
+    private final UserService userService;
     private final MeetingMapper meetingMapper;
     private final DefaultReferenceCodeGenerator defaultReferenceCodeGenerator;
     private final AttendeeMapper attendeeMapper;
@@ -104,5 +108,18 @@ public class MeetingService {
         Meeting meeting = getMeeting(meetingId);
         if (meeting.getAttendees().stream().noneMatch(a -> a.getUserId().equals(userId))) throw new ForbiddenException("You're not part of this meeting");
         return meetingMapper.toResponseDto(meeting);
+    }
+
+    public Map<UUID, List<MeetingDto>> getAllMeetingsPerConsultant() {
+        return userService.getAllConsultants().stream().collect(Collectors.toMap(
+                User::getUserId,
+                c -> getAllMeetingsByUser(c.getUserId(), null, null ,null)
+        ));
+    }
+
+    public void markMeetingAsOccurred(UUID meetingId){
+        Meeting meeting = getMeeting(meetingId);
+        meeting.markAsOccurred();
+        meetingRepository.save(meeting);
     }
 }

@@ -89,4 +89,8 @@ public class Meeting {
     public void assignAttendees(List<Attendee> attendees) {
         this.attendees = attendees;
     }
+
+    public void markAsOccurred() {
+        this.occurred = true;
+    }
 }
