@@ -28,6 +28,7 @@ public class Reminder {
     private LocalDateTime scheduledAt;
     private LocalDateTime sentAt;
 
+    //TODO readAt
     public Reminder(UUID receiver, Meeting meeting) {
         this.receiver = receiver;
         this.meetingId = meeting.getMeetingId();

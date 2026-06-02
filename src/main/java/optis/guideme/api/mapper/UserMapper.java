@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.request.NewUserDto;
 import optis.guideme.api.dto.response.UserDto;
 import optis.guideme.application.S3PresignService;
-import optis.guideme.domain.factories.UserFactory;
 import optis.guideme.domain.user.Consultant;
 import optis.guideme.domain.user.User;
 import org.springframework.stereotype.Component;
@@ -16,19 +15,7 @@ import java.time.LocalDateTime;
 public class UserMapper {
     public static final String S3_BASE_URL = "https://stg-guide-me.s3.eu-west-1.amazonaws.com/";
     private final S3PresignService s3PresignService;
-    private final UserFactory userFactory;
 
-    public User toDomain(NewUserDto newUserDto) {
-       // return userFactory.addNewUser(newUserDto);
-        return null; //TODO
-    }
-
-//    public User toDomain(UpdateUserDto updateUserDto) {
-//
-//        return new User(
-//
-//        );
-//    }
 
     public UserDto toResponseDto(User user) {
         String clientName  = null; // null when not a consultant

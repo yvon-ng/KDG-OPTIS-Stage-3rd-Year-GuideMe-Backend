@@ -71,6 +71,12 @@ public class UserService {
         Consultant consultant = getUser(userId).asConsultant();
         ClientScore newClientScore = new ClientScore(consultant.getClientName(), clientScoreMapper.newClientScoreToDomain(newClientScoreDto), LocalDateTime.now());
         consultant.addClientScore(newClientScore);
+
+        if (newClientScore.getScore().isLow()) {
+            List<User> managers = getAllManagers();
+            notificationService.sendLowClientScoreNotification(managers, consultant.getFirstName(), consultant.getLastName(), newClientScore.getScore().getValue());
+        }
+
     }
 
     public UserDto updateUserDetails(UUID userId, UpdateUserDto updateUserDto) {
@@ -140,5 +146,9 @@ public class UserService {
                 .flatMap(id -> userRepository.findById(id).stream())
                 .map(userMapper::toResponseDto)
                 .toList();
+    }
+
+    private List<User> getAllManagers() {
+        return userRepository.getAllManagers().toList();
     }
 }

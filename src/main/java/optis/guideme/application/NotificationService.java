@@ -7,6 +7,7 @@ import optis.guideme.domain.Notification;
 import optis.guideme.domain.NotificationType;
 import optis.guideme.domain.meeting.Meeting;
 import optis.guideme.domain.meetingRequest.MeetingRequest;
+import optis.guideme.domain.user.User;
 import optis.guideme.repository.NotificationRepository;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class NotificationService {
     private final NotificationMapper notificationMapper;
     private final NotificationTemplateService templateService;
 
+    //TODO check if correct notification constructor
     public void sendAcceptedMeetingRequestNotification(UUID userId, Meeting meeting) {
         String title = templateService.render("meeting.request.accepted.title");
         String description = templateService.render("meeting.request.accepted.description", meeting.getDisplayName());
@@ -38,6 +40,7 @@ public class NotificationService {
         );
     }
 
+    //TODO check if correct notification constructor
     public void sendDeclinedMeetingRequestNotification(UUID requestedBy, MeetingRequest meetingRequest) {
         String title = templateService.render("meeting.request.declined.title");
         String description = templateService.render("meeting.request.declined.description", meetingRequest.getDisplayName());
@@ -51,6 +54,7 @@ public class NotificationService {
         );
     }
 
+    //TODO check if correct notification constructor
     public void sendRescheduledMeetingRequestNotification(UUID requestedBy, MeetingRequest meetingRequest) {
         String title = templateService.render("meeting.request.rescheduled.title");
         String description = templateService.render("meeting.request.rescheduled.description", meetingRequest.getDisplayName());
@@ -80,4 +84,21 @@ public class NotificationService {
     public List<NotificationDto> getSentNotifications(UUID userId) {
         return notificationRepository.findAllByReceiverAndSentAtIsNotNull(userId).map(notificationMapper::toResponseDto).toList();
     }
+
+    public void sendLowClientScoreNotification(List<User> managers, String consultantFirstName, String consultantLastName, int score) {
+        String title = templateService.render("client.score.low.title", consultantFirstName);
+        String description = templateService.render("client.score.low.description", consultantFirstName, consultantLastName, score);
+
+        for (User manager : managers) {
+            Notification notification = new Notification(manager.getUserId(), title, description, NotificationType.LOW_CLIENT_SCORE, false, true,  LocalDateTime.now());
+            notificationRepository.save(notification);
+            NotificationDto notificationDto = notificationMapper.toResponseDto(notification);
+            messagingTemplate.convertAndSendToUser(
+                    manager.getUserId().toString(),
+                    "/queue/notifications",
+                    notificationDto
+            );
+        }
+    }
+
 }
