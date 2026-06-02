@@ -1,8 +1,6 @@
 package optis.guideme.repository;
 
-import io.netty.util.AsyncMapping;
 import lombok.NonNull;
-import optis.guideme.domain.user.Role;
 import optis.guideme.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

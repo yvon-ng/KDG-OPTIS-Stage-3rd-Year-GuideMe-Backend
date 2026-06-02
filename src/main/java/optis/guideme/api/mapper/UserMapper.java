@@ -1,7 +1,6 @@
 package optis.guideme.api.mapper;
 
 import lombok.RequiredArgsConstructor;
-import optis.guideme.api.dto.request.NewUserDto;
 import optis.guideme.api.dto.response.UserDto;
 import optis.guideme.application.S3PresignService;
 import optis.guideme.domain.user.Consultant;
