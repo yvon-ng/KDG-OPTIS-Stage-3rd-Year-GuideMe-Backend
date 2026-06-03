@@ -3,7 +3,6 @@ package optis.guideme.application;
 import lombok.RequiredArgsConstructor;
 import optis.guideme.api.dto.response.ReminderDto;
 import optis.guideme.api.mapper.ReminderMapper;
-import optis.guideme.domain.Notification;
 import optis.guideme.domain.exception.NotFoundException;
 import optis.guideme.domain.meeting.Reminder;
 import optis.guideme.repository.ReminderRepository;

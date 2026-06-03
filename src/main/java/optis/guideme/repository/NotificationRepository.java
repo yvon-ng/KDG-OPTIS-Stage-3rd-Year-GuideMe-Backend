@@ -1,6 +1,5 @@
 package optis.guideme.repository;
 
-import io.netty.util.AsyncMapping;
 import lombok.NonNull;
 import optis.guideme.domain.Notification;
 import org.springframework.data.jpa.repository.JpaRepository;
