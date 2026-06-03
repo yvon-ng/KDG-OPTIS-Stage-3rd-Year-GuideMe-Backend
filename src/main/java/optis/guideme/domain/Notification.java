@@ -23,7 +23,6 @@ public class Notification {
     @Enumerated(EnumType.STRING)
     private NotificationType notificationType;
     private boolean read;
-    private boolean sent;
     private LocalDateTime sentAt;
 
     public Notification(UUID receiver, String title, String description, NotificationType notificationType) {
@@ -32,7 +31,10 @@ public class Notification {
         this.description = description;
         this.notificationType = notificationType;
         this.read = false;
-        this.sent = true;
         this.sentAt = LocalDateTime.now();
+    }
+
+    public void markAsRead(){
+        this.read = true;
     }
 }

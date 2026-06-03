@@ -53,7 +53,7 @@ public class UserService {
     }
 
     public User getUser(UUID userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found with id: " + userId));
+        return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User Not Found with Id: " + userId));
     }
 
     public List<ClientScoreDto> getLatestClientScores(UUID userId, int limit) {
@@ -108,7 +108,7 @@ public class UserService {
 //                    : new Consultant(oid, email);
 //            userRepository.save(newUser);
 //        }
-        // !!!now this doesnt use constructo!!!
+        // !!!now this doesnt use constructor!!!
         userRepository.insertIfNotExists(oid, email, role.name(), User.DEFAULT_PROFILE_PICTURE_S3_KEY);
         User user = getUser(oid);
         //send notification

@@ -5,6 +5,7 @@ import optis.guideme.api.dto.response.NotificationDto;
 import optis.guideme.api.mapper.NotificationMapper;
 import optis.guideme.domain.Notification;
 import optis.guideme.domain.NotificationType;
+import optis.guideme.domain.exception.NotFoundException;
 import optis.guideme.domain.meeting.Meeting;
 import optis.guideme.domain.meetingRequest.MeetingRequest;
 import optis.guideme.domain.user.User;
@@ -25,7 +26,6 @@ public class NotificationService {
     private final NotificationMapper notificationMapper;
     private final NotificationTemplateService templateService;
 
-    //TODO check if correct notification constructor
     public void sendAcceptedMeetingRequestNotification(UUID userId, Meeting meeting) {
         String title = templateService.render("meeting.request.accepted.title");
         String description = templateService.render("meeting.request.accepted.description", meeting.getDisplayName());
@@ -39,7 +39,6 @@ public class NotificationService {
         );
     }
 
-    //TODO check if correct notification constructor
     public void sendDeclinedMeetingRequestNotification(UUID requestedBy, MeetingRequest meetingRequest) {
         String title = templateService.render("meeting.request.declined.title");
         String description = templateService.render("meeting.request.declined.description", meetingRequest.getDisplayName());
@@ -53,7 +52,6 @@ public class NotificationService {
         );
     }
 
-    //TODO check if correct notification constructor
     public void sendRescheduledMeetingRequestNotification(UUID requestedBy, MeetingRequest meetingRequest) {
         String title = templateService.render("meeting.request.rescheduled.title");
         String description = templateService.render("meeting.request.rescheduled.description", meetingRequest.getDisplayName());
@@ -81,7 +79,7 @@ public class NotificationService {
     }
 
     public List<NotificationDto> getSentNotifications(UUID userId) {
-        return notificationRepository.findAllByReceiverAndSentAtIsNotNull(userId).map(notificationMapper::toResponseDto).toList();
+        return notificationRepository.findAllByReceiverAndSentAtIsNotNullAndReadIsFalse(userId).map(notificationMapper::toResponseDto).toList();
     }
 
     public void sendLowClientScoreNotification(List<User> managers, String consultantFirstName, String consultantLastName, int score) {
@@ -99,4 +97,13 @@ public class NotificationService {
         }
     }
 
+    public void markNotificationRead(UUID notificationId) {
+        Notification notification = getNotification(notificationId);
+        notification.markAsRead();
+        notificationRepository.save(notification);
+    }
+
+    private Notification getNotification(UUID notificationId) {
+        return notificationRepository.findById(notificationId).orElseThrow(() -> new NotFoundException("Notification Not Found with Id: " + notificationId));
+    }
 }

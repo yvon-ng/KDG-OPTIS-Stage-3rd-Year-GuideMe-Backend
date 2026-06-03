@@ -1,5 +1,6 @@
 package optis.guideme.repository;
 
+import io.netty.util.AsyncMapping;
 import lombok.NonNull;
 import optis.guideme.domain.Notification;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,5 +11,5 @@ import java.util.stream.Stream;
 
 @Repository
 public interface NotificationRepository extends JpaRepository<@NonNull Notification, @NonNull UUID> {
-    Stream<Notification> findAllByReceiverAndSentAtIsNotNull(UUID userId);
+    Stream<Notification> findAllByReceiverAndSentAtIsNotNullAndReadIsFalse(UUID userId);
 }
