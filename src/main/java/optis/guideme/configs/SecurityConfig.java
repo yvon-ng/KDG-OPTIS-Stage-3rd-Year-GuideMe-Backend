@@ -30,6 +30,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/public/**").permitAll()
                         .requestMatchers("/socket/**").permitAll()
+                        .requestMatchers("/actuator/health").permitAll()
                         .requestMatchers("/api/managers/**").hasAnyRole("optis_guideme_manager")
                         .requestMatchers("/api/**").hasAnyRole("optis_guideme_user", "optis_guideme_manager")
                         .anyRequest().denyAll()                )
