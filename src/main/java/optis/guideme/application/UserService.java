@@ -5,13 +5,11 @@ import optis.guideme.api.dto.UpdateUserDto;
 import optis.guideme.api.dto.request.NewClientDto;
 import optis.guideme.api.dto.request.NewClientScoreDto;
 import optis.guideme.api.dto.response.ClientScoreDto;
-import optis.guideme.api.dto.response.NoteDto;
 import optis.guideme.api.dto.response.NotePreviewDto;
 import optis.guideme.api.dto.response.UserDto;
 import optis.guideme.api.mapper.ClientScoreMapper;
 import optis.guideme.api.mapper.UserMapper;
 import optis.guideme.domain.exception.NotFoundException;
-import optis.guideme.domain.note.Note;
 import optis.guideme.domain.user.*;
 import optis.guideme.repository.NoteRepository;
 import optis.guideme.repository.UserRepository;
@@ -55,7 +53,7 @@ public class UserService {
     }
 
     public User getUser(UUID userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found with id: " + userId));
+        return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User Not Found with Id: " + userId));
     }
 
     public List<ClientScoreDto> getLatestClientScores(UUID userId, int limit) {
@@ -71,6 +69,12 @@ public class UserService {
         Consultant consultant = getUser(userId).asConsultant();
         ClientScore newClientScore = new ClientScore(consultant.getClientName(), clientScoreMapper.newClientScoreToDomain(newClientScoreDto), LocalDateTime.now());
         consultant.addClientScore(newClientScore);
+
+        if (newClientScore.getScore().isLow()) {
+            List<User> managers = getAllManagers();
+            notificationService.sendLowClientScoreNotification(managers, consultant.getFirstName(), consultant.getLastName(), newClientScore.getScore().getValue());
+        }
+
     }
 
     public UserDto updateUserDetails(UUID userId, UpdateUserDto updateUserDto) {
@@ -104,7 +108,7 @@ public class UserService {
 //                    : new Consultant(oid, email);
 //            userRepository.save(newUser);
 //        }
-        // !!!now this doesnt use constructo!!!
+        // !!!now this doesnt use constructor!!!
         userRepository.insertIfNotExists(oid, email, role.name(), User.DEFAULT_PROFILE_PICTURE_S3_KEY);
         User user = getUser(oid);
         //send notification
@@ -140,5 +144,9 @@ public class UserService {
                 .flatMap(id -> userRepository.findById(id).stream())
                 .map(userMapper::toResponseDto)
                 .toList();
+    }
+
+    private List<User> getAllManagers() {
+        return userRepository.getAllManagers().toList();
     }
 }

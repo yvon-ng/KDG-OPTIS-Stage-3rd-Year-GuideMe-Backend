@@ -1,9 +1,6 @@
 package optis.guideme.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,28 +20,21 @@ public class Notification {
     private UUID receiver;
     private String title;
     private String description;
+    @Enumerated(EnumType.STRING)
     private NotificationType notificationType;
     private boolean read;
-    private boolean sent;
     private LocalDateTime sentAt;
 
     public Notification(UUID receiver, String title, String description, NotificationType notificationType) {
         this.receiver = receiver;
         this.title = title;
         this.description = description;
-        this.read = false;
-        this.sent = false;
         this.notificationType = notificationType;
+        this.read = false;
+        this.sentAt = LocalDateTime.now();
     }
 
-    // so far only used for FILL_IN_PROFILE notification
-    public Notification(UUID receiver, String title, String description, NotificationType notificationType, boolean read, boolean sent, LocalDateTime sentAt) {
-        this.receiver = receiver;
-        this.title = title;
-        this.description = description;
-        this.notificationType = notificationType;
-        this.read = read;
-        this.sent = sent;
-        this.sentAt = sentAt;
+    public void markAsRead(){
+        this.read = true;
     }
 }

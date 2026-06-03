@@ -7,5 +7,5 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-public record NoteDto(UUID noteId, String title, JsonNode description, Visibility visibility, UUID owner, LocalDateTime creationTimen, UUID meetingId, List<UUID> sharedUsers) {
+public record NoteDto(UUID noteId, String title, JsonNode description, Visibility visibility, UUID owner, LocalDateTime creationTime    , UUID meetingId, List<UUID> sharedUsers) {
 }

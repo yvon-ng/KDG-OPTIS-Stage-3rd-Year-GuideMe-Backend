@@ -105,6 +105,8 @@ public class MeetingRequestService {
         sendWebsocketMessage(rescheduled.getRequestedBy(), "/queue/outgoing-meeting-requests", created);
 
         notificationService.sendRescheduledMeetingRequestNotification(previous.getRequestedBy(), previous);
+        emailService.sendRescheduledEmail(previous.getRequestedBy(), rescheduled, previous);
+
         return meetingRequestDto;
     }
 
@@ -149,7 +151,7 @@ public class MeetingRequestService {
         meetingRequest.decline();
         List<Attendee> attendees = mapParticipantsToAttendees(meetingRequest);
 
-        // send decliend notification and declined emails immediately
+        // send declined notification and declined emails immediately
         notificationService.sendDeclinedMeetingRequestNotification(meetingRequest.getRequestedBy(), meetingRequest);
         attendees.forEach(a -> emailService.sendDeclinedEmail(a.getUserId(), meetingRequest));
 

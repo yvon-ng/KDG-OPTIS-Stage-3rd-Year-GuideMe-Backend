@@ -27,15 +27,22 @@ public class Reminder {
     private UUID meetingId;
     private LocalDateTime scheduledAt;
     private LocalDateTime sentAt;
+    private boolean read;
 
+    //TODO readAt
     public Reminder(UUID receiver, Meeting meeting) {
         this.receiver = receiver;
         this.meetingId = meeting.getMeetingId();
-        this.scheduledAt = meeting.getStartDateTime().minusHours(Reminder.EMAIL_REMINDER_HOURS_BEFORE_MEETING); //TODO if want to test reminders change to .minusMinutes(Reminder.TEST_EMAIL_REMINDER_MINUTES_BEFORE_MEETING)
+        this.scheduledAt = meeting.getStartDateTime().minusMinutes(Reminder.TEST_EMAIL_REMINDER_MINUTES_BEFORE_MEETING); //TODO if want to test reminders change to .minusMinutes(Reminder.TEST_EMAIL_REMINDER_MINUTES_BEFORE_MEETING)
+        this.read = false;
     }
 
     public void markAsSent() {
         this.sentAt = LocalDateTime.now();
+    }
+
+    public void markAsRead() {
+        this.read = true;
     }
 
 }

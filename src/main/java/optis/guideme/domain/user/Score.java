@@ -16,6 +16,8 @@ public enum Score {
     NINE(9),
     TEN(10);
 
+    public static final int LOW_SCORE_NOTIFICATION_THRESHOLD = 4;
+
     private final int value;
 
     Score(int value) {
@@ -30,5 +32,9 @@ public enum Score {
         }
 
         throw new IllegalArgumentException("Invalid score value: " + value);
+    }
+
+    public boolean isLow() {
+        return this.value <= LOW_SCORE_NOTIFICATION_THRESHOLD;
     }
 }

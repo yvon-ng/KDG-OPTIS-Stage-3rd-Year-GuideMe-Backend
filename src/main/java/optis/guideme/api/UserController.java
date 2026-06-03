@@ -45,15 +45,6 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-
-//    @GetMapping("/invite")
-//    public ResponseEntity<@NonNull InvitationDto> inviteUser(@AuthenticationPrincipal Jwt jwt, NewInvitationDto newInvitationDto){
-//        UserId managerId = new UserId(UUID.fromString(jwt.getSubject()));
-//        User user = userService.addUser(managerId, newInvitationDto.email(), newInvitationDto.role())
-//                .orElseThrow(() -> new NotFoundException("User not found with id: " + managerId)); //todo
-//        return ResponseEntity.ok();
-//    }
-
     @GetMapping("others")
     public List<UserDto> getAllUsersExceptMe() {
         return userService.getAllUsersExceptMe(CurrentUserProvider.getUserId());

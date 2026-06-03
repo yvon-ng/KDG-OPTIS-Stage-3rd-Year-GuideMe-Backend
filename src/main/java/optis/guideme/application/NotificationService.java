@@ -5,14 +5,15 @@ import optis.guideme.api.dto.response.NotificationDto;
 import optis.guideme.api.mapper.NotificationMapper;
 import optis.guideme.domain.Notification;
 import optis.guideme.domain.NotificationType;
+import optis.guideme.domain.exception.NotFoundException;
 import optis.guideme.domain.meeting.Meeting;
 import optis.guideme.domain.meetingRequest.MeetingRequest;
+import optis.guideme.domain.user.User;
 import optis.guideme.repository.NotificationRepository;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -67,7 +68,7 @@ public class NotificationService {
     public void sendFillInProfileNotification(UUID requestedBy) {
         String title = templateService.render("profile.fill.in.title");
         String description = templateService.render("profile.fill.in.description");
-        Notification notification = new Notification(requestedBy, title, description,NotificationType.FILL_IN_PROFILE, false, true, LocalDateTime.now());
+        Notification notification = new Notification(requestedBy, title, description,NotificationType.FILL_IN_PROFILE);
         notificationRepository.save(notification); // save first so id gets generated
         NotificationDto notificationDto = notificationMapper.toResponseDto(notification);
         messagingTemplate.convertAndSendToUser(
@@ -78,6 +79,31 @@ public class NotificationService {
     }
 
     public List<NotificationDto> getSentNotifications(UUID userId) {
-        return notificationRepository.findAllByReceiverAndSentAtIsNotNull(userId).map(notificationMapper::toResponseDto).toList();
+        return notificationRepository.findAllByReceiverAndSentAtIsNotNullAndReadIsFalse(userId).map(notificationMapper::toResponseDto).toList();
+    }
+
+    public void sendLowClientScoreNotification(List<User> managers, String consultantFirstName, String consultantLastName, int score) {
+        String title = templateService.render("client.score.low.title", consultantFirstName);
+        String description = templateService.render("client.score.low.description", consultantFirstName, consultantLastName, String.valueOf(score));
+        for (User manager : managers) {
+            Notification notification = new Notification(manager.getUserId(), title, description, NotificationType.LOW_CLIENT_SCORE);
+            notificationRepository.save(notification);
+            NotificationDto notificationDto = notificationMapper.toResponseDto(notification);
+            messagingTemplate.convertAndSendToUser(
+                    manager.getUserId().toString(),
+                    "/queue/notifications",
+                    notificationDto
+            );
+        }
+    }
+
+    public void markNotificationRead(UUID notificationId) {
+        Notification notification = getNotification(notificationId);
+        notification.markAsRead();
+        notificationRepository.save(notification);
+    }
+
+    private Notification getNotification(UUID notificationId) {
+        return notificationRepository.findById(notificationId).orElseThrow(() -> new NotFoundException("Notification Not Found with Id: " + notificationId));
     }
 }
