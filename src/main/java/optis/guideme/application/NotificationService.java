@@ -71,7 +71,7 @@ public class NotificationService {
     public void sendFillInProfileNotification(UUID requestedBy) {
         String title = templateService.render("profile.fill.in.title");
         String description = templateService.render("profile.fill.in.description");
-        Notification notification = new Notification(requestedBy, title, description,NotificationType.FILL_IN_PROFILE, false, true, LocalDateTime.now());
+        Notification notification = new Notification(requestedBy, title, description,NotificationType.FILL_IN_PROFILE);
         notificationRepository.save(notification); // save first so id gets generated
         NotificationDto notificationDto = notificationMapper.toResponseDto(notification);
         messagingTemplate.convertAndSendToUser(
@@ -87,10 +87,9 @@ public class NotificationService {
 
     public void sendLowClientScoreNotification(List<User> managers, String consultantFirstName, String consultantLastName, int score) {
         String title = templateService.render("client.score.low.title", consultantFirstName);
-        String description = templateService.render("client.score.low.description", consultantFirstName, consultantLastName, score);
-
+        String description = templateService.render("client.score.low.description", consultantFirstName, consultantLastName, String.valueOf(score));
         for (User manager : managers) {
-            Notification notification = new Notification(manager.getUserId(), title, description, NotificationType.LOW_CLIENT_SCORE, false, true,  LocalDateTime.now());
+            Notification notification = new Notification(manager.getUserId(), title, description, NotificationType.LOW_CLIENT_SCORE);
             notificationRepository.save(notification);
             NotificationDto notificationDto = notificationMapper.toResponseDto(notification);
             messagingTemplate.convertAndSendToUser(

@@ -26,23 +26,13 @@ public class Notification {
     private boolean sent;
     private LocalDateTime sentAt;
 
-    //TODO check why 2
     public Notification(UUID receiver, String title, String description, NotificationType notificationType) {
         this.receiver = receiver;
         this.title = title;
         this.description = description;
+        this.notificationType = notificationType;
         this.read = false;
-        this.sent = false;
-        this.notificationType = notificationType;
-    }
-
-    public Notification(UUID receiver, String title, String description, NotificationType notificationType, boolean read, boolean sent, LocalDateTime sentAt) {
-        this.receiver = receiver;
-        this.title = title;
-        this.description = description;
-        this.notificationType = notificationType;
-        this.read = read;
-        this.sent = sent;
-        this.sentAt = sentAt;
+        this.sent = true;
+        this.sentAt = LocalDateTime.now();
     }
 }
