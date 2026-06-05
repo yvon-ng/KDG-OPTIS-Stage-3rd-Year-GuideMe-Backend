@@ -16,6 +16,8 @@ import java.util.List;
 
 @Configuration
 public class SecurityConfig {
+    public static final String AZURE_MANAGER_ROLE = "optis_guideme_manager";
+    public static final String AZURE_ACCESS_ROLE = "optis_guideme_user";
     private final String frontendUrl;
 
     public SecurityConfig(@Value("${frontend.url}") String frontendUrl) {
@@ -31,8 +33,8 @@ public class SecurityConfig {
                         .requestMatchers("/public/**").permitAll()
                         .requestMatchers("/socket/**").permitAll()
                         .requestMatchers("/actuator/health").permitAll()
-                        .requestMatchers("/api/managers/**").hasAnyRole("optis_guideme_manager")
-                        .requestMatchers("/api/**").hasAnyRole("optis_guideme_user", "optis_guideme_manager")
+                        .requestMatchers("/api/managers/**").hasAnyRole(AZURE_MANAGER_ROLE)
+                        .requestMatchers("/api/**").hasAnyRole(AZURE_ACCESS_ROLE, AZURE_MANAGER_ROLE)
                         .anyRequest().denyAll()                )
                 .oauth2ResourceServer(oauth -> oauth
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(converter))
