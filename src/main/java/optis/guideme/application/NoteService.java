@@ -13,8 +13,10 @@ import optis.guideme.repository.NoteRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -30,7 +32,9 @@ public class NoteService {
     }
 
     public List<NotePreviewDto> getAllNotes(UUID userId) {
-        return noteRepository.findAllByOwnerOrderByCreationTimeDesc(userId).map(noteMapper::toNotesResponseDto).toList();
+        return noteRepository.findAllAccessibleNotes(userId)
+                .map(noteMapper::toNotesResponseDto)
+                .toList();
     }
 
     public List<NotePreviewDto> getAllPrivateNotes(UUID userId) {
