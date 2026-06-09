@@ -13,8 +13,6 @@ import java.util.stream.Stream;
 
 @Repository
 public interface NoteRepository extends JpaRepository<@NonNull Note, @NonNull UUID> {
-    Stream<Note> findAllByOwnerOrderByCreationTimeDesc(UUID userId);
-
     Stream<Note> findAllByOwnerAndVisibilityOrderByCreationTimeDesc(UUID userId, Visibility visibility);
 
     Stream<Note> findAllByOwnerAndMeetingIdIsNotNullOrderByCreationTimeDesc(UUID userId);
