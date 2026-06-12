@@ -674,3 +674,232 @@ VALUES
 
     ('MANAGER',    'F1000000-0000-0000-0000-000000000018', '5965a3ec-531c-4a2e-a443-4d7049a15549'),
     ('CONSULTANT', 'F1000000-0000-0000-0000-000000000018', '00000000-0000-0000-0000-000000000003');
+
+-- ============================================================
+-- ADDITIONAL NOTES: SHADEN & ABIR
+-- ============================================================
+
+-- -------------------------------------------------------
+-- SHADEN (4a94af3d-350a-4425-9a31-ba071e695a14)
+-- -------------------------------------------------------
+
+INSERT INTO notes(note_id, title, owner, visibility, meeting_id, description, creation_time)
+VALUES
+
+    -- Private notes (Shaden only)
+    ('E1000000-0000-0000-0000-000000000001',
+     'Angular signals study log',
+     '4a94af3d-350a-4425-9a31-ba071e695a14',
+     'PRIVATE', NULL,
+     '{"ops":[{"insert":"Signals replace zone-based CD. computed() is lazy, effect() runs on change. Avoid httpResource inside computed — use it at component level."}]}',
+     '2026-03-15T09:30:00'),
+
+    ('E1000000-0000-0000-0000-000000000002',
+     'FujiFilm project blockers',
+     '4a94af3d-350a-4425-9a31-ba071e695a14',
+     'PRIVATE', NULL,
+     '{"ops":[{"insert":"Waiting on API credentials from FujiFilm infra team. Fallback: use mock data for sprint demo. Follow up with client by Friday."}]}',
+     '2026-04-10T14:00:00'),
+
+    ('E1000000-0000-0000-0000-000000000003',
+     'Career goals mid-year',
+     '4a94af3d-350a-4425-9a31-ba071e695a14',
+     'PRIVATE', NULL,
+     '{"ops":[{"insert":"Target: lead a feature end-to-end before year end. Build confidence in presenting technical decisions to stakeholders. Ask Abir for stretch assignment."}]}',
+     '2026-05-20T08:00:00'),
+
+    ('E1000000-0000-0000-0000-000000000004',
+     'Lessons from onboarding at FujiFilm',
+     '4a94af3d-350a-4425-9a31-ba071e695a14',
+     'PRIVATE', NULL,
+     '{"ops":[{"insert":"Week 1: culture is very documentation-driven. PRs need detailed descriptions. Testing is taken seriously — 80% coverage minimum enforced in pipeline."}]}',
+     '2026-01-10T10:00:00'),
+
+    -- Shared notes (visible to other users)
+    ('E1000000-0000-0000-0000-000000000005',
+     'Best practices: Angular standalone components',
+     '4a94af3d-350a-4425-9a31-ba071e695a14',
+     'SHARED', NULL,
+     '{"ops":[{"insert":"Use standalone: true on all new components. Avoid NgModules unless integrating legacy libs. Import only what you need per component. Prefer inject() over constructor injection."}]}',
+     '2026-04-03T11:00:00'),
+
+    ('E1000000-0000-0000-0000-000000000006',
+     'Raise request — supporting evidence',
+     '4a94af3d-350a-4425-9a31-ba071e695a14',
+     'SHARED', NULL,
+     '{"ops":[{"insert":"Delivered 3 major features ahead of schedule. Client score improved from SEVEN to TEN. Proactively mentored Bram on event-driven patterns. Led tech demo for FujiFilm stakeholders."}]}',
+     '2026-05-25T09:00:00'),
+
+    ('E1000000-0000-0000-0000-000000000007',
+     'GuideMe deployment checklist',
+     '4a94af3d-350a-4425-9a31-ba071e695a14',
+     'SHARED', NULL,
+     '{"ops":[{"insert":"1. Run gradle build. 2. Push Docker image to ECR. 3. Update ECS task definition. 4. Trigger service update. 5. Verify /actuator/health returns 200. 6. Check CloudWatch logs for startup errors."}]}',
+     '2026-05-14T16:00:00'),
+
+    -- Meeting-scoped notes (tied to meetings Shaden attends)
+    ('E1000000-0000-0000-0000-000000000008',
+     'Yearly Budget Meeting recap',
+     '4a94af3d-350a-4425-9a31-ba071e695a14',
+     'MEETING_PARTICIPANTS', '70000000-0000-0000-0000-000000000004',
+     '{"ops":[{"insert":"Budget approved for tooling upgrades. Training budget per consultant: €1500. Cloud infra spend reviewed — savings target of 15% set for H2."}]}',
+     '2026-01-11T17:00:00'),
+
+    ('E1000000-0000-0000-0000-000000000009',
+     'Daily Standup action items',
+     '4a94af3d-350a-4425-9a31-ba071e695a14',
+     'MEETING_PARTICIPANTS', '00000000-0000-0000-0000-000000000040',
+     '{"ops":[{"insert":"Blocked on auth integration. Need Hannelie to review PR #47 before EOD. Shaden to update ticket status in Jira after standup."}]}',
+     '2026-09-09T10:15:00'),
+
+    ('E1000000-0000-0000-0000-000000000010',
+     'Infrastructure Planning counter-proposal notes',
+     '4a94af3d-350a-4425-9a31-ba071e695a14',
+     'MEETING_PARTICIPANTS', NULL,
+     '{"ops":[{"insert":"Counter-proposed moving meeting from Feb 2 to Feb 6 due to sprint deadline clash. Abir to confirm availability. Agenda: cloud migration scope and team allocation."}]}',
+     '2026-01-28T12:00:00');
+
+
+-- -------------------------------------------------------
+-- ABIR (5965a3ec-531c-4a2e-a443-4d7049a15549)
+-- -------------------------------------------------------
+
+INSERT INTO notes(note_id, title, owner, visibility, meeting_id, description, creation_time)
+VALUES
+
+    -- Private notes (Abir only)
+    ('E2000000-0000-0000-0000-000000000001',
+     'Consultant portfolio health check',
+     '5965a3ec-531c-4a2e-a443-4d7049a15549',
+     'PRIVATE', NULL,
+     '{"ops":[{"insert":"Robbe: score improving, needs confidence boost. Tom: excellent delivery, ready for lead role. Charlotte: accessibility work impressive. Dries: test coverage still below target — follow up."}]}',
+     '2026-05-15T08:30:00'),
+
+    ('E2000000-0000-0000-0000-000000000002',
+     'Hiring pipeline notes',
+     '5965a3ec-531c-4a2e-a443-4d7049a15549',
+     'PRIVATE', NULL,
+     '{"ops":[{"insert":"2 candidates shortlisted for backend role. Interview panel: Mathias + Abir. Offer to go out by end of month if references clear. Target start: September."}]}',
+     '2026-05-22T10:00:00'),
+
+    ('E2000000-0000-0000-0000-000000000003',
+     'Q3 budget planning thoughts',
+     '5965a3ec-531c-4a2e-a443-4d7049a15549',
+     'PRIVATE', NULL,
+     '{"ops":[{"insert":"Training spend front-loaded in Q1/Q2. Remaining budget: €4200. Allocate to conference attendance (€2000) and certifications (€2200). Discuss with Keshia before submission."}]}',
+     '2026-06-01T09:00:00'),
+
+    ('E2000000-0000-0000-0000-000000000004',
+     'Team retrospective observations',
+     '5965a3ec-531c-4a2e-a443-4d7049a15549',
+     'PRIVATE', NULL,
+     '{"ops":[{"insert":"Recurring theme: consultants want clearer career path visibility. Action: introduce bi-annual growth conversations. Also: async standup experiment was well received."}]}',
+     '2026-04-21T16:00:00'),
+
+    -- Shared notes (visible to other users)
+    ('E2000000-0000-0000-0000-000000000005',
+     'GuideMe project status — manager view',
+     '5965a3ec-531c-4a2e-a443-4d7049a15549',
+     'SHARED', NULL,
+     '{"ops":[{"insert":"Backend: ECS deployment stable, WebSocket notifications live. Frontend: role-based access implemented, notes feature in final QA. Target go-live: end of Q2."}]}',
+     '2026-05-28T11:00:00'),
+
+    ('E2000000-0000-0000-0000-000000000006',
+     'Onboarding guide for new consultants',
+     '5965a3ec-531c-4a2e-a443-4d7049a15549',
+     'SHARED', NULL,
+     '{"ops":[{"insert":"Day 1: set up Azure AD, request VPN, join Slack. Week 1: shadow a senior consultant. Week 2: first PR reviewed by manager. Month 1: solo delivery of small feature."}]}',
+     '2026-03-05T09:00:00'),
+
+    ('E2000000-0000-0000-0000-000000000007',
+     'Client escalation protocol',
+     '5965a3ec-531c-4a2e-a443-4d7049a15549',
+     'SHARED', NULL,
+     '{"ops":[{"insert":"Step 1: consultant flags issue to manager within 24h. Step 2: manager contacts client within 48h. Step 3: joint call within 72h if unresolved. Document all steps in GuideMe notes."}]}',
+     '2026-02-10T14:00:00'),
+
+    ('E2000000-0000-0000-0000-000000000008',
+     'Performance review framework H1 2026',
+     '5965a3ec-531c-4a2e-a443-4d7049a15549',
+     'SHARED', NULL,
+     '{"ops":[{"insert":"Criteria: delivery quality, client score trend, communication, initiative. Ratings: Exceeds / Meets / Developing. Reviews to be completed by July 1. Self-assessment form shared via email."}]}',
+     '2026-05-30T10:00:00'),
+
+    -- Meeting-scoped notes (tied to meetings Abir attends)
+    ('E2000000-0000-0000-0000-000000000009',
+     'Architecture Review — decisions log',
+     '5965a3ec-531c-4a2e-a443-4d7049a15549',
+     'MEETING_PARTICIPANTS', '70000000-0000-0000-0000-000000000001',
+     '{"ops":[{"insert":"Agreed: move auth layer to dedicated microservice. Timeline: 8 weeks. Owner: Dimitri. Risk: token propagation across services needs careful design."}]}',
+     '2026-02-14T10:30:00'),
+
+    ('E2000000-0000-0000-0000-000000000010',
+     'Consultant Feedback Session — themes',
+     '5965a3ec-531c-4a2e-a443-4d7049a15549',
+     'MEETING_PARTICIPANTS', '70000000-0000-0000-0000-000000000005',
+     '{"ops":[{"insert":"Top themes raised: more visibility into project pipeline, clearer promotion criteria, request for monthly all-hands. Action: draft proposal for all-hands format by Dec."}]}',
+     '2026-11-03T15:30:00'),
+
+    ('E2000000-0000-0000-0000-000000000011',
+     'Sprint Planning — capacity notes',
+     '5965a3ec-531c-4a2e-a443-4d7049a15549',
+     'MEETING_PARTICIPANTS', 'A2000000-0000-0000-0000-000000000001',
+     '{"ops":[{"insert":"Dries available 4 days this sprint (1 day off). Velocity target: 32 SP. Carry-over: 5 SP from last sprint. Priority: test coverage goal before new features."}]}',
+     '2026-05-05T10:15:00'),
+
+    ('E2000000-0000-0000-0000-000000000012',
+     'Q2 Planning — resource allocation',
+     '5965a3ec-531c-4a2e-a443-4d7049a15549',
+     'MEETING_PARTICIPANTS', '70000000-0000-0000-0000-000000000002',
+     '{"ops":[{"insert":"Shaden allocated to FujiFilm full-time. Hannelie to support Tomorrowland ramp-up. Bram potentially moving to new client in Q3 — prepare transition plan."}]}',
+     '2026-05-10T15:30:00');
+
+-- ============================================================
+-- SHARED USER NOTES
+-- Fine-grained per-user sharing on top of visibility
+-- ============================================================
+
+INSERT INTO shared_user_notes(note_id, user_id)
+VALUES
+    -- Shaden's raise evidence note → shared with Abir (her manager) and Keshia (other manager)
+    ('E1000000-0000-0000-0000-000000000006', '5965a3ec-531c-4a2e-a443-4d7049a15549'),
+    ('E1000000-0000-0000-0000-000000000006', '00000000-0000-0000-0000-000000000001'),
+
+    -- Shaden's career goals (private) → shared only with Abir for coaching context
+    ('E1000000-0000-0000-0000-000000000003', '5965a3ec-531c-4a2e-a443-4d7049a15549'),
+
+    -- Shaden's GuideMe deployment checklist → shared with Kristof and Hannelie (teammates)
+    ('E1000000-0000-0000-0000-000000000007', '00000000-0000-0000-0000-000000000002'),
+    ('E1000000-0000-0000-0000-000000000007', '00000000-0000-0000-0000-000000000003'),
+
+    -- Abir's performance review framework → shared with Keshia and Mathias (co-managers)
+    ('E2000000-0000-0000-0000-000000000008', '00000000-0000-0000-0000-000000000001'),
+    ('E2000000-0000-0000-0000-000000000008', '00000000-0000-0000-0000-000000000009'),
+
+    -- Abir's consultant portfolio health check (private) → shared with Keshia only
+    ('E2000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001'),
+
+    -- Abir's client escalation protocol → shared with all consultants for awareness
+    ('E2000000-0000-0000-0000-000000000007', '00000000-0000-0000-0000-000000000002'),
+    ('E2000000-0000-0000-0000-000000000007', '00000000-0000-0000-0000-000000000003'),
+    ('E2000000-0000-0000-0000-000000000007', '4a94af3d-350a-4425-9a31-ba071e695a14'),
+    ('E2000000-0000-0000-0000-000000000007', '00000000-0000-0000-0000-000000000004'),
+    ('E2000000-0000-0000-0000-000000000007', '00000000-0000-0000-0000-000000000005'),
+    ('E2000000-0000-0000-0000-000000000007', '00000000-0000-0000-0000-000000000006'),
+    ('E2000000-0000-0000-0000-000000000007', '00000000-0000-0000-0000-000000000007'),
+    ('E2000000-0000-0000-0000-000000000007', '00000000-0000-0000-0000-000000000008'),
+    ('E2000000-0000-0000-0000-000000000007', '00000000-0000-0000-0000-000000000010'),
+    ('E2000000-0000-0000-0000-000000000007', '00000000-0000-0000-0000-000000000012'),
+    ('E2000000-0000-0000-0000-000000000007', '00000000-0000-0000-0000-000000000013'),
+
+    -- Abir's onboarding guide → shared with Dries, Bram, Charlotte (recently onboarded)
+    ('E2000000-0000-0000-0000-000000000006', '00000000-0000-0000-0000-000000000004'),
+    ('E2000000-0000-0000-0000-000000000006', '00000000-0000-0000-0000-000000000005'),
+    ('E2000000-0000-0000-0000-000000000006', '00000000-0000-0000-0000-000000000006'),
+
+    -- Shaden's Angular best practices → shared with Hannelie and Robbe (frontend peers)
+    ('E1000000-0000-0000-0000-000000000005', '00000000-0000-0000-0000-000000000003'),
+    ('E1000000-0000-0000-0000-000000000005', '00000000-0000-0000-0000-000000000010'),
+
+    -- Original "Request for raise" note → shared with Abir (pre-existing note 10000000-...)
+    ('10000000-0000-0000-0000-000000000000', '5965a3ec-531c-4a2e-a443-4d7049a15549');

@@ -58,7 +58,7 @@ public class NoteService {
     }
 
     public List<NoteDto> getNotesSharedWithUser(UUID ownerId, UUID currentUserId) {
-        return noteRepository.findAllByOwnerAndSharedUsersContaining(ownerId, currentUserId)
+        return noteRepository.findAllSharedBetweenUsers(currentUserId, ownerId)
                 .map(noteMapper::toNoteResponseDto)
                 .toList();
     }
