@@ -13,22 +13,20 @@ import java.util.stream.Stream;
 public interface MeetingRequestRepository extends JpaRepository<@NonNull MeetingRequest, @NonNull UUID> {
 //    boolean existsByReferenceCode(String code);
 
-    @Query(
-            """
+    @Query("""
             SELECT mr FROM MeetingRequest mr
             JOIN mr.requestFor rf
             WHERE mr.status = optis.guideme.domain.meetingRequest.Status.PENDING
             AND rf = :userId
-            """
-    )
+            """)
     Stream<MeetingRequest> findIncomingMeetingRequests(UUID userId);
 
     @Query(
             """
-            SELECT mr FROM MeetingRequest mr
-            WHERE mr.status = optis.guideme.domain.meetingRequest.Status.PENDING
-            AND mr.requestedBy = :userId
-            """
+                    SELECT mr FROM MeetingRequest mr
+                    WHERE mr.status = optis.guideme.domain.meetingRequest.Status.PENDING
+                    AND mr.requestedBy = :userId
+                    """
     )
     Stream<MeetingRequest> findOutgoingMeetingRequests(UUID userId);
 }

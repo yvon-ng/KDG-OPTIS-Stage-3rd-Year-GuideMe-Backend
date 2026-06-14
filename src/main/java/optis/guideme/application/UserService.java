@@ -5,7 +5,6 @@ import optis.guideme.api.dto.UpdateUserDto;
 import optis.guideme.api.dto.request.NewClientDto;
 import optis.guideme.api.dto.request.NewClientScoreDto;
 import optis.guideme.api.dto.response.ClientScoreDto;
-import optis.guideme.api.dto.response.NotePreviewDto;
 import optis.guideme.api.dto.response.UserDto;
 import optis.guideme.api.mapper.ClientScoreMapper;
 import optis.guideme.api.mapper.UserMapper;
@@ -30,7 +29,6 @@ public class UserService {
     private final ClientScoreMapper clientScoreMapper;
     private final NotificationService notificationService;
     private final NoteRepository noteRepository;
-    private final NoteService noteService;
 
     public UserDto get(UUID userId) {
         return userMapper.toResponseDto(getUser(userId));
@@ -88,7 +86,7 @@ public class UserService {
     public void addNewClient(UUID userId, NewClientDto newClientDto) {
         Consultant consultant = getUser(userId).asConsultant();
         consultant.asConsultant().changeClient(newClientDto.clientName(), newClientDto.startDateAtClient().atZone(ZoneId.systemDefault()).toLocalDateTime());
-        ClientScore newClientScore = new ClientScore(newClientDto.clientName(), Score.NULL, LocalDateTime.now());
+        ClientScore newClientScore = new ClientScore(newClientDto.clientName(), Score.TEN, LocalDateTime.now());
         consultant.addClientScore(newClientScore);
     }
 
@@ -134,14 +132,7 @@ public class UserService {
     }
 
     public List<UserDto> getSharedUsers(UUID userId) {
-        List<UUID> noteIds = noteService.getAllNotes(userId).stream()
-                .map(NotePreviewDto::noteId)
-                .toList();
-
-        return noteRepository.findAllById(noteIds).stream()
-                .flatMap(note -> note.getSharedUsers().stream())
-                .distinct()
-                .flatMap(id -> userRepository.findById(id).stream())
+        return noteRepository.findDistinctSharedUsersByOwner(userId)
                 .map(userMapper::toResponseDto)
                 .toList();
     }

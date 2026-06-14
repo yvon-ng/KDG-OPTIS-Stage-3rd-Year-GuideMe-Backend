@@ -6,5 +6,5 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-public record NotePreviewDto(UUID noteId, String title, Visibility visibility, LocalDateTime creationTime, List<UUID> sharedUsers) {
+public record NotePreviewDto(UUID noteId, String title, Visibility visibility, UUID owner, LocalDateTime creationTime, List<UUID> sharedUsers) {
 }
